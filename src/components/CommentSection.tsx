@@ -4,8 +4,9 @@ import { supabase } from "@/integrations/supabase/client";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { MessageSquare, Send } from "lucide-react";
+import { MessageSquare, Send, Trash2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/hooks/useAuth";
 
 interface Comment {
   id: string;
@@ -20,6 +21,7 @@ const CommentSection = () => {
   const [content, setContent] = useState("");
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
+  const { isAdmin } = useAuth();
 
   const fetchComments = async () => {
     const { data, error } = await supabase
@@ -35,8 +37,8 @@ const CommentSection = () => {
     fetchComments();
     const channel = supabase
       .channel("comments-realtime")
-      .on("postgres_changes", { event: "INSERT", schema: "public", table: "comments" }, (payload) => {
-        setComments((prev) => [payload.new as Comment, ...prev]);
+      .on("postgres_changes", { event: "*", schema: "public", table: "comments" }, () => {
+        fetchComments();
       })
       .subscribe();
     return () => { supabase.removeChannel(channel); };
@@ -62,6 +64,15 @@ const CommentSection = () => {
     } else {
       setContent("");
       toast({ title: "留言成功 ✨" });
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    const { error } = await supabase.from("comments").delete().eq("id", id);
+    if (error) {
+      toast({ title: "删除失败", description: error.message, variant: "destructive" });
+    } else {
+      toast({ title: "已删除 🗑️" });
     }
   };
 
@@ -121,7 +132,18 @@ const CommentSection = () => {
             >
               <div className="flex items-center justify-between mb-2">
                 <span className="text-sm font-medium text-primary">{c.nickname}</span>
-                <span className="text-xs text-muted-foreground">{timeAgo(c.created_at)}</span>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs text-muted-foreground">{timeAgo(c.created_at)}</span>
+                  {isAdmin && (
+                    <button
+                      onClick={() => handleDelete(c.id)}
+                      className="text-destructive/60 hover:text-destructive transition-colors p-1"
+                      title="删除留言"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                  )}
+                </div>
               </div>
               <p className="text-sm text-foreground/80 leading-relaxed">{c.content}</p>
             </motion.div>
