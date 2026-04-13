@@ -4,6 +4,7 @@ import { Download, Globe, Shield, Zap } from "lucide-react";
 import GlassCard from "@/components/GlassCard";
 import ParticleBackground from "@/components/ParticleBackground";
 import CommentSection from "@/components/CommentSection";
+import UserNav from "@/components/UserNav";
 
 const resourceLinks = [
   { icon: Zap, label: "迅雷资源通道", color: "text-primary" },
@@ -19,6 +20,10 @@ const Index = () => {
     <div className="min-h-screen relative">
       <ParticleBackground />
       <div className="relative z-10 flex flex-col items-center px-4 py-12">
+        {/* User Nav */}
+        <div className="w-full max-w-2xl flex justify-end mb-4">
+          <UserNav />
+        </div>
         {/* Hero */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
