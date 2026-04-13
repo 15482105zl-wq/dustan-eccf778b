@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { MessageSquare, Send, Trash2 } from "lucide-react";
+import { MessageSquare, Send, Trash2, LogIn } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -21,7 +22,21 @@ const CommentSection = () => {
   const [content, setContent] = useState("");
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
-  const { isAdmin } = useAuth();
+  const { user, isAdmin } = useAuth();
+  const navigate = useNavigate();
+
+  // Auto-fill nickname from profile
+  useEffect(() => {
+    if (!user) return;
+    supabase
+      .from("profiles")
+      .select("display_name")
+      .eq("user_id", user.id)
+      .single()
+      .then(({ data }) => {
+        if (data?.display_name) setNickname(data.display_name);
+      });
+  }, [user]);
 
   const fetchComments = async () => {
     const { data, error } = await supabase
