@@ -113,27 +113,40 @@ const CommentSection = () => {
         <span className="gradient-text">实时留言互动区</span>
       </h2>
 
-      <form onSubmit={handleSubmit} className="glass rounded-xl p-4 mb-6 space-y-3">
-        <Input
-          placeholder="你的昵称"
-          value={nickname}
-          onChange={(e) => setNickname(e.target.value)}
-          maxLength={20}
-          className="bg-secondary/50 border-border/50 focus:border-primary/50 placeholder:text-muted-foreground/50"
-        />
-        <Textarea
-          placeholder="说点什么..."
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-          maxLength={500}
-          rows={3}
-          className="bg-secondary/50 border-border/50 focus:border-primary/50 placeholder:text-muted-foreground/50 resize-none"
-        />
-        <Button type="submit" disabled={loading} className="w-full bg-primary/20 text-primary border border-primary/30 hover:bg-primary/30">
-          <Send className="w-4 h-4 mr-2" />
-          {loading ? "发送中..." : "发送留言"}
-        </Button>
-      </form>
+      {user ? (
+        <form onSubmit={handleSubmit} className="glass rounded-xl p-4 mb-6 space-y-3">
+          <Input
+            placeholder="你的昵称"
+            value={nickname}
+            onChange={(e) => setNickname(e.target.value)}
+            maxLength={20}
+            className="bg-secondary/50 border-border/50 focus:border-primary/50 placeholder:text-muted-foreground/50"
+          />
+          <Textarea
+            placeholder="说点什么..."
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+            maxLength={500}
+            rows={3}
+            className="bg-secondary/50 border-border/50 focus:border-primary/50 placeholder:text-muted-foreground/50 resize-none"
+          />
+          <Button type="submit" disabled={loading} className="w-full bg-primary/20 text-primary border border-primary/30 hover:bg-primary/30">
+            <Send className="w-4 h-4 mr-2" />
+            {loading ? "发送中..." : "发送留言"}
+          </Button>
+        </form>
+      ) : (
+        <div className="glass rounded-xl p-6 mb-6 flex flex-col items-center gap-3">
+          <p className="text-sm text-muted-foreground">登录后即可发表留言</p>
+          <Button
+            onClick={() => navigate("/auth")}
+            className="bg-primary/20 text-primary border border-primary/30 hover:bg-primary/30"
+          >
+            <LogIn className="w-4 h-4 mr-2" />
+            去登录
+          </Button>
+        </div>
+      )
 
       <div className="space-y-3 pb-12">
         <AnimatePresence>
