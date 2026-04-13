@@ -32,11 +32,19 @@ const Profile = () => {
       .select("display_name, bio, avatar_url")
       .eq("user_id", user.id)
       .single()
-      .then(({ data }) => {
+      .then(({ data, error }) => {
         if (data) {
           setDisplayName(data.display_name || "");
           setBio(data.bio || "");
           setAvatarUrl(data.avatar_url);
+        } else if (error) {
+          // Profile doesn't exist yet, create one
+          supabase.from("profiles").insert({
+            user_id: user.id,
+            display_name: user.email || "",
+          }).then(() => {
+            setDisplayName(user.email || "");
+          });
         }
       });
   }, [user]);
