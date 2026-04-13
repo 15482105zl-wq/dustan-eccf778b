@@ -146,7 +146,7 @@ const CommentSection = () => {
             去登录
           </Button>
         </div>
-      )
+      )}
 
       <div className="space-y-3 pb-12">
         <AnimatePresence>
