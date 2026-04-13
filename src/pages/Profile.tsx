@@ -97,7 +97,16 @@ const Profile = () => {
     }
   };
 
-  if (authLoading) return null;
+  if (authLoading) {
+    return (
+      <div className="min-h-screen relative">
+        <ParticleBackground />
+        <div className="relative z-10 flex items-center justify-center min-h-screen">
+          <p className="text-muted-foreground">加载中...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen relative">
