@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { MessageSquare, Send, Trash2 } from "lucide-react";
+import { MessageSquare, Send, Trash2, LogIn } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -21,7 +22,21 @@ const CommentSection = () => {
   const [content, setContent] = useState("");
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
-  const { isAdmin } = useAuth();
+  const { user, isAdmin } = useAuth();
+  const navigate = useNavigate();
+
+  // Auto-fill nickname from profile
+  useEffect(() => {
+    if (!user) return;
+    supabase
+      .from("profiles")
+      .select("display_name")
+      .eq("user_id", user.id)
+      .single()
+      .then(({ data }) => {
+        if (data?.display_name) setNickname(data.display_name);
+      });
+  }, [user]);
 
   const fetchComments = async () => {
     const { data, error } = await supabase
@@ -98,27 +113,40 @@ const CommentSection = () => {
         <span className="gradient-text">实时留言互动区</span>
       </h2>
 
-      <form onSubmit={handleSubmit} className="glass rounded-xl p-4 mb-6 space-y-3">
-        <Input
-          placeholder="你的昵称"
-          value={nickname}
-          onChange={(e) => setNickname(e.target.value)}
-          maxLength={20}
-          className="bg-secondary/50 border-border/50 focus:border-primary/50 placeholder:text-muted-foreground/50"
-        />
-        <Textarea
-          placeholder="说点什么..."
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-          maxLength={500}
-          rows={3}
-          className="bg-secondary/50 border-border/50 focus:border-primary/50 placeholder:text-muted-foreground/50 resize-none"
-        />
-        <Button type="submit" disabled={loading} className="w-full bg-primary/20 text-primary border border-primary/30 hover:bg-primary/30">
-          <Send className="w-4 h-4 mr-2" />
-          {loading ? "发送中..." : "发送留言"}
-        </Button>
-      </form>
+      {user ? (
+        <form onSubmit={handleSubmit} className="glass rounded-xl p-4 mb-6 space-y-3">
+          <Input
+            placeholder="你的昵称"
+            value={nickname}
+            onChange={(e) => setNickname(e.target.value)}
+            maxLength={20}
+            className="bg-secondary/50 border-border/50 focus:border-primary/50 placeholder:text-muted-foreground/50"
+          />
+          <Textarea
+            placeholder="说点什么..."
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+            maxLength={500}
+            rows={3}
+            className="bg-secondary/50 border-border/50 focus:border-primary/50 placeholder:text-muted-foreground/50 resize-none"
+          />
+          <Button type="submit" disabled={loading} className="w-full bg-primary/20 text-primary border border-primary/30 hover:bg-primary/30">
+            <Send className="w-4 h-4 mr-2" />
+            {loading ? "发送中..." : "发送留言"}
+          </Button>
+        </form>
+      ) : (
+        <div className="glass rounded-xl p-6 mb-6 flex flex-col items-center gap-3">
+          <p className="text-sm text-muted-foreground">登录后即可发表留言</p>
+          <Button
+            onClick={() => navigate("/auth")}
+            className="bg-primary/20 text-primary border border-primary/30 hover:bg-primary/30"
+          >
+            <LogIn className="w-4 h-4 mr-2" />
+            去登录
+          </Button>
+        </div>
+      )}
 
       <div className="space-y-3 pb-12">
         <AnimatePresence>
