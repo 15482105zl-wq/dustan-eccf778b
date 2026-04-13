@@ -32,11 +32,19 @@ const Profile = () => {
       .select("display_name, bio, avatar_url")
       .eq("user_id", user.id)
       .single()
-      .then(({ data }) => {
+      .then(({ data, error }) => {
         if (data) {
           setDisplayName(data.display_name || "");
           setBio(data.bio || "");
           setAvatarUrl(data.avatar_url);
+        } else if (error) {
+          // Profile doesn't exist yet, create one
+          supabase.from("profiles").insert({
+            user_id: user.id,
+            display_name: user.email || "",
+          }).then(() => {
+            setDisplayName(user.email || "");
+          });
         }
       });
   }, [user]);
@@ -89,7 +97,16 @@ const Profile = () => {
     }
   };
 
-  if (authLoading) return null;
+  if (authLoading) {
+    return (
+      <div className="min-h-screen relative">
+        <ParticleBackground />
+        <div className="relative z-10 flex items-center justify-center min-h-screen">
+          <p className="text-muted-foreground">加载中...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen relative">

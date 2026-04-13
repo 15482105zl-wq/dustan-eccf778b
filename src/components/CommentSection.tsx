@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
-import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { MessageSquare, Send, Trash2, LogIn } from "lucide-react";
@@ -18,14 +17,14 @@ interface Comment {
 
 const CommentSection = () => {
   const [comments, setComments] = useState<Comment[]>([]);
-  const [nickname, setNickname] = useState("");
   const [content, setContent] = useState("");
   const [loading, setLoading] = useState(false);
+  const [displayName, setDisplayName] = useState("");
   const { toast } = useToast();
   const { user, isAdmin } = useAuth();
   const navigate = useNavigate();
 
-  // Auto-fill nickname from profile
+  // Fetch display name from profile
   useEffect(() => {
     if (!user) return;
     supabase
@@ -34,7 +33,7 @@ const CommentSection = () => {
       .eq("user_id", user.id)
       .single()
       .then(({ data }) => {
-        if (data?.display_name) setNickname(data.display_name);
+        setDisplayName(data?.display_name || user.email || "匿名用户");
       });
   }, [user]);
 
@@ -61,18 +60,18 @@ const CommentSection = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const trimmedNick = nickname.trim();
     const trimmedContent = content.trim();
-    if (!trimmedNick || !trimmedContent) {
-      toast({ title: "请填写昵称和内容", variant: "destructive" });
+    if (!trimmedContent) {
+      toast({ title: "请输入留言内容", variant: "destructive" });
       return;
     }
-    if (trimmedNick.length > 20 || trimmedContent.length > 500) {
-      toast({ title: "昵称最多20字，内容最多500字", variant: "destructive" });
+    if (trimmedContent.length > 500) {
+      toast({ title: "内容最多500字", variant: "destructive" });
       return;
     }
     setLoading(true);
-    const { error } = await supabase.from("comments").insert({ nickname: trimmedNick, content: trimmedContent });
+    const nickname = displayName || user?.email || "匿名用户";
+    const { error } = await supabase.from("comments").insert({ nickname, content: trimmedContent });
     setLoading(false);
     if (error) {
       toast({ title: "发送失败", description: error.message, variant: "destructive" });
@@ -115,13 +114,9 @@ const CommentSection = () => {
 
       {user ? (
         <form onSubmit={handleSubmit} className="glass rounded-xl p-4 mb-6 space-y-3">
-          <Input
-            placeholder="你的昵称"
-            value={nickname}
-            onChange={(e) => setNickname(e.target.value)}
-            maxLength={20}
-            className="bg-secondary/50 border-border/50 focus:border-primary/50 placeholder:text-muted-foreground/50"
-          />
+          <div className="text-xs text-muted-foreground">
+            以 <span className="text-primary">{displayName || user.email}</span> 身份留言
+          </div>
           <Textarea
             placeholder="说点什么..."
             value={content}

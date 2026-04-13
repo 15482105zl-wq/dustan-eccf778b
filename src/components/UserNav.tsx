@@ -58,7 +58,15 @@ const UserNav = () => {
         <span className="text-sm text-foreground/80 hidden sm:inline">{displayName || "我的"}</span>
       </button>
       <button
-        onClick={async () => { await signOut(); navigate("/"); }}
+        onClick={async () => {
+          try {
+            await signOut();
+            navigate("/");
+          } catch (e) {
+            console.error("Sign out error:", e);
+            navigate("/");
+          }
+        }}
         className="text-muted-foreground hover:text-destructive transition-colors"
         title="退出登录"
       >
