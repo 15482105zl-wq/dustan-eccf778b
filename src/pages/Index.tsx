@@ -59,7 +59,7 @@ const Index = () => {
                 <p className="text-xs text-muted-foreground mt-0.5">点击进入工具页 →</p>
               </div>
             </div>
-            <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
+            <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
           </GlassCard>
         </div>
 
