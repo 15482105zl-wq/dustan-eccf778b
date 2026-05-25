@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { MessageSquare, Send, Trash2, LogIn } from "lucide-react";
+import { MessageSquare, Send, Trash2, LogIn, WifiOff, RefreshCw } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -20,6 +20,8 @@ const CommentSection = () => {
   const [content, setContent] = useState("");
   const [loading, setLoading] = useState(false);
   const [displayName, setDisplayName] = useState("");
+  const [offline, setOffline] = useState(false);
+  const [reconnecting, setReconnecting] = useState(false);
   const { toast } = useToast();
   const { user, isAdmin } = useAuth();
   const navigate = useNavigate();
@@ -43,8 +45,25 @@ const CommentSection = () => {
       .select("*")
       .order("created_at", { ascending: false })
       .limit(50);
+    if (error) {
+      console.error(error);
+      const msg = (error.message || "").toLowerCase();
+      if (msg.includes("fetch") || msg.includes("network") || msg.includes("failed")) {
+        setOffline(true);
+      }
+      return false;
+    }
+    setOffline(false);
     if (data) setComments(data as Comment[]);
-    if (error) console.error(error);
+    return true;
+  };
+
+  const handleReconnect = async () => {
+    setReconnecting(true);
+    const ok = await fetchComments();
+    setReconnecting(false);
+    if (ok) toast({ title: "已重新连接 ✅" });
+    else toast({ title: "仍无法连接", description: "后端可能仍在恢复中，请稍后再试", variant: "destructive" });
   };
 
   useEffect(() => {
@@ -55,7 +74,18 @@ const CommentSection = () => {
         fetchComments();
       })
       .subscribe();
-    return () => { supabase.removeChannel(channel); };
+
+    const goOffline = () => setOffline(true);
+    const goOnline = () => { setOffline(false); fetchComments(); };
+    window.addEventListener("offline", goOffline);
+    window.addEventListener("online", goOnline);
+    if (typeof navigator !== "undefined" && navigator.onLine === false) setOffline(true);
+
+    return () => {
+      supabase.removeChannel(channel);
+      window.removeEventListener("offline", goOffline);
+      window.removeEventListener("online", goOnline);
+    };
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -74,7 +104,13 @@ const CommentSection = () => {
     const { error } = await supabase.from("comments").insert({ nickname, content: trimmedContent });
     setLoading(false);
     if (error) {
-      toast({ title: "发送失败", description: error.message, variant: "destructive" });
+      const msg = (error.message || "").toLowerCase();
+      if (msg.includes("fetch") || msg.includes("network") || msg.includes("failed")) {
+        setOffline(true);
+        toast({ title: "无法连接到服务器", description: "请检查网络或稍后重试", variant: "destructive" });
+      } else {
+        toast({ title: "发送失败", description: error.message, variant: "destructive" });
+      }
     } else {
       setContent("");
       toast({ title: "留言成功 ✨" });
@@ -111,6 +147,26 @@ const CommentSection = () => {
         <MessageSquare className="w-5 h-5 text-primary" />
         <span className="gradient-text">实时留言互动区</span>
       </h2>
+
+      {offline && (
+        <div className="mb-4 rounded-lg border border-destructive/40 bg-destructive/10 p-3 flex items-center justify-between gap-3">
+          <div className="flex items-center gap-2 text-sm text-destructive">
+            <WifiOff className="w-4 h-4 shrink-0" />
+            <span>无法连接服务器，留言暂时不可用</span>
+          </div>
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={handleReconnect}
+            disabled={reconnecting}
+            className="gap-1.5 border-destructive/40 text-destructive hover:bg-destructive/20"
+          >
+            <RefreshCw className={`w-3.5 h-3.5 ${reconnecting ? "animate-spin" : ""}`} />
+            重新连接
+          </Button>
+        </div>
+      )}
+
 
       {user ? (
         <form onSubmit={handleSubmit} className="glass rounded-xl p-4 mb-6 space-y-3">
