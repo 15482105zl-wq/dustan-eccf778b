@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { MessageSquare, Send, Trash2, LogIn } from "lucide-react";
+import { MessageSquare, Send, Trash2, LogIn, WifiOff, RefreshCw } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -20,6 +20,8 @@ const CommentSection = () => {
   const [content, setContent] = useState("");
   const [loading, setLoading] = useState(false);
   const [displayName, setDisplayName] = useState("");
+  const [offline, setOffline] = useState(false);
+  const [reconnecting, setReconnecting] = useState(false);
   const { toast } = useToast();
   const { user, isAdmin } = useAuth();
   const navigate = useNavigate();
@@ -43,8 +45,25 @@ const CommentSection = () => {
       .select("*")
       .order("created_at", { ascending: false })
       .limit(50);
+    if (error) {
+      console.error(error);
+      const msg = (error.message || "").toLowerCase();
+      if (msg.includes("fetch") || msg.includes("network") || msg.includes("failed")) {
+        setOffline(true);
+      }
+      return false;
+    }
+    setOffline(false);
     if (data) setComments(data as Comment[]);
-    if (error) console.error(error);
+    return true;
+  };
+
+  const handleReconnect = async () => {
+    setReconnecting(true);
+    const ok = await fetchComments();
+    setReconnecting(false);
+    if (ok) toast({ title: "已重新连接 ✅" });
+    else toast({ title: "仍无法连接", description: "后端可能仍在恢复中，请稍后再试", variant: "destructive" });
   };
 
   useEffect(() => {
