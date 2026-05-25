@@ -41,9 +41,13 @@ const UserNav = () => {
   return (
     <div className="flex items-center gap-3">
       {isAdmin && (
-        <span className="text-[10px] px-1.5 py-0.5 rounded bg-primary/20 text-primary border border-primary/30">
+        <button
+          onClick={() => navigate("/admin")}
+          className="text-[10px] px-1.5 py-0.5 rounded bg-primary/20 text-primary border border-primary/30 hover:bg-primary/30 transition-colors"
+          title="进入留言管理"
+        >
           管理员
-        </span>
+        </button>
       )}
       <button
         onClick={() => navigate("/profile")}
