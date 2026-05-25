@@ -74,7 +74,18 @@ const CommentSection = () => {
         fetchComments();
       })
       .subscribe();
-    return () => { supabase.removeChannel(channel); };
+
+    const goOffline = () => setOffline(true);
+    const goOnline = () => { setOffline(false); fetchComments(); };
+    window.addEventListener("offline", goOffline);
+    window.addEventListener("online", goOnline);
+    if (typeof navigator !== "undefined" && navigator.onLine === false) setOffline(true);
+
+    return () => {
+      supabase.removeChannel(channel);
+      window.removeEventListener("offline", goOffline);
+      window.removeEventListener("online", goOnline);
+    };
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -93,7 +104,13 @@ const CommentSection = () => {
     const { error } = await supabase.from("comments").insert({ nickname, content: trimmedContent });
     setLoading(false);
     if (error) {
-      toast({ title: "发送失败", description: error.message, variant: "destructive" });
+      const msg = (error.message || "").toLowerCase();
+      if (msg.includes("fetch") || msg.includes("network") || msg.includes("failed")) {
+        setOffline(true);
+        toast({ title: "无法连接到服务器", description: "请检查网络或稍后重试", variant: "destructive" });
+      } else {
+        toast({ title: "发送失败", description: error.message, variant: "destructive" });
+      }
     } else {
       setContent("");
       toast({ title: "留言成功 ✨" });
