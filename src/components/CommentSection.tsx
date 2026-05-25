@@ -148,6 +148,26 @@ const CommentSection = () => {
         <span className="gradient-text">实时留言互动区</span>
       </h2>
 
+      {offline && (
+        <div className="mb-4 rounded-lg border border-destructive/40 bg-destructive/10 p-3 flex items-center justify-between gap-3">
+          <div className="flex items-center gap-2 text-sm text-destructive">
+            <WifiOff className="w-4 h-4 shrink-0" />
+            <span>无法连接服务器，留言暂时不可用</span>
+          </div>
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={handleReconnect}
+            disabled={reconnecting}
+            className="gap-1.5 border-destructive/40 text-destructive hover:bg-destructive/20"
+          >
+            <RefreshCw className={`w-3.5 h-3.5 ${reconnecting ? "animate-spin" : ""}`} />
+            重新连接
+          </Button>
+        </div>
+      )}
+
+
       {user ? (
         <form onSubmit={handleSubmit} className="glass rounded-xl p-4 mb-6 space-y-3">
           <div className="text-xs text-muted-foreground">
