@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
-import { Mail, Lock, Loader2, MailCheck } from "lucide-react";
+import { Mail, Lock, Loader2, MailCheck, ArrowLeft } from "lucide-react";
 
 interface Props {
   open: boolean;
@@ -14,19 +14,28 @@ interface Props {
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+type View = "auth" | "forgot" | "sent-signup" | "sent-reset";
+
 const AuthGateModal = ({ open, onOpenChange }: Props) => {
   const [tab, setTab] = useState<"login" | "signup">("login");
+  const [view, setView] = useState<View>("auth");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [sentTo, setSentTo] = useState<string | null>(null);
+  const [needsVerify, setNeedsVerify] = useState(false);
+  const [sentTo, setSentTo] = useState("");
   const { toast } = useToast();
 
-  const validate = () => {
+  const validEmail = () => {
     if (!emailRegex.test(email)) {
       toast({ title: "邮箱格式不正确", variant: "destructive" });
       return false;
     }
+    return true;
+  };
+
+  const validate = () => {
+    if (!validEmail()) return false;
     if (password.length < 6) {
       toast({ title: "密码至少 6 位", variant: "destructive" });
       return false;
@@ -42,8 +51,9 @@ const AuthGateModal = ({ open, onOpenChange }: Props) => {
     setLoading(false);
     if (error) {
       const msg = error.message.toLowerCase();
-      if (msg.includes("email not confirmed") || msg.includes("not confirmed")) {
-        toast({ title: "请先验证邮箱", description: "请前往邮箱点击验证链接后再登录", variant: "destructive" });
+      if (msg.includes("not confirmed")) {
+        setNeedsVerify(true);
+        toast({ title: "请先验证邮箱", description: "可点击下方按钮重新发送验证邮件", variant: "destructive" });
       } else {
         toast({ title: "登录失败", description: error.message, variant: "destructive" });
       }
@@ -51,7 +61,8 @@ const AuthGateModal = ({ open, onOpenChange }: Props) => {
     }
     if (data.user && !data.user.email_confirmed_at) {
       await supabase.auth.signOut();
-      toast({ title: "请先验证邮箱", description: "请前往邮箱点击验证链接后再登录", variant: "destructive" });
+      setNeedsVerify(true);
+      toast({ title: "请先验证邮箱", variant: "destructive" });
       return;
     }
     toast({ title: "登录成功 ✨" });
@@ -73,13 +84,45 @@ const AuthGateModal = ({ open, onOpenChange }: Props) => {
       return;
     }
     setSentTo(email);
+    setView("sent-signup");
+  };
+
+  const handleResend = async () => {
+    if (!validEmail()) return;
+    setLoading(true);
+    const { error } = await supabase.auth.resend({ type: "signup", email, options: { emailRedirectTo: `${window.location.origin}/` } });
+    setLoading(false);
+    if (error) {
+      toast({ title: "发送失败", description: error.message, variant: "destructive" });
+      return;
+    }
+    toast({ title: "验证邮件已重新发送 📨" });
+    setNeedsVerify(false);
+  };
+
+  const handleForgot = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!validEmail()) return;
+    setLoading(true);
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/reset-password`,
+    });
+    setLoading(false);
+    if (error) {
+      toast({ title: "发送失败", description: error.message, variant: "destructive" });
+      return;
+    }
+    setSentTo(email);
+    setView("sent-reset");
   };
 
   const reset = () => {
-    setSentTo(null);
+    setView("auth");
     setEmail("");
     setPassword("");
     setTab("login");
+    setNeedsVerify(false);
+    setSentTo("");
   };
 
   return (
@@ -91,22 +134,44 @@ const AuthGateModal = ({ open, onOpenChange }: Props) => {
       }}
     >
       <DialogContent className="glass border-primary/20 sm:max-w-md">
-        {sentTo ? (
+        {view === "sent-signup" || view === "sent-reset" ? (
           <div className="flex flex-col items-center text-center py-4 gap-4">
             <div className="w-14 h-14 rounded-full bg-primary/15 flex items-center justify-center">
               <MailCheck className="w-7 h-7 text-primary" />
             </div>
             <DialogHeader>
-              <DialogTitle className="gradient-text">验证邮件已发送</DialogTitle>
+              <DialogTitle className="gradient-text">
+                {view === "sent-signup" ? "验证邮件已发送" : "重置链接已发送"}
+              </DialogTitle>
               <DialogDescription>
-                我们已向 <span className="text-primary">{sentTo}</span> 发送了一封验证邮件。
-                <br />请点击邮件中的链接完成验证，然后回到这里登录。
+                我们已向 <span className="text-primary">{sentTo}</span> 发送了邮件。
+                <br />
+                {view === "sent-signup" ? "请点击邮件中的链接完成验证，然后回到这里登录。" : "请点击邮件中的链接重置密码。"}
               </DialogDescription>
             </DialogHeader>
-            <Button onClick={() => setSentTo(null)} variant="outline" className="w-full">
-              我已验证，去登录
+            <Button onClick={() => setView("auth")} variant="outline" className="w-full">
+              返回登录
             </Button>
           </div>
+        ) : view === "forgot" ? (
+          <>
+            <DialogHeader>
+              <DialogTitle className="gradient-text">找回密码</DialogTitle>
+              <DialogDescription>输入注册邮箱，我们会发送重置链接</DialogDescription>
+            </DialogHeader>
+            <form onSubmit={handleForgot} className="space-y-3 mt-4">
+              <div className="relative">
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <Input type="email" inputMode="email" autoComplete="email" placeholder="邮箱" value={email} onChange={(e) => setEmail(e.target.value)} className="pl-9" required />
+              </div>
+              <Button type="submit" disabled={loading} className="w-full bg-primary/20 text-primary border border-primary/30 hover:bg-primary/30">
+                {loading && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}发送重置链接
+              </Button>
+              <button type="button" onClick={() => setView("auth")} className="w-full text-xs text-muted-foreground hover:text-primary flex items-center justify-center gap-1 mt-2">
+                <ArrowLeft className="w-3 h-3" /> 返回登录
+              </button>
+            </form>
+          </>
         ) : (
           <>
             <DialogHeader>
@@ -114,7 +179,7 @@ const AuthGateModal = ({ open, onOpenChange }: Props) => {
               <DialogDescription>使用邮箱注册并验证后即可使用 Clash 配置</DialogDescription>
             </DialogHeader>
 
-            <Tabs value={tab} onValueChange={(v) => setTab(v as "login" | "signup")} className="w-full">
+            <Tabs value={tab} onValueChange={(v) => { setTab(v as "login" | "signup"); setNeedsVerify(false); }} className="w-full">
               <TabsList className="grid grid-cols-2 w-full">
                 <TabsTrigger value="login">登录</TabsTrigger>
                 <TabsTrigger value="signup">注册</TabsTrigger>
@@ -133,6 +198,14 @@ const AuthGateModal = ({ open, onOpenChange }: Props) => {
                   <Button type="submit" disabled={loading} className="w-full bg-primary/20 text-primary border border-primary/30 hover:bg-primary/30">
                     {loading && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}登录
                   </Button>
+                  {needsVerify && (
+                    <Button type="button" variant="outline" onClick={handleResend} disabled={loading} className="w-full">
+                      {loading && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}重新发送验证邮件
+                    </Button>
+                  )}
+                  <button type="button" onClick={() => setView("forgot")} className="w-full text-xs text-muted-foreground hover:text-primary text-center mt-1">
+                    忘记密码？
+                  </button>
                 </form>
               </TabsContent>
 
