@@ -4,20 +4,26 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { LogIn, LogOut, User } from "lucide-react";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 const UserNav = () => {
-  const { user, signOut, isAdmin } = useAuth();
+  const { user, signOut } = useAuth();
   const navigate = useNavigate();
+  const { toast } = useToast();
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const [displayName, setDisplayName] = useState<string>("");
 
   useEffect(() => {
-    if (!user) return;
+    if (!user) {
+      setAvatarUrl(null);
+      setDisplayName("");
+      return;
+    }
     supabase
       .from("profiles")
       .select("avatar_url, display_name")
       .eq("user_id", user.id)
-      .single()
+      .maybeSingle()
       .then(({ data }) => {
         if (data) {
           setAvatarUrl(data.avatar_url);
@@ -25,6 +31,17 @@ const UserNav = () => {
         }
       });
   }, [user]);
+
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+    } catch (e) {
+      console.error("Sign out error:", e);
+    } finally {
+      toast({ title: "已退出登录" });
+      navigate("/");
+    }
+  };
 
   if (!user) {
     return (
@@ -40,15 +57,6 @@ const UserNav = () => {
 
   return (
     <div className="flex items-center gap-3">
-      {isAdmin && (
-        <button
-          onClick={() => navigate("/admin")}
-          className="text-[10px] px-1.5 py-0.5 rounded bg-primary/20 text-primary border border-primary/30 hover:bg-primary/30 transition-colors"
-          title="进入留言管理"
-        >
-          管理员
-        </button>
-      )}
       <button
         onClick={() => navigate("/profile")}
         className="flex items-center gap-2 hover:opacity-80 transition-opacity"
@@ -62,15 +70,7 @@ const UserNav = () => {
         <span className="text-sm text-foreground/80 hidden sm:inline">{displayName || "我的"}</span>
       </button>
       <button
-        onClick={async () => {
-          try {
-            await signOut();
-            navigate("/");
-          } catch (e) {
-            console.error("Sign out error:", e);
-            navigate("/");
-          }
-        }}
+        onClick={handleSignOut}
         className="text-muted-foreground hover:text-destructive transition-colors"
         title="退出登录"
       >
