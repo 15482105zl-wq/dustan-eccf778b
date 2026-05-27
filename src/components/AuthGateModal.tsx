@@ -5,7 +5,9 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
-import { Mail, Lock, Loader2, MailCheck, ArrowLeft } from "lucide-react";
+import { Mail, Loader2, MailCheck, ArrowLeft } from "lucide-react";
+import PasswordInput from "@/components/PasswordInput";
+import { translateAuthError } from "@/lib/authErrors";
 
 interface Props {
   open: boolean;
@@ -13,7 +15,6 @@ interface Props {
 }
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
 type View = "auth" | "forgot" | "sent-signup" | "sent-reset";
 
 const AuthGateModal = ({ open, onOpenChange }: Props) => {
@@ -21,23 +22,17 @@ const AuthGateModal = ({ open, onOpenChange }: Props) => {
   const [view, setView] = useState<View>("auth");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [needsVerify, setNeedsVerify] = useState(false);
   const [sentTo, setSentTo] = useState("");
   const { toast } = useToast();
 
+  const fail = (msg: string) => toast({ title: msg, variant: "destructive" });
+
   const validEmail = () => {
     if (!emailRegex.test(email)) {
-      toast({ title: "邮箱格式不正确", variant: "destructive" });
-      return false;
-    }
-    return true;
-  };
-
-  const validate = () => {
-    if (!validEmail()) return false;
-    if (password.length < 6) {
-      toast({ title: "密码至少 6 位", variant: "destructive" });
+      fail("邮箱格式不正确");
       return false;
     }
     return true;
@@ -45,84 +40,104 @@ const AuthGateModal = ({ open, onOpenChange }: Props) => {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!validate()) return;
+    if (!validEmail()) return;
+    if (password.length < 6) return fail("密码至少 6 位");
     setLoading(true);
-    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-    setLoading(false);
-    if (error) {
-      const msg = error.message.toLowerCase();
-      if (msg.includes("not confirmed")) {
-        setNeedsVerify(true);
-        toast({ title: "请先验证邮箱", description: "可点击下方按钮重新发送验证邮件", variant: "destructive" });
-      } else {
-        toast({ title: "登录失败", description: error.message, variant: "destructive" });
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) {
+        if (error.message.toLowerCase().includes("not confirmed")) setNeedsVerify(true);
+        fail(translateAuthError(error.message));
+        return;
       }
-      return;
+      if (data.user && !data.user.email_confirmed_at) {
+        await supabase.auth.signOut();
+        setNeedsVerify(true);
+        fail("邮箱尚未验证，请先点击验证邮件中的链接");
+        return;
+      }
+      toast({ title: "登录成功 ✨" });
+      onOpenChange(false);
+    } catch (err: any) {
+      fail(translateAuthError(err?.message));
+    } finally {
+      setLoading(false);
     }
-    if (data.user && !data.user.email_confirmed_at) {
-      await supabase.auth.signOut();
-      setNeedsVerify(true);
-      toast({ title: "请先验证邮箱", variant: "destructive" });
-      return;
-    }
-    toast({ title: "登录成功 ✨" });
-    onOpenChange(false);
   };
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!validate()) return;
+    if (!validEmail()) return;
+    if (password.length < 6) return fail("密码至少 6 位");
+    if (password !== confirmPassword) return fail("两次输入的密码不一致，请重新输入");
     setLoading(true);
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: { emailRedirectTo: `${window.location.origin}/` },
-    });
-    setLoading(false);
-    if (error) {
-      toast({ title: "注册失败", description: error.message, variant: "destructive" });
-      return;
+    try {
+      const { error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: { emailRedirectTo: `${window.location.origin}/` },
+      });
+      if (error) {
+        fail(translateAuthError(error.message));
+        return;
+      }
+      setSentTo(email);
+      setView("sent-signup");
+    } catch (err: any) {
+      fail(translateAuthError(err?.message));
+    } finally {
+      setLoading(false);
     }
-    setSentTo(email);
-    setView("sent-signup");
   };
 
   const handleResend = async () => {
     if (!validEmail()) return;
     setLoading(true);
-    const { error } = await supabase.auth.resend({ type: "signup", email, options: { emailRedirectTo: `${window.location.origin}/` } });
-    setLoading(false);
-    if (error) {
-      toast({ title: "发送失败", description: error.message, variant: "destructive" });
-      return;
+    try {
+      const { error } = await supabase.auth.resend({
+        type: "signup",
+        email,
+        options: { emailRedirectTo: `${window.location.origin}/` },
+      });
+      if (error) {
+        fail(translateAuthError(error.message));
+        return;
+      }
+      toast({ title: "验证邮件已重新发送 📨" });
+      setNeedsVerify(false);
+    } finally {
+      setLoading(false);
     }
-    toast({ title: "验证邮件已重新发送 📨" });
-    setNeedsVerify(false);
   };
 
   const handleForgot = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validEmail()) return;
     setLoading(true);
-    const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${window.location.origin}/reset-password`,
-    });
-    setLoading(false);
-    if (error) {
-      toast({ title: "发送失败", description: error.message, variant: "destructive" });
-      return;
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/reset-password`,
+      });
+      if (error) {
+        fail(translateAuthError(error.message));
+        return;
+      }
+      setSentTo(email);
+      setView("sent-reset");
+    } finally {
+      setLoading(false);
     }
-    setSentTo(email);
-    setView("sent-reset");
   };
 
   const reset = () => {
     setView("auth");
     setEmail("");
     setPassword("");
+    setConfirmPassword("");
     setTab("login");
     setNeedsVerify(false);
     setSentTo("");
+    setLoading(false);
   };
 
   return (
@@ -176,7 +191,7 @@ const AuthGateModal = ({ open, onOpenChange }: Props) => {
           <>
             <DialogHeader>
               <DialogTitle className="gradient-text">登录后访问</DialogTitle>
-              <DialogDescription>使用邮箱注册并验证后即可使用 Clash 配置</DialogDescription>
+              <DialogDescription>使用邮箱注册并验证后即可访问</DialogDescription>
             </DialogHeader>
 
             <Tabs value={tab} onValueChange={(v) => { setTab(v as "login" | "signup"); setNeedsVerify(false); }} className="w-full">
@@ -191,10 +206,13 @@ const AuthGateModal = ({ open, onOpenChange }: Props) => {
                     <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                     <Input type="email" inputMode="email" autoComplete="email" placeholder="邮箱 (支持 QQ/163/Gmail 等)" value={email} onChange={(e) => setEmail(e.target.value)} className="pl-9" required />
                   </div>
-                  <div className="relative">
-                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                    <Input type="password" autoComplete="current-password" placeholder="密码" value={password} onChange={(e) => setPassword(e.target.value)} className="pl-9" required />
-                  </div>
+                  <PasswordInput
+                    autoComplete="current-password"
+                    placeholder="密码"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                  />
                   <Button type="submit" disabled={loading} className="w-full bg-primary/20 text-primary border border-primary/30 hover:bg-primary/30">
                     {loading && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}登录
                   </Button>
@@ -215,10 +233,25 @@ const AuthGateModal = ({ open, onOpenChange }: Props) => {
                     <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                     <Input type="email" inputMode="email" autoComplete="email" placeholder="邮箱 (支持 QQ/163/Gmail 等)" value={email} onChange={(e) => setEmail(e.target.value)} className="pl-9" required />
                   </div>
-                  <div className="relative">
-                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                    <Input type="password" autoComplete="new-password" placeholder="设置密码 (至少 6 位)" value={password} onChange={(e) => setPassword(e.target.value)} className="pl-9" required minLength={6} />
-                  </div>
+                  <PasswordInput
+                    autoComplete="new-password"
+                    placeholder="设置密码 (至少 6 位)"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                    minLength={6}
+                  />
+                  <PasswordInput
+                    autoComplete="new-password"
+                    placeholder="确认密码"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    required
+                    minLength={6}
+                  />
+                  {confirmPassword.length > 0 && password !== confirmPassword && (
+                    <p className="text-xs text-destructive">两次输入的密码不一致</p>
+                  )}
                   <Button type="submit" disabled={loading} className="w-full bg-primary/20 text-primary border border-primary/30 hover:bg-primary/30">
                     {loading && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}注册并发送验证邮件
                   </Button>
