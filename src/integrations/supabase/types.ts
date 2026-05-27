@@ -14,27 +14,6 @@ export type Database = {
   }
   public: {
     Tables: {
-      comments: {
-        Row: {
-          content: string
-          created_at: string
-          id: string
-          nickname: string
-        }
-        Insert: {
-          content: string
-          created_at?: string
-          id?: string
-          nickname: string
-        }
-        Update: {
-          content?: string
-          created_at?: string
-          id?: string
-          nickname?: string
-        }
-        Relationships: []
-      }
       profiles: {
         Row: {
           avatar_url: string | null
