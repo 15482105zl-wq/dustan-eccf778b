@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
@@ -8,13 +8,15 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
 import ParticleBackground from "@/components/ParticleBackground";
-import { ArrowLeft, Mail, Lock, User } from "lucide-react";
-import { useEffect } from "react";
+import { ArrowLeft, Mail, Loader2 } from "lucide-react";
+import PasswordInput from "@/components/PasswordInput";
+import { translateAuthError } from "@/lib/authErrors";
 
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
@@ -30,40 +32,53 @@ const Auth = () => {
       toast({ title: "请填写邮箱和密码", variant: "destructive" });
       return;
     }
-    setLoading(true);
-    if (isLogin) {
-      const { error } = await supabase.auth.signInWithPassword({ email, password });
-      if (error) {
-        toast({ title: "登录失败", description: error.message, variant: "destructive" });
-      } else {
-        toast({ title: "登录成功 ✨" });
-        navigate("/");
-      }
-    } else {
-      const { error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: { emailRedirectTo: window.location.origin },
-      });
-      if (error) {
-        toast({ title: "注册失败", description: error.message, variant: "destructive" });
-      } else {
-        toast({ title: "注册成功", description: "请检查邮箱验证链接" });
-      }
+    if (!isLogin && password !== confirmPassword) {
+      toast({ title: "两次输入的密码不一致", variant: "destructive" });
+      return;
     }
-    setLoading(false);
+    setLoading(true);
+    try {
+      if (isLogin) {
+        const { error } = await supabase.auth.signInWithPassword({ email, password });
+        if (error) {
+          toast({ title: "登录失败", description: translateAuthError(error.message), variant: "destructive" });
+        } else {
+          toast({ title: "登录成功 ✨" });
+          navigate("/");
+        }
+      } else {
+        const { error } = await supabase.auth.signUp({
+          email,
+          password,
+          options: { emailRedirectTo: window.location.origin },
+        });
+        if (error) {
+          toast({ title: "注册失败", description: translateAuthError(error.message), variant: "destructive" });
+        } else {
+          toast({ title: "注册成功", description: "请检查邮箱验证链接" });
+        }
+      }
+    } catch (err: any) {
+      toast({ title: "操作失败", description: translateAuthError(err?.message), variant: "destructive" });
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleGoogleLogin = async () => {
-    const result = await lovable.auth.signInWithOAuth("google", {
-      redirect_uri: window.location.origin,
-    });
-    if (result.error) {
-      toast({ title: "Google 登录失败", variant: "destructive" });
-      return;
+    try {
+      const result = await lovable.auth.signInWithOAuth("google", {
+        redirect_uri: window.location.origin,
+      });
+      if (result.error) {
+        toast({ title: "Google 登录失败", variant: "destructive" });
+        return;
+      }
+      if (result.redirected) return;
+      navigate("/");
+    } catch (e: any) {
+      toast({ title: "Google 登录失败", description: e?.message, variant: "destructive" });
     }
-    if (result.redirected) return;
-    navigate("/");
   };
 
   return (
@@ -101,26 +116,44 @@ const Auth = () => {
         >
           <form onSubmit={handleEmailAuth} className="glass rounded-xl p-6 space-y-4">
             <div className="relative">
-              <Mail className="absolute left-3 top-3 w-4 h-4 text-muted-foreground" />
+              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <Input
                 type="email"
                 placeholder="邮箱"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="pl-10 bg-secondary/50 border-border/50"
+                autoComplete="email"
+                required
               />
             </div>
-            <div className="relative">
-              <Lock className="absolute left-3 top-3 w-4 h-4 text-muted-foreground" />
-              <Input
-                type="password"
-                placeholder="密码"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="pl-10 bg-secondary/50 border-border/50"
-              />
-            </div>
+            <PasswordInput
+              placeholder={isLogin ? "密码" : "设置密码 (至少 6 位)"}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              autoComplete={isLogin ? "current-password" : "new-password"}
+              minLength={6}
+              required
+              className="bg-secondary/50 border-border/50"
+            />
+            {!isLogin && (
+              <>
+                <PasswordInput
+                  placeholder="确认密码"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  autoComplete="new-password"
+                  minLength={6}
+                  required
+                  className="bg-secondary/50 border-border/50"
+                />
+                {confirmPassword.length > 0 && password !== confirmPassword && (
+                  <p className="text-xs text-destructive">两次输入的密码不一致</p>
+                )}
+              </>
+            )}
             <Button type="submit" disabled={loading} className="w-full bg-primary/20 text-primary border border-primary/30 hover:bg-primary/30">
+              {loading && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
               {loading ? "处理中..." : isLogin ? "登录" : "注册"}
             </Button>
           </form>
@@ -148,7 +181,8 @@ const Auth = () => {
           <p className="text-center text-sm text-muted-foreground mt-4">
             {isLogin ? "还没有账号？" : "已有账号？"}
             <button
-              onClick={() => setIsLogin(!isLogin)}
+              type="button"
+              onClick={() => { setIsLogin(!isLogin); setConfirmPassword(""); }}
               className="text-primary hover:underline ml-1"
             >
               {isLogin ? "注册" : "登录"}

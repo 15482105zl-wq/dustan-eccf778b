@@ -3,7 +3,6 @@ import { motion } from "framer-motion";
 import { Globe, Wrench, Apple, Wifi, ArrowLeft } from "lucide-react";
 import GlassCard from "@/components/GlassCard";
 import ParticleBackground from "@/components/ParticleBackground";
-import CommentSection from "@/components/CommentSection";
 
 const tools = [
   { icon: Globe, label: "全球加速", desc: "高速稳定的全球网络加速" },
@@ -19,7 +18,6 @@ const Tools = () => {
     <div className="min-h-screen relative">
       <ParticleBackground />
       <div className="relative z-10 flex flex-col items-center px-4 py-12">
-        {/* Back */}
         <motion.button
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
@@ -54,8 +52,6 @@ const Tools = () => {
             </GlassCard>
           ))}
         </div>
-
-        <CommentSection />
       </div>
     </div>
   );

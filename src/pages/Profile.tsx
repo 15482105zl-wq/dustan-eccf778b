@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { useToast } from "@/hooks/use-toast";
 import ParticleBackground from "@/components/ParticleBackground";
-import { ArrowLeft, Camera, Save } from "lucide-react";
+import { ArrowLeft, Camera, Save, Loader2 } from "lucide-react";
 
 const Profile = () => {
   const { user, loading: authLoading } = useAuth();
@@ -20,6 +20,7 @@ const Profile = () => {
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
     if (!authLoading && !user) navigate("/auth");
@@ -27,26 +28,24 @@ const Profile = () => {
 
   useEffect(() => {
     if (!user) return;
-    supabase
-      .from("profiles")
-      .select("display_name, bio, avatar_url")
-      .eq("user_id", user.id)
-      .single()
-      .then(({ data, error }) => {
-        if (data) {
-          setDisplayName(data.display_name || "");
-          setBio(data.bio || "");
-          setAvatarUrl(data.avatar_url);
-        } else if (error) {
-          // Profile doesn't exist yet, create one
-          supabase.from("profiles").insert({
-            user_id: user.id,
-            display_name: user.email || "",
-          }).then(() => {
-            setDisplayName(user.email || "");
-          });
-        }
-      });
+    let active = true;
+    (async () => {
+      const { data } = await supabase
+        .from("profiles")
+        .select("display_name, bio, avatar_url")
+        .eq("user_id", user.id)
+        .maybeSingle();
+      if (!active) return;
+      if (data) {
+        setDisplayName(data.display_name || "");
+        setBio(data.bio || "");
+        setAvatarUrl(data.avatar_url);
+      } else {
+        setDisplayName(user.email || "");
+      }
+      setLoaded(true);
+    })();
+    return () => { active = false; };
   }, [user]);
 
   const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -57,52 +56,77 @@ const Profile = () => {
       return;
     }
     setUploading(true);
-    const ext = file.name.split(".").pop();
-    const path = `${user.id}/avatar.${ext}`;
-    const { error: uploadError } = await supabase.storage
-      .from("avatars")
-      .upload(path, file, { upsert: true });
-    if (uploadError) {
-      toast({ title: "上传失败", description: uploadError.message, variant: "destructive" });
+    try {
+      const ext = file.name.split(".").pop() || "png";
+      const path = `${user.id}/avatar.${ext}`;
+      const { error: uploadError } = await supabase.storage
+        .from("avatars")
+        .upload(path, file, { upsert: true, contentType: file.type });
+      if (uploadError) {
+        toast({ title: "上传失败", description: uploadError.message, variant: "destructive" });
+        return;
+      }
+      const { data: { publicUrl } } = supabase.storage.from("avatars").getPublicUrl(path);
+      const cacheBusted = publicUrl + "?t=" + Date.now();
+      setAvatarUrl(cacheBusted);
+      const { error: upsertErr } = await supabase
+        .from("profiles")
+        .upsert(
+          { user_id: user.id, avatar_url: publicUrl },
+          { onConflict: "user_id" }
+        );
+      if (upsertErr) {
+        toast({ title: "头像保存失败", description: upsertErr.message, variant: "destructive" });
+        return;
+      }
+      toast({ title: "头像已更新 ✨" });
+    } catch (err: any) {
+      toast({ title: "上传失败", description: err?.message || "未知错误", variant: "destructive" });
+    } finally {
       setUploading(false);
-      return;
     }
-    const { data: { publicUrl } } = supabase.storage.from("avatars").getPublicUrl(path);
-    setAvatarUrl(publicUrl + "?t=" + Date.now());
-    await supabase.from("profiles").update({ avatar_url: publicUrl }).eq("user_id", user.id);
-    toast({ title: "头像已更新 ✨" });
-    setUploading(false);
   };
 
   const handleSave = async () => {
     if (!user) return;
     if (displayName.trim().length > 50) {
-      toast({ title: "昵称最多50字", variant: "destructive" });
+      toast({ title: "昵称最多 50 字", variant: "destructive" });
       return;
     }
     if (bio.trim().length > 200) {
-      toast({ title: "简介最多200字", variant: "destructive" });
+      toast({ title: "简介最多 200 字", variant: "destructive" });
       return;
     }
     setSaving(true);
-    const { error } = await supabase
-      .from("profiles")
-      .update({ display_name: displayName.trim(), bio: bio.trim() })
-      .eq("user_id", user.id);
-    setSaving(false);
-    if (error) {
-      toast({ title: "保存失败", variant: "destructive" });
-    } else {
-      toast({ title: "资料已更新 ✨" });
+    try {
+      const { error } = await supabase
+        .from("profiles")
+        .upsert(
+          {
+            user_id: user.id,
+            display_name: displayName.trim(),
+            bio: bio.trim(),
+          },
+          { onConflict: "user_id" }
+        );
+      if (error) {
+        toast({ title: "保存失败", description: error.message, variant: "destructive" });
+      } else {
+        toast({ title: "资料已更新 ✨" });
+      }
+    } catch (err: any) {
+      toast({ title: "保存失败", description: err?.message || "未知错误", variant: "destructive" });
+    } finally {
+      setSaving(false);
     }
   };
 
-  if (authLoading) {
+  if (authLoading || !loaded) {
     return (
       <div className="min-h-screen relative">
         <ParticleBackground />
-        <div className="relative z-10 flex items-center justify-center min-h-screen">
-          <p className="text-muted-foreground">加载中...</p>
+        <div className="relative z-10 flex items-center justify-center min-h-screen gap-2 text-muted-foreground text-sm">
+          <Loader2 className="w-4 h-4 animate-spin" />加载中...
         </div>
       </div>
     );
@@ -138,7 +162,6 @@ const Profile = () => {
           transition={{ delay: 0.1 }}
           className="w-full max-w-sm glass rounded-xl p-6 space-y-6"
         >
-          {/* Avatar */}
           <div className="flex flex-col items-center gap-3">
             <div className="relative group">
               <Avatar className="w-20 h-20 border-2 border-primary/30">
@@ -148,7 +171,7 @@ const Profile = () => {
                 </AvatarFallback>
               </Avatar>
               <label className="absolute inset-0 flex items-center justify-center bg-background/60 rounded-full opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
-                <Camera className="w-5 h-5 text-primary" />
+                {uploading ? <Loader2 className="w-5 h-5 text-primary animate-spin" /> : <Camera className="w-5 h-5 text-primary" />}
                 <input
                   type="file"
                   accept="image/*"
@@ -200,7 +223,7 @@ const Profile = () => {
             disabled={saving}
             className="w-full bg-primary/20 text-primary border border-primary/30 hover:bg-primary/30"
           >
-            <Save className="w-4 h-4 mr-2" />
+            {saving ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Save className="w-4 h-4 mr-2" />}
             {saving ? "保存中..." : "保存资料"}
           </Button>
         </motion.div>

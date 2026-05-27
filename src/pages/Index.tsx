@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Download, Globe, Shield, Zap } from "lucide-react";
+import { Download, Globe, Shield, Zap, MessageCircle } from "lucide-react";
 import GlassCard from "@/components/GlassCard";
 import ParticleBackground from "@/components/ParticleBackground";
 import UserNav from "@/components/UserNav";
@@ -8,7 +8,8 @@ import AuthGateModal from "@/components/AuthGateModal";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 
-const CLASH_URL = "https://campsite.bio/bysuhu";
+const ACCEL_URL = "https://campsite.bio/dustan";
+const FEEDBACK_URL = "https://qm.qq.com/q/KECVhxL7a2";
 
 const resourceLinks = [
   { icon: Zap, label: "迅雷资源通道", color: "text-primary", url: "https://pan.xunlei.com/s/VOSYGLtZIWaCQejBOvXrruR8A1?pwd=bbia" },
@@ -22,7 +23,7 @@ const Index = () => {
   const { toast } = useToast();
   const [authOpen, setAuthOpen] = useState(false);
 
-  const handleClashClick = () => {
+  const handleAccelClick = () => {
     if (!user) {
       setAuthOpen(true);
       return;
@@ -31,7 +32,7 @@ const Index = () => {
       toast({ title: "请先验证邮箱", description: "请前往邮箱点击验证链接后再访问", variant: "destructive" });
       return;
     }
-    window.open(CLASH_URL, "_blank", "noopener,noreferrer");
+    window.open(ACCEL_URL, "_blank", "noopener,noreferrer");
   };
 
   return (
@@ -72,7 +73,7 @@ const Index = () => {
         <div className="w-full max-w-2xl">
           <GlassCard
             delay={0.5}
-            onClick={handleClashClick}
+            onClick={handleAccelClick}
             className="p-6 flex items-center justify-between"
           >
             <div className="flex items-center gap-3">
@@ -80,7 +81,7 @@ const Index = () => {
                 <Globe className="w-5 h-5 text-accent" />
               </div>
               <div>
-                <p className="font-heading font-semibold text-foreground">Clash V2pn 全能配置</p>
+                <p className="font-heading font-semibold text-foreground">全球网络加速</p>
                 <p className="text-xs text-muted-foreground mt-0.5">
                   {user?.email_confirmed_at ? "点击访问 →" : "登录后访问 →"}
                 </p>
@@ -89,6 +90,19 @@ const Index = () => {
             <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
           </GlassCard>
         </div>
+
+        <motion.a
+          href={FEEDBACK_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.7 }}
+          className="mt-12 flex items-center gap-1.5 text-xs text-muted-foreground hover:text-primary transition-colors"
+        >
+          <MessageCircle className="w-3.5 h-3.5" />
+          帮助与反馈
+        </motion.a>
       </div>
 
       <AuthGateModal open={authOpen} onOpenChange={setAuthOpen} />
