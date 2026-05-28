@@ -98,3 +98,17 @@
   0%, 100% { opacity: 0.4; }
   50% { opacity: 0.8; }
 }
+
+@keyframes breathe-glow {
+  0%, 100% {
+    box-shadow: 0 0 20px hsl(270 80% 65% / 0.35), 0 0 40px hsl(270 80% 65% / 0.15), inset 0 0 20px hsl(270 80% 65% / 0.05);
+  }
+  50% {
+    box-shadow: 0 0 30px hsl(270 80% 65% / 0.55), 0 0 60px hsl(270 80% 65% / 0.25), inset 0 0 30px hsl(270 80% 65% / 0.1);
+  }
+}
+
+.animate-breathe-glow {
+  animation: breathe-glow 3s ease-in-out infinite;
+}
+
