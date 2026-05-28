@@ -74,20 +74,20 @@ const Index = () => {
           <GlassCard
             delay={0.5}
             onClick={handleAccelClick}
-            className="p-6 flex items-center justify-between"
+            className="p-6 flex items-center justify-between animate-breathe-glow border-accent/30"
           >
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-lg bg-accent/20 flex items-center justify-center">
                 <Globe className="w-5 h-5 text-accent" />
               </div>
               <div>
-                <p className="font-heading font-semibold text-foreground">全球网络加速</p>
+                <p className="font-heading font-bold text-foreground text-lg">全球网络加速</p>
                 <p className="text-xs text-muted-foreground mt-0.5">
                   {user?.email_confirmed_at ? "点击访问 →" : "登录后访问 →"}
                 </p>
               </div>
             </div>
-            <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+            <div className="w-2.5 h-2.5 rounded-full bg-accent animate-pulse" />
           </GlassCard>
         </div>
 
