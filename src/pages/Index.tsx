@@ -98,9 +98,9 @@ const Index = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.7 }}
-          className="mt-12 flex items-center gap-1.5 text-xs text-muted-foreground hover:text-primary transition-colors"
+          className="mt-12 flex items-center gap-1.5 text-sm text-foreground/70 hover:text-primary transition-colors"
         >
-          <MessageCircle className="w-3.5 h-3.5" />
+          <MessageCircle className="w-4 h-4" />
           帮助与反馈
         </motion.a>
       </div>
