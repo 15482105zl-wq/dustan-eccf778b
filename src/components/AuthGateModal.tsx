@@ -176,10 +176,7 @@ const AuthGateModal = ({ open, onOpenChange }: Props) => {
               <DialogDescription>输入注册邮箱，我们会发送重置链接</DialogDescription>
             </DialogHeader>
             <form onSubmit={handleForgot} className="space-y-3 mt-4">
-              <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                <Input type="email" inputMode="email" autoComplete="email" placeholder="邮箱" value={email} onChange={(e) => setEmail(e.target.value)} className="pl-9" required />
-              </div>
+              <EmailInput value={email} onChange={setEmail} required />
               <Button type="submit" disabled={loading} className="w-full bg-primary/20 text-primary border border-primary/30 hover:bg-primary/30">
                 {loading && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}发送重置链接
               </Button>
