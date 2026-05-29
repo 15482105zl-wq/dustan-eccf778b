@@ -41,7 +41,7 @@ const Profile = () => {
         setBio(data.bio || "");
         setAvatarUrl(data.avatar_url);
       } else {
-        setDisplayName(user.email || "");
+        setDisplayName("");
       }
       setLoaded(true);
     })();
