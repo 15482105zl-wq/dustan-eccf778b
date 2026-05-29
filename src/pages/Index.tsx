@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Download, Globe, Shield, Zap, MessageCircle } from "lucide-react";
+import { Download, Globe, Shield, Zap, MessageCircle, Rocket } from "lucide-react";
 import GlassCard from "@/components/GlassCard";
 import ParticleBackground from "@/components/ParticleBackground";
 import UserNav from "@/components/UserNav";
