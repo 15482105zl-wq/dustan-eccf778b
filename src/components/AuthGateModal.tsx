@@ -5,8 +5,9 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
-import { Mail, Loader2, MailCheck, ArrowLeft } from "lucide-react";
+import { Loader2, MailCheck, ArrowLeft } from "lucide-react";
 import PasswordInput from "@/components/PasswordInput";
+import EmailInput from "@/components/EmailInput";
 import { translateAuthError } from "@/lib/authErrors";
 
 interface Props {
