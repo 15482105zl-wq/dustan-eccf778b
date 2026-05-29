@@ -8,8 +8,9 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
 import ParticleBackground from "@/components/ParticleBackground";
-import { ArrowLeft, Mail, Loader2 } from "lucide-react";
+import { ArrowLeft, Loader2 } from "lucide-react";
 import PasswordInput from "@/components/PasswordInput";
+import EmailInput from "@/components/EmailInput";
 import { translateAuthError } from "@/lib/authErrors";
 
 const Auth = () => {
@@ -115,18 +116,13 @@ const Auth = () => {
           className="w-full max-w-sm"
         >
           <form onSubmit={handleEmailAuth} className="glass rounded-xl p-6 space-y-4">
-            <div className="relative">
-              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-              <Input
-                type="email"
-                placeholder="邮箱"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="pl-10 bg-secondary/50 border-border/50"
-                autoComplete="email"
-                required
-              />
-            </div>
+            <EmailInput
+              value={email}
+              onChange={setEmail}
+              placeholder="邮箱"
+              required
+              className="bg-secondary/50 border-border/50"
+            />
             <PasswordInput
               placeholder={isLogin ? "密码" : "设置密码 (至少 6 位)"}
               value={password}

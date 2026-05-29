@@ -5,8 +5,9 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
-import { Mail, Loader2, MailCheck, ArrowLeft } from "lucide-react";
+import { Loader2, MailCheck, ArrowLeft } from "lucide-react";
 import PasswordInput from "@/components/PasswordInput";
+import EmailInput from "@/components/EmailInput";
 import { translateAuthError } from "@/lib/authErrors";
 
 interface Props {
@@ -175,10 +176,7 @@ const AuthGateModal = ({ open, onOpenChange }: Props) => {
               <DialogDescription>输入注册邮箱，我们会发送重置链接</DialogDescription>
             </DialogHeader>
             <form onSubmit={handleForgot} className="space-y-3 mt-4">
-              <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                <Input type="email" inputMode="email" autoComplete="email" placeholder="邮箱" value={email} onChange={(e) => setEmail(e.target.value)} className="pl-9" required />
-              </div>
+              <EmailInput value={email} onChange={setEmail} required />
               <Button type="submit" disabled={loading} className="w-full bg-primary/20 text-primary border border-primary/30 hover:bg-primary/30">
                 {loading && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}发送重置链接
               </Button>
@@ -202,10 +200,7 @@ const AuthGateModal = ({ open, onOpenChange }: Props) => {
 
               <TabsContent value="login">
                 <form onSubmit={handleLogin} className="space-y-3 mt-4">
-                  <div className="relative">
-                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                    <Input type="email" inputMode="email" autoComplete="email" placeholder="邮箱 (支持 QQ/163/Gmail 等)" value={email} onChange={(e) => setEmail(e.target.value)} className="pl-9" required />
-                  </div>
+                  <EmailInput value={email} onChange={setEmail} placeholder="邮箱 (支持 QQ/163/Gmail 等)" required />
                   <PasswordInput
                     autoComplete="current-password"
                     placeholder="密码"
@@ -229,10 +224,7 @@ const AuthGateModal = ({ open, onOpenChange }: Props) => {
 
               <TabsContent value="signup">
                 <form onSubmit={handleSignup} className="space-y-3 mt-4">
-                  <div className="relative">
-                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                    <Input type="email" inputMode="email" autoComplete="email" placeholder="邮箱 (支持 QQ/163/Gmail 等)" value={email} onChange={(e) => setEmail(e.target.value)} className="pl-9" required />
-                  </div>
+                  <EmailInput value={email} onChange={setEmail} placeholder="邮箱 (支持 QQ/163/Gmail 等)" required />
                   <PasswordInput
                     autoComplete="new-password"
                     placeholder="设置密码 (至少 6 位)"
