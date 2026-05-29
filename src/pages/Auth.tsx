@@ -8,8 +8,9 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
 import ParticleBackground from "@/components/ParticleBackground";
-import { ArrowLeft, Mail, Loader2 } from "lucide-react";
+import { ArrowLeft, Loader2 } from "lucide-react";
 import PasswordInput from "@/components/PasswordInput";
+import EmailInput from "@/components/EmailInput";
 import { translateAuthError } from "@/lib/authErrors";
 
 const Auth = () => {
