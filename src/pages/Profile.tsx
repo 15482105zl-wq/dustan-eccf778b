@@ -185,7 +185,7 @@ const Profile = () => {
                 {uploading ? <Loader2 className="w-5 h-5 text-primary animate-spin" /> : <Camera className="w-5 h-5 text-primary" />}
                 <input
                   type="file"
-                  accept="image/*"
+                  accept="image/jpeg,image/png,image/gif,image/webp"
                   onChange={handleAvatarUpload}
                   className="hidden"
                   disabled={uploading}
