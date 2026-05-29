@@ -55,9 +55,20 @@ const Profile = () => {
       toast({ title: "头像不能超过 2MB", variant: "destructive" });
       return;
     }
+    const ALLOWED_MIME: Record<string, string> = {
+      "image/jpeg": "jpg",
+      "image/jpg": "jpg",
+      "image/png": "png",
+      "image/gif": "gif",
+      "image/webp": "webp",
+    };
+    const ext = ALLOWED_MIME[file.type];
+    if (!ext) {
+      toast({ title: "仅支持 JPG / PNG / GIF / WEBP 格式", variant: "destructive" });
+      return;
+    }
     setUploading(true);
     try {
-      const ext = file.name.split(".").pop() || "png";
       const path = `${user.id}/avatar.${ext}`;
       const { error: uploadError } = await supabase.storage
         .from("avatars")
