@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 import { Download, Globe, Shield, Zap, MessageCircle, Rocket } from "lucide-react";
 import GlassCard from "@/components/GlassCard";
 import ParticleBackground from "@/components/ParticleBackground";
@@ -8,7 +9,6 @@ import AuthGateModal from "@/components/AuthGateModal";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 
-const ACCEL_URL = "https://campsite.bio/dustan";
 const FEEDBACK_URL = "https://qm.qq.com/q/KECVhxL7a2";
 
 const resourceLinks = [
@@ -21,6 +21,7 @@ const resourceLinks = [
 const Index = () => {
   const { user } = useAuth();
   const { toast } = useToast();
+  const navigate = useNavigate();
   const [authOpen, setAuthOpen] = useState(false);
 
   const handleAccelClick = () => {
@@ -32,7 +33,7 @@ const Index = () => {
       toast({ title: "请先验证邮箱", description: "请前往邮箱点击验证链接后再访问", variant: "destructive" });
       return;
     }
-    window.open(ACCEL_URL, "_blank", "noopener,noreferrer");
+    navigate("/vip");
   };
 
   return (
