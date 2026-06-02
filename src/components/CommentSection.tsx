@@ -165,8 +165,13 @@ const CommentSection = () => {
     if (!user) return;
     const content = input.trim();
     if (!content) return;
-    if (content.length > 2000) {
-      toast({ title: "留言过长（最多 2000 字）", variant: "destructive" });
+    if (content.length > MAX_LEN) {
+      toast({ title: `留言过长（最多 ${MAX_LEN} 字）`, variant: "destructive" });
+      return;
+    }
+    const current = await refreshDailyCount();
+    if (current >= DAILY_LIMIT) {
+      toast({ title: `今日留言次数已达上限 (${DAILY_LIMIT}/${DAILY_LIMIT})`, variant: "destructive" });
       return;
     }
     setPosting(true);
@@ -180,6 +185,7 @@ const CommentSection = () => {
       setComments((prev) => [data as Comment, ...prev]);
       setInput("");
       setReplyTo(null);
+      setDailyCount((n) => n + 1);
       await fetchProfilesFor([user.id]);
     } catch (e: any) {
       toast({ title: "发送失败", description: e.message, variant: "destructive" });
