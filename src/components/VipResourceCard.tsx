@@ -50,18 +50,8 @@ const VipResourceCard = ({ icon: Icon, title, description, url, code, highlight,
             <p className="text-xs text-muted-foreground mt-0.5 truncate">{description}</p>
           )}
         </div>
-        <ExternalLink className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors shrink-0" />
       </div>
-      {code && (
-        <button
-          type="button"
-          onClick={copyCode}
-          className="mt-3 inline-flex items-center gap-1.5 text-xs font-mono px-2.5 py-1 rounded-md bg-primary/10 border border-primary/30 text-primary hover:bg-primary/20 transition-colors"
-        >
-          <span>提取码：{code}</span>
-          <Copy className="w-3 h-3" />
-        </button>
-      )}
+
     </motion.div>
   );
 };
