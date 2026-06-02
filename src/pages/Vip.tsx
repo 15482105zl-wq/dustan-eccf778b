@@ -19,33 +19,31 @@ const resources = [
   {
     icon: Download,
     title: "FlClash开源梯子",
-    description: "开源客户端 · 迅雷下载",
+    description: "开源轻量客户端",
     url: "https://pan.xunlei.com/s/VOtIOK6rxYbj6SC8zzHL70cAA1?pwd=s62d#",
-    code: "s62d",
   },
   {
     icon: Apple,
     title: "IOS（独享美区ID）",
-    description: "腾讯文档共享",
+    description: "Apple 独享 ID",
     url: "https://docs.qq.com/doc/DRnR1Y25LY3NJbnNp",
   },
   {
     icon: Globe,
     title: "Clash公共免费节点",
-    description: "免费节点订阅",
+    description: "每日免费节点",
     url: "https://pan.xunlei.com/s/VOnGAtlOEyZgFgT8dYpo67d1A1?pwd=45tq#",
-    code: "45tq",
   },
   {
     icon: Search,
     title: "IP环境查询",
-    description: "ping0.cc · 检测IP纯净度",
+    description: "检测IP纯净度",
     url: "https://ping0.cc",
   },
   {
     icon: Send,
     title: "TG 群组",
-    description: "Telegram 官方社群",
+    description: "官方社群",
     url: "https://t.me/bydustan",
   },
 ];
