@@ -34,6 +34,15 @@ const formatTime = (iso: string) => {
   return d.toLocaleDateString("zh-CN");
 };
 
+const DAILY_LIMIT = 5;
+const MAX_LEN = 60;
+
+const startOfTodayISO = () => {
+  const d = new Date();
+  d.setHours(0, 0, 0, 0);
+  return d.toISOString();
+};
+
 const CommentSection = () => {
   const { user } = useAuth();
   const { toast } = useToast();
@@ -46,7 +55,29 @@ const CommentSection = () => {
   const [posting, setPosting] = useState(false);
   const [input, setInput] = useState("");
   const [replyTo, setReplyTo] = useState<Comment | null>(null);
+  const [dailyCount, setDailyCount] = useState(0);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  const reachedLimit = dailyCount >= DAILY_LIMIT;
+
+  const refreshDailyCount = useCallback(async () => {
+    if (!user) {
+      setDailyCount(0);
+      return 0;
+    }
+    const { count } = await supabase
+      .from("comments")
+      .select("id", { count: "exact", head: true })
+      .eq("user_id", user.id)
+      .gte("created_at", startOfTodayISO());
+    const n = count ?? 0;
+    setDailyCount(n);
+    return n;
+  }, [user]);
+
+  useEffect(() => {
+    refreshDailyCount();
+  }, [refreshDailyCount]);
 
   const fetchProfilesFor = useCallback(async (userIds: string[]) => {
     const missing = Array.from(new Set(userIds)).filter((id) => !profiles[id]);
@@ -134,8 +165,13 @@ const CommentSection = () => {
     if (!user) return;
     const content = input.trim();
     if (!content) return;
-    if (content.length > 2000) {
-      toast({ title: "留言过长（最多 2000 字）", variant: "destructive" });
+    if (content.length > MAX_LEN) {
+      toast({ title: `留言过长（最多 ${MAX_LEN} 字）`, variant: "destructive" });
+      return;
+    }
+    const current = await refreshDailyCount();
+    if (current >= DAILY_LIMIT) {
+      toast({ title: `今日留言次数已达上限 (${DAILY_LIMIT}/${DAILY_LIMIT})`, variant: "destructive" });
       return;
     }
     setPosting(true);
@@ -149,6 +185,7 @@ const CommentSection = () => {
       setComments((prev) => [data as Comment, ...prev]);
       setInput("");
       setReplyTo(null);
+      setDailyCount((n) => n + 1);
       await fetchProfilesFor([user.id]);
     } catch (e: any) {
       toast({ title: "发送失败", description: e.message, variant: "destructive" });
@@ -189,22 +226,29 @@ const CommentSection = () => {
         <Textarea
           ref={textareaRef}
           value={input}
-          onChange={(e) => setInput(e.target.value)}
-          placeholder={user ? "说点什么…（支持 @昵称 回复）" : "请先登录后留言"}
-          disabled={!user || posting}
+          onChange={(e) => setInput(e.target.value.slice(0, MAX_LEN))}
+          placeholder={user ? (reachedLimit ? `今日留言次数已达上限 (${DAILY_LIMIT}/${DAILY_LIMIT})` : "说点什么…（支持 @昵称 回复）") : "请先登录后留言"}
+          disabled={!user || posting || reachedLimit}
           className="bg-transparent border-glass-border/50 min-h-[72px] resize-none text-sm"
-          maxLength={2000}
+          maxLength={MAX_LEN}
         />
-        <div className="flex items-center justify-between mt-2">
-          <span className="text-xs text-muted-foreground">{input.length}/2000</span>
+        <div className="flex items-center justify-between mt-2 gap-2">
+          <div className="flex items-center gap-2 text-xs text-muted-foreground">
+            <span>{input.length}/{MAX_LEN}</span>
+            {user && (
+              <span className={reachedLimit ? "text-destructive" : "text-accent/80"}>
+                · 今日 {Math.min(dailyCount, DAILY_LIMIT)}/{DAILY_LIMIT}
+              </span>
+            )}
+          </div>
           <Button
             size="sm"
             onClick={handlePost}
-            disabled={!user || posting || !input.trim()}
-            className="bg-accent/20 text-accent border border-accent/40 hover:bg-accent/30"
+            disabled={!user || posting || !input.trim() || reachedLimit}
+            className="bg-accent/20 text-accent border border-accent/40 hover:bg-accent/30 disabled:opacity-50"
           >
             {posting ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Send className="w-3.5 h-3.5" />}
-            发送
+            {reachedLimit ? "已达上限" : "发送"}
           </Button>
         </div>
       </div>
