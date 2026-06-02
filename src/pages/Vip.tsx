@@ -30,7 +30,7 @@ const resources = [
   },
   {
     icon: Globe,
-    title: "Clash公共免费节点",
+    title: "Clash免费节点",
     description: "每日免费节点",
     url: "https://pan.xunlei.com/s/VOnGAtlOEyZgFgT8dYpo67d1A1?pwd=45tq#",
   },
