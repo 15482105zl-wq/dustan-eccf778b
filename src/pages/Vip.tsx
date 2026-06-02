@@ -24,7 +24,7 @@ const resources = [
   },
   {
     icon: Apple,
-    title: "IOS（独享美区ID）",
+    title: "苹果美区 ID",
     description: "Apple 独享 ID",
     url: "https://docs.qq.com/doc/DRnR1Y25LY3NJbnNp",
   },
