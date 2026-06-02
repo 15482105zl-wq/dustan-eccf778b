@@ -34,6 +34,15 @@ const formatTime = (iso: string) => {
   return d.toLocaleDateString("zh-CN");
 };
 
+const DAILY_LIMIT = 5;
+const MAX_LEN = 60;
+
+const startOfTodayISO = () => {
+  const d = new Date();
+  d.setHours(0, 0, 0, 0);
+  return d.toISOString();
+};
+
 const CommentSection = () => {
   const { user } = useAuth();
   const { toast } = useToast();
@@ -46,7 +55,29 @@ const CommentSection = () => {
   const [posting, setPosting] = useState(false);
   const [input, setInput] = useState("");
   const [replyTo, setReplyTo] = useState<Comment | null>(null);
+  const [dailyCount, setDailyCount] = useState(0);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  const reachedLimit = dailyCount >= DAILY_LIMIT;
+
+  const refreshDailyCount = useCallback(async () => {
+    if (!user) {
+      setDailyCount(0);
+      return 0;
+    }
+    const { count } = await supabase
+      .from("comments")
+      .select("id", { count: "exact", head: true })
+      .eq("user_id", user.id)
+      .gte("created_at", startOfTodayISO());
+    const n = count ?? 0;
+    setDailyCount(n);
+    return n;
+  }, [user]);
+
+  useEffect(() => {
+    refreshDailyCount();
+  }, [refreshDailyCount]);
 
   const fetchProfilesFor = useCallback(async (userIds: string[]) => {
     const missing = Array.from(new Set(userIds)).filter((id) => !profiles[id]);
