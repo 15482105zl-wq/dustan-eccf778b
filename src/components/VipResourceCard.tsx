@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Copy, ExternalLink, LucideIcon } from "lucide-react";
+import { LucideIcon } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 interface Props {
