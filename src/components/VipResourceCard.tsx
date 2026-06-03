@@ -36,18 +36,18 @@ const VipResourceCard = ({ icon: Icon, title, description, url, code, highlight,
           : "border-glass-border/40 hover:border-primary/40 hover:shadow-glow-sm"
       }`}
     >
-      <div className="flex items-center gap-3">
+      <div className="flex flex-col gap-2.5">
         <div
-          className={`w-11 h-11 rounded-lg flex items-center justify-center shrink-0 ${
+          className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 ${
             highlight ? "bg-accent/20 text-accent" : "bg-primary/15 text-primary"
           }`}
         >
           <Icon className="w-5 h-5" />
         </div>
-        <div className="flex-1 min-w-0">
-          <p className="font-heading font-semibold text-foreground text-[15px] truncate">{title}</p>
+        <div className="min-w-0">
+          <p className="font-heading font-semibold text-foreground text-[13px] leading-tight break-words">{title}</p>
           {description && (
-            <p className="text-xs text-muted-foreground mt-0.5 truncate">{description}</p>
+            <p className="text-[11px] text-muted-foreground mt-1 break-words leading-snug">{description}</p>
           )}
         </div>
       </div>
