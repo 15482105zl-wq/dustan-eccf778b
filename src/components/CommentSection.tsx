@@ -254,71 +254,105 @@ const CommentSection = () => {
         </div>
       </div>
 
-      {/* List */}
+      {/* List grouped by date (today expanded by default) */}
       <div className="space-y-3">
-        <AnimatePresence initial={false}>
-          {comments.map((c) => {
-            const p = profiles[c.user_id];
-            const parent = c.parent_id ? parentMap[c.parent_id] : null;
-            return (
-              <motion.div
-                key={c.id}
-                layout
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.97 }}
-                transition={{ duration: 0.2 }}
-                className="glass rounded-xl p-3.5 border border-glass-border/40 hover:border-primary/30 transition-colors"
-              >
-                <div className="flex gap-3">
-                  <Avatar className="w-9 h-9 border border-primary/30 shrink-0">
-                    <AvatarImage src={p?.avatar_url || undefined} />
-                    <AvatarFallback className="bg-secondary text-xs">
-                      {p?.display_name?.[0]?.toUpperCase() || <UserIcon className="w-4 h-4" />}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <span className="text-sm font-semibold text-foreground/90">{nameOf(c.user_id)}</span>
-                      <span className="text-[11px] text-muted-foreground">{formatTime(c.created_at)}</span>
-                    </div>
-                    {parent && (
-                      <div className="mt-1.5 text-xs text-muted-foreground border-l-2 border-accent/40 pl-2 py-0.5 bg-secondary/30 rounded-r">
-                        <span className="text-accent">@{nameOf(parent.user_id)}</span>: {parent.content.slice(0, 80)}
-                        {parent.content.length > 80 && "…"}
+        {(() => {
+          const groups = new Map<string, Comment[]>();
+          for (const c of comments) {
+            const key = new Date(c.created_at).toLocaleDateString("zh-CN", { year: "numeric", month: "2-digit", day: "2-digit" }).replace(/\//g, "-");
+            if (!groups.has(key)) groups.set(key, []);
+            groups.get(key)!.push(c);
+          }
+          const todayKey = new Date().toLocaleDateString("zh-CN", { year: "numeric", month: "2-digit", day: "2-digit" }).replace(/\//g, "-");
+          const keys = Array.from(groups.keys());
+          return (
+            <Accordion type="multiple" defaultValue={[todayKey]} className="space-y-2">
+              {keys.map((dateKey) => {
+                const list = groups.get(dateKey)!;
+                const isToday = dateKey === todayKey;
+                return (
+                  <AccordionItem key={dateKey} value={dateKey} className="glass rounded-xl border border-glass-border/40 overflow-hidden">
+                    <AccordionTrigger className="px-4 py-2.5 hover:no-underline">
+                      <div className="flex items-center gap-2 text-sm">
+                        <span className={`font-mono ${isToday ? "text-accent" : "text-foreground/80"}`}>{dateKey}</span>
+                        {isToday && <span className="text-[10px] px-1.5 py-0.5 rounded bg-accent/15 text-accent border border-accent/30">今日</span>}
+                        <span className="text-xs text-muted-foreground">共 {list.length} 条留言</span>
                       </div>
-                    )}
-                    <p className="text-sm text-foreground/85 mt-1.5 whitespace-pre-wrap break-words">{c.content}</p>
-                    <div className="flex items-center gap-3 mt-2">
-                      {user && (
-                        <button
-                          onClick={() => handleReply(c)}
-                          className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-accent transition-colors"
-                        >
-                          <Reply className="w-3 h-3" /> 回复
-                        </button>
-                      )}
-                      {user?.id === c.user_id && (
-                        <button
-                          onClick={() => handleDelete(c.id)}
-                          className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-destructive transition-colors"
-                        >
-                          <Trash2 className="w-3 h-3" /> 删除
-                        </button>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-            );
-          })}
-        </AnimatePresence>
+                    </AccordionTrigger>
+                    <AccordionContent className="px-3 pb-3">
+                      <div className="space-y-3">
+                        <AnimatePresence initial={false}>
+                          {list.map((c) => {
+                            const p = profiles[c.user_id];
+                            const parent = c.parent_id ? parentMap[c.parent_id] : null;
+                            return (
+                              <motion.div
+                                key={c.id}
+                                layout
+                                initial={{ opacity: 0, y: 8 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, scale: 0.97 }}
+                                transition={{ duration: 0.2 }}
+                                className="rounded-lg p-3 border border-glass-border/30 bg-background/30 hover:border-primary/30 transition-colors"
+                              >
+                                <div className="flex gap-3">
+                                  <Avatar className="w-9 h-9 border border-primary/30 shrink-0">
+                                    <AvatarImage src={p?.avatar_url || undefined} />
+                                    <AvatarFallback className="bg-secondary text-xs">
+                                      {p?.display_name?.[0]?.toUpperCase() || <UserIcon className="w-4 h-4" />}
+                                    </AvatarFallback>
+                                  </Avatar>
+                                  <div className="flex-1 min-w-0">
+                                    <div className="flex items-center gap-2 flex-wrap">
+                                      <span className="text-sm font-semibold text-foreground/90">{nameOf(c.user_id)}</span>
+                                      <span className="text-[11px] text-muted-foreground">{formatTime(c.created_at)}</span>
+                                    </div>
+                                    {parent && (
+                                      <div className="mt-1.5 text-xs text-muted-foreground border-l-2 border-accent/40 pl-2 py-0.5 bg-secondary/30 rounded-r">
+                                        <span className="text-accent">@{nameOf(parent.user_id)}</span>: {parent.content.slice(0, 80)}
+                                        {parent.content.length > 80 && "…"}
+                                      </div>
+                                    )}
+                                    <p className="text-sm text-foreground/85 mt-1.5 whitespace-pre-wrap break-words">{c.content}</p>
+                                    <div className="flex items-center gap-3 mt-2">
+                                      {user && (
+                                        <button
+                                          onClick={() => handleReply(c)}
+                                          className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-accent transition-colors"
+                                        >
+                                          <Reply className="w-3 h-3" /> 回复
+                                        </button>
+                                      )}
+                                      {user?.id === c.user_id && (
+                                        <button
+                                          onClick={() => handleDelete(c.id)}
+                                          className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-destructive transition-colors"
+                                        >
+                                          <Trash2 className="w-3 h-3" /> 删除
+                                        </button>
+                                      )}
+                                    </div>
+                                  </div>
+                                </div>
+                              </motion.div>
+                            );
+                          })}
+                        </AnimatePresence>
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
+                );
+              })}
+            </Accordion>
+          );
+        })()}
 
         {comments.length === 0 && !loading && (
           <div className="text-center py-10 text-sm text-muted-foreground">
             还没有留言，来抢沙发吧 ✨
           </div>
         )}
+
 
         {hasMore && (
           <div className="flex justify-center pt-2">
