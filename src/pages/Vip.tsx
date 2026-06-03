@@ -17,22 +17,16 @@ const resources = [
     highlight: true,
   },
   {
-    icon: Download,
-    title: "FlClash开源梯子",
-    description: "开源轻量客户端",
-    url: "https://pan.xunlei.com/s/VOtIOK6rxYbj6SC8zzHL70cAA1?pwd=s62d#",
+    icon: Globe,
+    title: "Clash共享节点",
+    description: "每日免费节点",
+    url: "https://pan.xunlei.com/s/VOnGAtlOEyZgFgT8dYpo67d1A1?pwd=45tq#",
   },
   {
     icon: Apple,
     title: "苹果美区 ID",
     description: "Apple 独享 ID",
     url: "https://docs.qq.com/doc/DRnR1Y25LY3NJbnNp",
-  },
-  {
-    icon: Globe,
-    title: "Clash免费节点",
-    description: "每日免费节点",
-    url: "https://pan.xunlei.com/s/VOnGAtlOEyZgFgT8dYpo67d1A1?pwd=45tq#",
   },
   {
     icon: Search,
@@ -88,9 +82,11 @@ const Vip = () => {
           <p className="text-muted-foreground text-sm">精选高速通道 · 自由畅游全球</p>
         </motion.div>
 
-        <div className="w-full max-w-2xl grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div className="w-full max-w-2xl grid grid-cols-6 gap-3 auto-rows-fr">
           {resources.map((r, i) => (
-            <VipResourceCard key={r.title} {...r} delay={i * 0.06} />
+            <div key={r.title} className={i < 2 ? "col-span-6 sm:col-span-3" : "col-span-6 sm:col-span-2"}>
+              <VipResourceCard {...r} delay={i * 0.06} />
+            </div>
           ))}
         </div>
 

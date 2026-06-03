@@ -30,9 +30,9 @@ const VipResourceCard = ({ icon: Icon, title, description, url, code, highlight,
       whileHover={{ scale: 1.02, y: -2 }}
       whileTap={{ scale: 0.98 }}
       onClick={() => window.open(url, "_blank", "noopener,noreferrer")}
-      className={`glass rounded-xl p-4 cursor-pointer relative overflow-hidden group transition-all duration-300 ${
+      className={`glass rounded-xl p-4 cursor-pointer relative overflow-hidden group transition-all duration-300 h-full ${
         highlight
-          ? "border-accent/50 animate-breathe-glow"
+          ? "border-accent/50 animate-breathe-glow shadow-[0_0_24px_hsl(var(--accent)/0.35)]"
           : "border-glass-border/40 hover:border-primary/40 hover:shadow-glow-sm"
       }`}
     >
