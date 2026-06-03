@@ -78,18 +78,20 @@ const Profile = () => {
         return;
       }
       const { data: { publicUrl } } = supabase.storage.from("avatars").getPublicUrl(path);
-      const cacheBusted = publicUrl + "?t=" + Date.now();
+      const cacheBusted = `${publicUrl}?t=${Date.now()}`;
       setAvatarUrl(cacheBusted);
       const { error: upsertErr } = await supabase
         .from("profiles")
         .upsert(
-          { user_id: user.id, avatar_url: publicUrl },
+          { user_id: user.id, avatar_url: cacheBusted },
           { onConflict: "user_id" }
         );
       if (upsertErr) {
         toast({ title: "头像保存失败", description: upsertErr.message, variant: "destructive" });
         return;
       }
+      // Force-refresh auth user_metadata so global state picks up new avatar immediately
+      await supabase.auth.updateUser({ data: { avatar_url: cacheBusted } });
       toast({ title: "头像已更新 ✨" });
     } catch (err: any) {
       toast({ title: "上传失败", description: err?.message || "未知错误", variant: "destructive" });
