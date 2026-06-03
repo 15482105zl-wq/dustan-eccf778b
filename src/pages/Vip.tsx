@@ -93,7 +93,6 @@ const Vip = () => {
           </div>
         </div>
 
-        <CommentSection />
       </div>
     </div>
   );
