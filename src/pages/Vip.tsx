@@ -17,22 +17,16 @@ const resources = [
     highlight: true,
   },
   {
-    icon: Download,
-    title: "FlClash开源梯子",
-    description: "开源轻量客户端",
-    url: "https://pan.xunlei.com/s/VOtIOK6rxYbj6SC8zzHL70cAA1?pwd=s62d#",
+    icon: Globe,
+    title: "Clash共享节点",
+    description: "每日免费节点",
+    url: "https://pan.xunlei.com/s/VOnGAtlOEyZgFgT8dYpo67d1A1?pwd=45tq#",
   },
   {
     icon: Apple,
     title: "苹果美区 ID",
     description: "Apple 独享 ID",
     url: "https://docs.qq.com/doc/DRnR1Y25LY3NJbnNp",
-  },
-  {
-    icon: Globe,
-    title: "Clash免费节点",
-    description: "每日免费节点",
-    url: "https://pan.xunlei.com/s/VOnGAtlOEyZgFgT8dYpo67d1A1?pwd=45tq#",
   },
   {
     icon: Search,
