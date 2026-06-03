@@ -82,16 +82,15 @@ const Vip = () => {
           <p className="text-muted-foreground text-sm">精选高速通道 · 自由畅游全球</p>
         </motion.div>
 
-        <div className="w-full max-w-2xl grid grid-cols-6 gap-4 auto-rows-fr">
+        <div className="w-full max-w-2xl grid grid-cols-6 gap-3">
           {resources.map((r, i) => (
             <div key={r.title} className={i < 2 ? "col-span-3" : "col-span-2"}>
               <VipResourceCard {...r} delay={i * 0.06} />
             </div>
           ))}
-          <div className="col-span-6">
-            <CommentSection />
-          </div>
         </div>
+
+        <CommentSection />
 
       </div>
     </div>
