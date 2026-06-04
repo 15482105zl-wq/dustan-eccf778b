@@ -1,50 +1,18 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Zap, Download, Apple, Globe, Search, Send, Rocket } from "lucide-react";
+import { ArrowLeft, Zap, Apple, Globe, Lock, Rocket } from "lucide-react";
 import ParticleBackground from "@/components/ParticleBackground";
 import UserNav from "@/components/UserNav";
 import VipResourceCard from "@/components/VipResourceCard";
 import CommentSection from "@/components/CommentSection";
+import UnlockForum from "@/components/UnlockForum";
 import { useAuth } from "@/hooks/useAuth";
-
-const resources = [
-  {
-    icon: Zap,
-    title: "⚡V2pn专线 · 全球加速⚡",
-    description: "高速专线 · 推荐首选",
-    url: "https://dustan.zwaaa.app/#/register?code=R4Xx2MlV",
-    highlight: true,
-  },
-  {
-    icon: Globe,
-    title: "Clash共享节点",
-    description: "每日免费节点",
-    url: "https://pan.xunlei.com/s/VOnGAtlOEyZgFgT8dYpo67d1A1?pwd=45tq#",
-  },
-  {
-    icon: Apple,
-    title: "苹果美区 ID",
-    description: "Apple 独享 ID",
-    url: "https://docs.qq.com/doc/DRnR1Y25LY3NJbnNp",
-  },
-  {
-    icon: Search,
-    title: "IP环境查询",
-    description: "检测IP纯净度",
-    url: "https://ping0.cc",
-  },
-  {
-    icon: Send,
-    title: "TG 群组",
-    description: "官方社群",
-    url: "https://t.me/bydustan",
-  },
-];
 
 const Vip = () => {
   const navigate = useNavigate();
   const { user, loading } = useAuth();
+  const [forumOpen, setForumOpen] = useState(false);
 
   useEffect(() => {
     if (!loading && (!user || !user.email_confirmed_at)) {
@@ -53,6 +21,35 @@ const Vip = () => {
   }, [user, loading, navigate]);
 
   if (loading || !user) return null;
+
+  const cards = [
+    {
+      icon: Zap,
+      title: "⚡V2PN专线·全球加速⚡",
+      description: "高速专线 · 推荐首选",
+      url: "https://dustan.zwaaa.app/#/register?code=R4Xx2MlV",
+      highlight: true,
+    },
+    {
+      icon: Globe,
+      title: "Clash 共享节点",
+      description: "每日共享节点",
+      url: "https://pan.xunlei.com/s/VOnGAtlOEyZgFgT8dYpo67d1A1?pwd=45tq#",
+    },
+    {
+      icon: Apple,
+      title: "苹果美区ID",
+      description: "Apple独享ID",
+      url: "https://docs.qq.com/doc/DRnR1Y25LY3NJbnNp",
+    },
+    {
+      icon: Lock,
+      title: "Unlock 论坛",
+      description: "纯文字社区",
+      onClick: () => setForumOpen(true),
+      highlight: true,
+    },
+  ];
 
   return (
     <div className="min-h-screen relative">
@@ -82,17 +79,20 @@ const Vip = () => {
           <p className="text-muted-foreground text-sm">精选高速通道 · 自由畅游全球</p>
         </motion.div>
 
-        <div className="w-full max-w-2xl grid grid-cols-6 gap-3">
-          {resources.map((r, i) => (
-            <div key={r.title} className={i < 2 ? "col-span-3" : "col-span-2"}>
-              <VipResourceCard {...r} delay={i * 0.06} />
+        <div className="w-full max-w-2xl grid grid-cols-6 gap-3 auto-rows-fr">
+          {cards.map((c, i) => (
+            <div key={c.title} className="col-span-3">
+              <VipResourceCard {...c} delay={i * 0.06} />
             </div>
           ))}
         </div>
 
-        <CommentSection />
-
+        <div className="w-full max-w-2xl">
+          <CommentSection />
+        </div>
       </div>
+
+      <UnlockForum open={forumOpen} onOpenChange={setForumOpen} />
     </div>
   );
 };
