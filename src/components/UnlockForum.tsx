@@ -126,26 +126,32 @@ const UnlockForum = ({ open, onOpenChange }: Props) => {
   const nameOf = (uid: string) => profiles[uid]?.display_name || "匿名用户";
 
   const handlePostThread = async () => {
-    if (!isOwner || !user) return;
-    const t = title.trim();
-    const c = body.trim();
+    if (!user) return;
+    if (user.email !== OWNER_EMAIL) {
+      toast({ title: "无权发布", description: "仅站长账号可发布主贴", variant: "destructive" });
+      return;
+    }
+    const t = title.trim().slice(0, MAX_TITLE);
+    const c = body.trim().slice(0, MAX_BODY);
     if (!t || !c) return;
     setPosting(true);
     try {
+      const payload = { user_id: user.id, title: t, content: c };
       const { data, error } = await supabase
         .from("forum_threads")
-        .insert({ user_id: user.id, title: t.slice(0, MAX_TITLE), content: c.slice(0, MAX_BODY) })
-        .select("*")
+        .insert(payload)
+        .select("id, user_id, title, content, created_at")
         .single();
       if (error) throw error;
-      setThreads((prev) => [data as Thread, ...prev]);
+      if (data) setThreads((prev) => [data as Thread, ...prev]);
       await fetchProfiles([user.id]);
       setTitle("");
       setBody("");
       setComposeOpen(false);
       toast({ title: "主贴已发布 ✨" });
     } catch (e: any) {
-      toast({ title: "发布失败", description: e.message, variant: "destructive" });
+      console.error("post thread error", e);
+      toast({ title: "发布失败", description: e.message || "请稍后重试", variant: "destructive" });
     } finally {
       setPosting(false);
     }
