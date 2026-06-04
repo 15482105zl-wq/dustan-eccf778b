@@ -25,7 +25,7 @@ const Vip = () => {
   const cards = [
     {
       icon: Zap,
-      title: "⚡V2PN专线·全球加速⚡",
+      title: "⚡V2PN专线 · 全球加速⚡",
       description: "高速专线 · 推荐首选",
       url: "https://dustan.zwaaa.app/#/register?code=R4Xx2MlV",
       highlight: true,
@@ -35,19 +35,21 @@ const Vip = () => {
       title: "Clash 共享节点",
       description: "每日共享节点",
       url: "https://pan.xunlei.com/s/VOnGAtlOEyZgFgT8dYpo67d1A1?pwd=45tq#",
+      highlight: true,
     },
     {
       icon: Apple,
       title: "苹果美区ID",
       description: "Apple独享ID",
       url: "https://docs.qq.com/doc/DRnR1Y25LY3NJbnNp",
+      singleLine: true,
     },
     {
       icon: Lock,
-      title: "Unlock 论坛",
+      title: "Unlock",
       description: "纯文字社区",
       onClick: () => setForumOpen(true),
-      highlight: true,
+      singleLine: true,
     },
   ];
 
@@ -79,7 +81,7 @@ const Vip = () => {
           <p className="text-muted-foreground text-sm">精选高速通道 · 自由畅游全球</p>
         </motion.div>
 
-        <div className="w-full max-w-2xl grid grid-cols-6 gap-3 auto-rows-fr">
+        <div className="w-full max-w-2xl grid grid-cols-6 gap-3">
           {cards.map((c, i) => (
             <div key={c.title} className="col-span-3">
               <VipResourceCard {...c} delay={i * 0.06} />
