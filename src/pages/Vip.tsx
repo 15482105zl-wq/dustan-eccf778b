@@ -22,21 +22,26 @@ const Vip = () => {
 
   if (loading || !user) return null;
 
-  const cards = [
+  const primary = [
     {
       icon: Zap,
-      title: "⚡V2PN专线 · 全球加速⚡",
-      description: "高速专线 · 推荐首选",
+      title: "V2PN⚡专线",
+      description: "高速专线 · 首选",
       url: "https://dustan.zwaaa.app/#/register?code=R4Xx2MlV",
       highlight: true,
+      singleLine: true,
     },
     {
       icon: Globe,
-      title: "Clash 共享节点",
-      description: "每日共享节点",
+      title: "Clash 节点",
+      description: "每日免费节点",
       url: "https://pan.xunlei.com/s/VOnGAtlOEyZgFgT8dYpo67d1A1?pwd=45tq#",
       highlight: true,
+      singleLine: true,
     },
+  ];
+
+  const secondary = [
     {
       icon: Apple,
       title: "苹果美区ID",
@@ -49,6 +54,13 @@ const Vip = () => {
       title: "Unlock",
       description: "纯文字社区",
       onClick: () => setForumOpen(true),
+      singleLine: true,
+    },
+    {
+      icon: Send,
+      title: "TG 群组",
+      description: "官方社群",
+      url: "https://t.me/+yourgroup",
       singleLine: true,
     },
   ];
