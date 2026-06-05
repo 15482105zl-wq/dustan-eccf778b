@@ -26,7 +26,7 @@ const Vip = () => {
     {
       icon: Zap,
       title: "V2PN⚡专线",
-      description: "高速专线·首选",
+      description: "全球高速专线",
       url: "https://dustan.zwaaa.app/#/register?code=R4Xx2MlV",
       highlight: true,
     },
@@ -49,14 +49,14 @@ const Vip = () => {
     {
       icon: Lock,
       title: "Unlock",
-      description: "纯文字社区",
+      description: "破解软件社区",
       onClick: () => setForumOpen(true),
     },
     {
       icon: Send,
       title: "TG群组",
       description: "官方社群",
-      url: "https://t.me/+yourgroup",
+      url: "https://t.me/bydustan",
     },
   ];
 
