@@ -211,6 +211,26 @@ const CommentSection = () => {
     setComments((prev) => prev.filter((c) => c.id !== id && c.parent_id !== id));
   };
 
+  const startEdit = (c: Comment) => {
+    setEditingId(c.id);
+    setEditingText(c.content);
+  };
+  const cancelEdit = () => {
+    setEditingId(null);
+    setEditingText("");
+  };
+  const saveEdit = async (id: string) => {
+    const content = editingText.trim().slice(0, MAX_LEN);
+    if (!content) return;
+    const { error } = await supabase.from("comments").update({ content }).eq("id", id);
+    if (error) {
+      toast({ title: "编辑失败", description: error.message, variant: "destructive" });
+      return;
+    }
+    setComments((prev) => prev.map((c) => (c.id === id ? { ...c, content } : c)));
+    cancelEdit();
+  };
+
   return (
     <section className="w-full max-w-2xl mx-auto mt-10">
       <div className="flex items-center gap-2 mb-4">
