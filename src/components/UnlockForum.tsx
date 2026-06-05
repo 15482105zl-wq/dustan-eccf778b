@@ -292,7 +292,7 @@ const UnlockForum = ({ open, onOpenChange }: Props) => {
                     <p className="text-sm text-foreground/85 whitespace-pre-wrap break-words mb-3 border-l-2 border-accent/40 pl-3">
                       {t.content}
                     </p>
-                    {isOwner && user?.id === t.user_id && (
+                    {isOwner && (
                       <button
                         onClick={() => handleDeleteThread(t.id)}
                         className="text-[11px] text-muted-foreground hover:text-destructive inline-flex items-center gap-1 mb-3"
@@ -321,7 +321,7 @@ const UnlockForum = ({ open, onOpenChange }: Props) => {
                               <div className="flex items-center gap-2 text-[11px]">
                                 <span className="font-semibold text-foreground/90">{nameOf(r.user_id)}</span>
                                 <span className="text-muted-foreground">{formatTime(r.created_at)}</span>
-                                {user?.id === r.user_id && (
+                                {(isOwner || user?.id === r.user_id) && (
                                   <button onClick={() => handleDeleteReply(r.id, t.id)} className="ml-auto text-muted-foreground hover:text-destructive">
                                     <X className="w-3 h-3" />
                                   </button>

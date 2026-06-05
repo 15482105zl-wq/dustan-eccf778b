@@ -5,7 +5,9 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, MessageSquare, Reply, Send, Trash2, User as UserIcon, X } from "lucide-react";
+import { Loader2, MessageSquare, Reply, Send, Trash2, User as UserIcon, X, Pencil, Check } from "lucide-react";
+
+const ADMIN_EMAIL = "15482105zl@gmail.com";
 import { motion, AnimatePresence } from "framer-motion";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 
@@ -58,7 +60,10 @@ const CommentSection = () => {
   const [replyTo, setReplyTo] = useState<Comment | null>(null);
   const [dailyCount, setDailyCount] = useState(0);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editingText, setEditingText] = useState("");
 
+  const isAdmin = user?.email === ADMIN_EMAIL;
   const reachedLimit = dailyCount >= DAILY_LIMIT;
 
   const refreshDailyCount = useCallback(async () => {
@@ -206,6 +211,26 @@ const CommentSection = () => {
     setComments((prev) => prev.filter((c) => c.id !== id && c.parent_id !== id));
   };
 
+  const startEdit = (c: Comment) => {
+    setEditingId(c.id);
+    setEditingText(c.content);
+  };
+  const cancelEdit = () => {
+    setEditingId(null);
+    setEditingText("");
+  };
+  const saveEdit = async (id: string) => {
+    const content = editingText.trim().slice(0, MAX_LEN);
+    if (!content) return;
+    const { error } = await supabase.from("comments").update({ content }).eq("id", id);
+    if (error) {
+      toast({ title: "编辑失败", description: error.message, variant: "destructive" });
+      return;
+    }
+    setComments((prev) => prev.map((c) => (c.id === id ? { ...c, content } : c)));
+    cancelEdit();
+  };
+
   return (
     <section className="w-full max-w-2xl mx-auto mt-10">
       <div className="flex items-center gap-2 mb-4">
@@ -313,9 +338,29 @@ const CommentSection = () => {
                                         {parent.content.length > 80 && "…"}
                                       </div>
                                     )}
-                                    <p className="text-sm text-foreground/85 mt-1.5 whitespace-pre-wrap break-words">{c.content}</p>
+                                    {editingId === c.id ? (
+                                      <div className="mt-1.5 space-y-2">
+                                        <Textarea
+                                          value={editingText}
+                                          onChange={(e) => setEditingText(e.target.value.slice(0, MAX_LEN))}
+                                          maxLength={MAX_LEN}
+                                          className="bg-transparent border-accent/40 min-h-[60px] resize-none text-sm"
+                                        />
+                                        <div className="flex items-center justify-between">
+                                          <span className="text-[11px] text-muted-foreground">{editingText.length}/{MAX_LEN}</span>
+                                          <div className="flex gap-2">
+                                            <Button size="sm" variant="ghost" onClick={cancelEdit}>取消</Button>
+                                            <Button size="sm" onClick={() => saveEdit(c.id)} className="bg-accent/20 text-accent border border-accent/40 hover:bg-accent/30">
+                                              <Check className="w-3.5 h-3.5 mr-1" /> 保存
+                                            </Button>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    ) : (
+                                      <p className="text-sm text-foreground/85 mt-1.5 whitespace-pre-wrap break-words">{c.content}</p>
+                                    )}
                                     <div className="flex items-center gap-3 mt-2">
-                                      {user && (
+                                      {user && editingId !== c.id && (
                                         <button
                                           onClick={() => handleReply(c)}
                                           className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-accent transition-colors"
@@ -323,13 +368,21 @@ const CommentSection = () => {
                                           <Reply className="w-3 h-3" /> 回复
                                         </button>
                                       )}
-                                      {user?.id === c.user_id && (
-                                        <button
-                                          onClick={() => handleDelete(c.id)}
-                                          className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-destructive transition-colors"
-                                        >
-                                          <Trash2 className="w-3 h-3" /> 删除
-                                        </button>
+                                      {(isAdmin || user?.id === c.user_id) && editingId !== c.id && (
+                                        <>
+                                          <button
+                                            onClick={() => startEdit(c)}
+                                            className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-accent transition-colors"
+                                          >
+                                            <Pencil className="w-3 h-3" /> 编辑
+                                          </button>
+                                          <button
+                                            onClick={() => handleDelete(c.id)}
+                                            className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-destructive transition-colors"
+                                          >
+                                            <Trash2 className="w-3 h-3" /> 删除
+                                          </button>
+                                        </>
                                       )}
                                     </div>
                                   </div>
