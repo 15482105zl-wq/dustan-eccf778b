@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Zap, Apple, Globe, Lock, Rocket } from "lucide-react";
+import { ArrowLeft, Zap, Apple, Globe, Lock, Rocket, Send } from "lucide-react";
 import ParticleBackground from "@/components/ParticleBackground";
 import UserNav from "@/components/UserNav";
 import VipResourceCard from "@/components/VipResourceCard";
@@ -22,21 +22,26 @@ const Vip = () => {
 
   if (loading || !user) return null;
 
-  const cards = [
+  const primary = [
     {
       icon: Zap,
-      title: "⚡V2PN专线 · 全球加速⚡",
-      description: "高速专线 · 推荐首选",
+      title: "V2PN⚡专线",
+      description: "高速专线 · 首选",
       url: "https://dustan.zwaaa.app/#/register?code=R4Xx2MlV",
       highlight: true,
+      singleLine: true,
     },
     {
       icon: Globe,
-      title: "Clash 共享节点",
-      description: "每日共享节点",
+      title: "Clash 节点",
+      description: "每日免费节点",
       url: "https://pan.xunlei.com/s/VOnGAtlOEyZgFgT8dYpo67d1A1?pwd=45tq#",
       highlight: true,
+      singleLine: true,
     },
+  ];
+
+  const secondary = [
     {
       icon: Apple,
       title: "苹果美区ID",
@@ -49,6 +54,13 @@ const Vip = () => {
       title: "Unlock",
       description: "纯文字社区",
       onClick: () => setForumOpen(true),
+      singleLine: true,
+    },
+    {
+      icon: Send,
+      title: "TG 群组",
+      description: "官方社群",
+      url: "https://t.me/+yourgroup",
       singleLine: true,
     },
   ];
@@ -81,10 +93,15 @@ const Vip = () => {
           <p className="text-muted-foreground text-sm">精选高速通道 · 自由畅游全球</p>
         </motion.div>
 
-        <div className="w-full max-w-2xl grid grid-cols-6 gap-3">
-          {cards.map((c, i) => (
+        <div className="w-full max-w-2xl grid grid-cols-6 gap-3 auto-rows-fr">
+          {primary.map((c, i) => (
             <div key={c.title} className="col-span-3">
               <VipResourceCard {...c} delay={i * 0.06} />
+            </div>
+          ))}
+          {secondary.map((c, i) => (
+            <div key={c.title} className="col-span-2">
+              <VipResourceCard {...c} delay={(i + 2) * 0.06} />
             </div>
           ))}
         </div>
