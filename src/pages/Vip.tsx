@@ -93,10 +93,15 @@ const Vip = () => {
           <p className="text-muted-foreground text-sm">精选高速通道 · 自由畅游全球</p>
         </motion.div>
 
-        <div className="w-full max-w-2xl grid grid-cols-6 gap-3">
-          {cards.map((c, i) => (
+        <div className="w-full max-w-2xl grid grid-cols-6 gap-3 auto-rows-fr">
+          {primary.map((c, i) => (
             <div key={c.title} className="col-span-3">
               <VipResourceCard {...c} delay={i * 0.06} />
+            </div>
+          ))}
+          {secondary.map((c, i) => (
+            <div key={c.title} className="col-span-2">
+              <VipResourceCard {...c} delay={(i + 2) * 0.06} />
             </div>
           ))}
         </div>
