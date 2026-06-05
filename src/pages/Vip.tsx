@@ -56,7 +56,7 @@ const Vip = () => {
       icon: Send,
       title: "TG群组",
       description: "官方社群",
-      url: "https://t.me/+yourgroup",
+      url: "https://t.me/bydustan",
     },
   ];
 
