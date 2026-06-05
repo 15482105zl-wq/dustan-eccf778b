@@ -5,7 +5,9 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, MessageSquare, Reply, Send, Trash2, User as UserIcon, X } from "lucide-react";
+import { Loader2, MessageSquare, Reply, Send, Trash2, User as UserIcon, X, Pencil, Check } from "lucide-react";
+
+const ADMIN_EMAIL = "15482105zl@gmail.com";
 import { motion, AnimatePresence } from "framer-motion";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 
