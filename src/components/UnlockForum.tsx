@@ -292,7 +292,7 @@ const UnlockForum = ({ open, onOpenChange }: Props) => {
                     <p className="text-sm text-foreground/85 whitespace-pre-wrap break-words mb-3 border-l-2 border-accent/40 pl-3">
                       {t.content}
                     </p>
-                    {isOwner && user?.id === t.user_id && (
+                    {isOwner && (
                       <button
                         onClick={() => handleDeleteThread(t.id)}
                         className="text-[11px] text-muted-foreground hover:text-destructive inline-flex items-center gap-1 mb-3"
