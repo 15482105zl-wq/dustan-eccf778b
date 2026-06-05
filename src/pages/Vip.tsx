@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Zap, Apple, Globe, Lock, Rocket } from "lucide-react";
+import { ArrowLeft, Zap, Apple, Globe, Lock, Rocket, Send } from "lucide-react";
 import ParticleBackground from "@/components/ParticleBackground";
 import UserNav from "@/components/UserNav";
 import VipResourceCard from "@/components/VipResourceCard";
