@@ -26,7 +26,7 @@ const Vip = () => {
     {
       icon: Zap,
       title: "V2PN⚡专线",
-      description: "高速专线·首选",
+      description: "全球高速专线",
       url: "https://dustan.zwaaa.app/#/register?code=R4Xx2MlV",
       highlight: true,
     },
