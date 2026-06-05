@@ -338,9 +338,29 @@ const CommentSection = () => {
                                         {parent.content.length > 80 && "…"}
                                       </div>
                                     )}
-                                    <p className="text-sm text-foreground/85 mt-1.5 whitespace-pre-wrap break-words">{c.content}</p>
+                                    {editingId === c.id ? (
+                                      <div className="mt-1.5 space-y-2">
+                                        <Textarea
+                                          value={editingText}
+                                          onChange={(e) => setEditingText(e.target.value.slice(0, MAX_LEN))}
+                                          maxLength={MAX_LEN}
+                                          className="bg-transparent border-accent/40 min-h-[60px] resize-none text-sm"
+                                        />
+                                        <div className="flex items-center justify-between">
+                                          <span className="text-[11px] text-muted-foreground">{editingText.length}/{MAX_LEN}</span>
+                                          <div className="flex gap-2">
+                                            <Button size="sm" variant="ghost" onClick={cancelEdit}>取消</Button>
+                                            <Button size="sm" onClick={() => saveEdit(c.id)} className="bg-accent/20 text-accent border border-accent/40 hover:bg-accent/30">
+                                              <Check className="w-3.5 h-3.5 mr-1" /> 保存
+                                            </Button>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    ) : (
+                                      <p className="text-sm text-foreground/85 mt-1.5 whitespace-pre-wrap break-words">{c.content}</p>
+                                    )}
                                     <div className="flex items-center gap-3 mt-2">
-                                      {user && (
+                                      {user && editingId !== c.id && (
                                         <button
                                           onClick={() => handleReply(c)}
                                           className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-accent transition-colors"
@@ -348,13 +368,21 @@ const CommentSection = () => {
                                           <Reply className="w-3 h-3" /> 回复
                                         </button>
                                       )}
-                                      {user?.id === c.user_id && (
-                                        <button
-                                          onClick={() => handleDelete(c.id)}
-                                          className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-destructive transition-colors"
-                                        >
-                                          <Trash2 className="w-3 h-3" /> 删除
-                                        </button>
+                                      {(isAdmin || user?.id === c.user_id) && editingId !== c.id && (
+                                        <>
+                                          <button
+                                            onClick={() => startEdit(c)}
+                                            className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-accent transition-colors"
+                                          >
+                                            <Pencil className="w-3 h-3" /> 编辑
+                                          </button>
+                                          <button
+                                            onClick={() => handleDelete(c.id)}
+                                            className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-destructive transition-colors"
+                                          >
+                                            <Trash2 className="w-3 h-3" /> 删除
+                                          </button>
+                                        </>
                                       )}
                                     </div>
                                   </div>
