@@ -60,7 +60,10 @@ const CommentSection = () => {
   const [replyTo, setReplyTo] = useState<Comment | null>(null);
   const [dailyCount, setDailyCount] = useState(0);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editingText, setEditingText] = useState("");
 
+  const isAdmin = user?.email === ADMIN_EMAIL;
   const reachedLimit = dailyCount >= DAILY_LIMIT;
 
   const refreshDailyCount = useCallback(async () => {
