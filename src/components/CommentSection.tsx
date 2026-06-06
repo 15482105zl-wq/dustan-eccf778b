@@ -7,7 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2, MessageSquare, Reply, Send, Trash2, User as UserIcon, X, Pencil, Check } from "lucide-react";
 
-const ADMIN_EMAIL = "15482105zl@gmail.com";
+
 import { motion, AnimatePresence } from "framer-motion";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 
@@ -47,7 +47,7 @@ const startOfTodayISO = () => {
 };
 
 const CommentSection = () => {
-  const { user } = useAuth();
+  const { user, isAdmin } = useAuth();
   const { toast } = useToast();
 
   const [comments, setComments] = useState<Comment[]>([]);
@@ -63,7 +63,7 @@ const CommentSection = () => {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editingText, setEditingText] = useState("");
 
-  const isAdmin = user?.email === ADMIN_EMAIL;
+  
   const reachedLimit = dailyCount >= DAILY_LIMIT;
 
   const refreshDailyCount = useCallback(async () => {

@@ -11,7 +11,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Loader2, Lock, Plus, Send, Trash2, User as UserIcon, X } from "lucide-react";
 import { motion } from "framer-motion";
 
-const OWNER_EMAIL = "15482105zl@gmail.com";
+
 const MAX_TITLE = 60;
 const MAX_BODY = 500;
 const MAX_REPLY = 200;
@@ -51,9 +51,9 @@ const formatTime = (iso: string) => {
 };
 
 const UnlockForum = ({ open, onOpenChange }: Props) => {
-  const { user } = useAuth();
+  const { user, isAdmin } = useAuth();
   const { toast } = useToast();
-  const isOwner = user?.email === OWNER_EMAIL;
+  const isOwner = isAdmin;
 
   const [loading, setLoading] = useState(false);
   const [threads, setThreads] = useState<Thread[]>([]);
@@ -127,7 +127,7 @@ const UnlockForum = ({ open, onOpenChange }: Props) => {
 
   const handlePostThread = async () => {
     if (!user) return;
-    if (user.email !== OWNER_EMAIL) {
+    if (!isAdmin) {
       toast({ title: "无权发布", description: "仅站长账号可发布主贴", variant: "destructive" });
       return;
     }
