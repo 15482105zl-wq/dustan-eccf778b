@@ -49,7 +49,7 @@ const Vip = () => {
     {
       icon: Lock,
       title: "Unlock",
-      description: "破解软件社区",
+      description: "软件社区",
       onClick: () => setForumOpen(true),
     },
     {
