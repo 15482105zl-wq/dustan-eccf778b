@@ -127,7 +127,7 @@ const UnlockForum = ({ open, onOpenChange }: Props) => {
 
   const handlePostThread = async () => {
     if (!user) return;
-    if (user.email !== OWNER_EMAIL) {
+    if (!isAdmin) {
       toast({ title: "无权发布", description: "仅站长账号可发布主贴", variant: "destructive" });
       return;
     }
