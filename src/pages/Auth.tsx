@@ -34,7 +34,7 @@ const Auth = () => {
       return;
     }
     if (!isLogin && password !== confirmPassword) {
-      toast({ title: "两次输入的密码不一致", variant: "destructive" });
+      toast({ title: "[错误：两次输入的密码不一致，请重新检查]", variant: "destructive" });
       return;
     }
     setLoading(true);
