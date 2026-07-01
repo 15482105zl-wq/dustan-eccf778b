@@ -48,15 +48,25 @@ const Auth = () => {
           navigate("/");
         }
       } else {
-        const { error } = await supabase.auth.signUp({
+        const { data, error } = await supabase.auth.signUp({
           email,
           password,
           options: { emailRedirectTo: window.location.origin },
         });
         if (error) {
           toast({ title: "注册失败", description: translateAuthError(error.message), variant: "destructive" });
+        } else if (data.session) {
+          toast({ title: "注册成功 ✨ 已自动登录" });
+          navigate("/");
         } else {
-          toast({ title: "注册成功", description: "请检查邮箱验证链接" });
+          // Fallback: auto sign-in if session wasn't returned
+          const { error: signInErr } = await supabase.auth.signInWithPassword({ email, password });
+          if (signInErr) {
+            toast({ title: "注册成功", description: "请手动登录", variant: "destructive" });
+          } else {
+            toast({ title: "注册成功 ✨ 已自动登录" });
+            navigate("/");
+          }
         }
       }
     } catch (err: any) {
