@@ -34,7 +34,7 @@ const Auth = () => {
       return;
     }
     if (!isLogin && password !== confirmPassword) {
-      toast({ title: "两次输入的密码不一致", variant: "destructive" });
+      toast({ title: "[错误：两次输入的密码不一致，请重新检查]", variant: "destructive" });
       return;
     }
     setLoading(true);
@@ -48,15 +48,25 @@ const Auth = () => {
           navigate("/");
         }
       } else {
-        const { error } = await supabase.auth.signUp({
+        const { data, error } = await supabase.auth.signUp({
           email,
           password,
           options: { emailRedirectTo: window.location.origin },
         });
         if (error) {
           toast({ title: "注册失败", description: translateAuthError(error.message), variant: "destructive" });
+        } else if (data.session) {
+          toast({ title: "注册成功 ✨ 已自动登录" });
+          navigate("/");
         } else {
-          toast({ title: "注册成功", description: "请检查邮箱验证链接" });
+          // Fallback: auto sign-in if session wasn't returned
+          const { error: signInErr } = await supabase.auth.signInWithPassword({ email, password });
+          if (signInErr) {
+            toast({ title: "注册成功", description: "请手动登录", variant: "destructive" });
+          } else {
+            toast({ title: "注册成功 ✨ 已自动登录" });
+            navigate("/");
+          }
         }
       }
     } catch (err: any) {
@@ -83,9 +93,10 @@ const Auth = () => {
   };
 
   return (
-    <div className="min-h-screen relative">
+    <div className="min-h-screen relative bg-[#050508]">
       <ParticleBackground />
       <div className="relative z-10 flex flex-col items-center px-4 py-12">
+        <div className="pointer-events-none fixed inset-0 opacity-40 bg-[radial-gradient(ellipse_at_top,#b026ff22,transparent_60%),radial-gradient(ellipse_at_bottom,#00f0ff22,transparent_60%)]" />
         <motion.button
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
@@ -115,7 +126,7 @@ const Auth = () => {
           transition={{ delay: 0.1 }}
           className="w-full max-w-sm"
         >
-          <form onSubmit={handleEmailAuth} className="glass rounded-xl p-6 space-y-4">
+          <form onSubmit={handleEmailAuth} className="relative rounded-xl p-6 space-y-4 bg-[#0a0a12]/80 backdrop-blur-xl border border-[#00f0ff]/30 shadow-[0_0_40px_-10px_#00f0ff,0_0_80px_-20px_#b026ff] before:content-[''] before:absolute before:inset-0 before:rounded-xl before:pointer-events-none before:bg-[linear-gradient(135deg,#00f0ff10,#b026ff10)]">
             <EmailInput
               value={email}
               onChange={setEmail}
