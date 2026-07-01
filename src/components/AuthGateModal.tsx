@@ -70,10 +70,10 @@ const AuthGateModal = ({ open, onOpenChange }: Props) => {
     e.preventDefault();
     if (!validEmail()) return;
     if (password.length < 6) return fail("密码至少 6 位");
-    if (password !== confirmPassword) return fail("两次输入的密码不一致，请重新输入");
+    if (password !== confirmPassword) return fail("[错误：两次输入的密码不一致，请重新检查]");
     setLoading(true);
     try {
-      const { error } = await supabase.auth.signUp({
+      const { data, error } = await supabase.auth.signUp({
         email,
         password,
         options: { emailRedirectTo: `${window.location.origin}/` },
@@ -82,8 +82,12 @@ const AuthGateModal = ({ open, onOpenChange }: Props) => {
         fail(translateAuthError(error.message));
         return;
       }
-      setSentTo(email);
-      setView("sent-signup");
+      if (!data.session) {
+        // auto sign-in fallback
+        await supabase.auth.signInWithPassword({ email, password });
+      }
+      toast({ title: "注册成功 ✨ 已自动登录" });
+      onOpenChange(false);
     } catch (err: any) {
       fail(translateAuthError(err?.message));
     } finally {
