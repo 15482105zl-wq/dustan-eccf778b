@@ -93,9 +93,10 @@ const Auth = () => {
   };
 
   return (
-    <div className="min-h-screen relative">
+    <div className="min-h-screen relative bg-[#050508]">
       <ParticleBackground />
       <div className="relative z-10 flex flex-col items-center px-4 py-12">
+        <div className="pointer-events-none fixed inset-0 opacity-40 bg-[radial-gradient(ellipse_at_top,#b026ff22,transparent_60%),radial-gradient(ellipse_at_bottom,#00f0ff22,transparent_60%)]" />
         <motion.button
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
