@@ -126,7 +126,7 @@ const Auth = () => {
           transition={{ delay: 0.1 }}
           className="w-full max-w-sm"
         >
-          <form onSubmit={handleEmailAuth} className="glass rounded-xl p-6 space-y-4">
+          <form onSubmit={handleEmailAuth} className="relative rounded-xl p-6 space-y-4 bg-[#0a0a12]/80 backdrop-blur-xl border border-[#00f0ff]/30 shadow-[0_0_40px_-10px_#00f0ff,0_0_80px_-20px_#b026ff] before:content-[''] before:absolute before:inset-0 before:rounded-xl before:pointer-events-none before:bg-[linear-gradient(135deg,#00f0ff10,#b026ff10)]">
             <EmailInput
               value={email}
               onChange={setEmail}
