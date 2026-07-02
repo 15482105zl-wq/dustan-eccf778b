@@ -1,18 +1,43 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Zap, Apple, Globe, Lock, Rocket, Send } from "lucide-react";
+import { ArrowLeft, Zap, Apple, Globe, Lock, Rocket, Send, type LucideIcon } from "lucide-react";
 import ParticleBackground from "@/components/ParticleBackground";
 import UserNav from "@/components/UserNav";
 import VipResourceCard from "@/components/VipResourceCard";
 import CommentSection from "@/components/CommentSection";
 import UnlockForum from "@/components/UnlockForum";
 import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
+
+const ICON_MAP: Record<string, LucideIcon> = { Zap, Apple, Globe, Lock, Send };
+
+type VipResourceRow = {
+  id: string;
+  category: "primary" | "secondary";
+  icon: string;
+  title: string;
+  description: string;
+  url: string | null;
+  highlight: boolean;
+  sort_order: number;
+};
+
+type CardProps = {
+  icon: LucideIcon;
+  title: string;
+  description: string;
+  url?: string;
+  onClick?: () => void;
+  highlight?: boolean;
+};
 
 const Vip = () => {
   const navigate = useNavigate();
   const { user, loading } = useAuth();
   const [forumOpen, setForumOpen] = useState(false);
+  const [primary, setPrimary] = useState<CardProps[]>([]);
+  const [secondary, setSecondary] = useState<CardProps[]>([]);
 
   useEffect(() => {
     if (!loading && (!user || !user.email_confirmed_at)) {
@@ -20,45 +45,28 @@ const Vip = () => {
     }
   }, [user, loading, navigate]);
 
+  useEffect(() => {
+    if (!user) return;
+    (async () => {
+      const { data, error } = await supabase
+        .from("vip_resources")
+        .select("id,category,icon,title,description,url,highlight,sort_order")
+        .order("sort_order", { ascending: true });
+      if (error || !data) return;
+      const toCard = (r: VipResourceRow): CardProps => ({
+        icon: ICON_MAP[r.icon] ?? Rocket,
+        title: r.title,
+        description: r.description,
+        url: r.url ?? undefined,
+        highlight: r.highlight,
+        onClick: r.title === "Unlock" ? () => setForumOpen(true) : undefined,
+      });
+      setPrimary((data as VipResourceRow[]).filter((r) => r.category === "primary").map(toCard));
+      setSecondary((data as VipResourceRow[]).filter((r) => r.category === "secondary").map(toCard));
+    })();
+  }, [user]);
+
   if (loading || !user) return null;
-
-  const primary = [
-    {
-      icon: Zap,
-      title: "V2PN⚡专线",
-      description: "全球高速专线",
-      url: "https://dustan.zwaaa.app/#/register?code=R4Xx2MlV",
-      highlight: true,
-    },
-    {
-      icon: Globe,
-      title: "Clash节点",
-      description: "每日免费节点",
-      url: "https://pan.xunlei.com/s/VOnGAtlOEyZgFgT8dYpo67d1A1?pwd=45tq#",
-      highlight: true,
-    },
-  ];
-
-  const secondary = [
-    {
-      icon: Apple,
-      title: "苹果美区ID",
-      description: "Apple独享ID",
-      url: "https://docs.qq.com/doc/DRnR1Y25LY3NJbnNp",
-    },
-    {
-      icon: Lock,
-      title: "Unlock",
-      description: "软件社区",
-      onClick: () => setForumOpen(true),
-    },
-    {
-      icon: Send,
-      title: "TG群组",
-      description: "官方社群",
-      url: "https://t.me/bydustan",
-    },
-  ];
 
   return (
     <div className="min-h-screen relative">
