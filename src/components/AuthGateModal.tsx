@@ -193,7 +193,7 @@ const AuthGateModal = ({ open, onOpenChange }: Props) => {
           <>
             <DialogHeader>
               <DialogTitle className="gradient-text">登录后访问</DialogTitle>
-              <DialogDescription>使用邮箱注册并验证后即可访问</DialogDescription>
+              <DialogDescription>使用邮箱注册后即可访问</DialogDescription>
             </DialogHeader>
 
             <Tabs value={tab} onValueChange={(v) => { setTab(v as "login" | "signup"); setNeedsVerify(false); }} className="w-full">
@@ -249,9 +249,9 @@ const AuthGateModal = ({ open, onOpenChange }: Props) => {
                     <p className="text-xs text-destructive">两次输入的密码不一致</p>
                   )}
                   <Button type="submit" disabled={loading} className="w-full bg-primary/20 text-primary border border-primary/30 hover:bg-primary/30">
-                    {loading && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}注册并发送验证邮件
+                    {loading && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}立即注册
                   </Button>
-                  <p className="text-xs text-muted-foreground text-center">注册后需点击邮件中的验证链接才能登录</p>
+                  <p className="text-xs text-muted-foreground text-center">注册成功后自动登录</p>
                 </form>
               </TabsContent>
             </Tabs>
