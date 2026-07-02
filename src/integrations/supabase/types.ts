@@ -156,6 +156,48 @@ export type Database = {
         }
         Relationships: []
       }
+      vip_resources: {
+        Row: {
+          action: string | null
+          category: string
+          created_at: string
+          description: string
+          highlight: boolean
+          icon: string
+          id: string
+          sort_order: number
+          title: string
+          updated_at: string
+          url: string | null
+        }
+        Insert: {
+          action?: string | null
+          category: string
+          created_at?: string
+          description: string
+          highlight?: boolean
+          icon: string
+          id?: string
+          sort_order?: number
+          title: string
+          updated_at?: string
+          url?: string | null
+        }
+        Update: {
+          action?: string | null
+          category?: string
+          created_at?: string
+          description?: string
+          highlight?: boolean
+          icon?: string
+          id?: string
+          sort_order?: number
+          title?: string
+          updated_at?: string
+          url?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
