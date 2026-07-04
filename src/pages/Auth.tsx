@@ -135,11 +135,11 @@ const Auth = () => {
               className="bg-secondary/50 border-border/50"
             />
             <PasswordInput
-              placeholder={isLogin ? "密码" : "设置密码 (至少 6 位)"}
+              placeholder={isLogin ? "密码" : "设置密码"}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               autoComplete={isLogin ? "current-password" : "new-password"}
-              minLength={6}
+              minLength={1}
               required
               className="bg-secondary/50 border-border/50"
             />
@@ -150,7 +150,7 @@ const Auth = () => {
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   autoComplete="new-password"
-                  minLength={6}
+                  minLength={1}
                   required
                   className="bg-secondary/50 border-border/50"
                 />
