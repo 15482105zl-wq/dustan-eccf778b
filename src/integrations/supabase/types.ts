@@ -210,6 +210,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      is_email_confirmed: { Args: never; Returns: boolean }
     }
     Enums: {
       app_role: "admin" | "moderator" | "user"
