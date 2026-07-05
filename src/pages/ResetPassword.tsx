@@ -347,8 +347,8 @@ const ResetPassword = () => {
             </div>
           )}
         </motion.div>
-      </div>
       </main>
+    </div>
   );
 };
 
