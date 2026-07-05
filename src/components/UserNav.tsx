@@ -73,6 +73,7 @@ const UserNav = () => {
         onClick={handleSignOut}
         className="text-muted-foreground hover:text-destructive transition-colors"
         title="退出登录"
+        aria-label="退出登录"
       >
         <LogOut className="w-4 h-4" />
       </button>
