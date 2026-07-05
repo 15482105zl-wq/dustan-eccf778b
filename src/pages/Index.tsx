@@ -117,7 +117,7 @@ const Index = () => {
           <MessageCircle className="w-4 h-4" />
           帮助与反馈
         </motion.a>
-      </div>
+      </main>
 
       <AuthGateModal open={authOpen} onOpenChange={setAuthOpen} />
     </div>
