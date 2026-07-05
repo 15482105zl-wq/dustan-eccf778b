@@ -58,7 +58,7 @@ const Tools = () => {
             </GlassCard>
           ))}
         </div>
-      </div>
+      </main>
     </div>
   );
 };
