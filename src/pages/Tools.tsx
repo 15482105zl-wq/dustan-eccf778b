@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { Globe, Wrench, Apple, Wifi, ArrowLeft } from "lucide-react";
 import GlassCard from "@/components/GlassCard";
 import ParticleBackground from "@/components/ParticleBackground";
+import SEO from "@/components/SEO";
 
 const tools = [
   { icon: Globe, label: "全球加速", desc: "高速稳定的全球网络加速" },
@@ -16,8 +17,13 @@ const Tools = () => {
 
   return (
     <div className="min-h-screen relative">
+      <SEO
+        title="工具与配置 · Clash 与 V2pn 资源"
+        description="Clash / V2pn 全球加速节点、开源工具合集、Apple 美区 ID 与每日免费节点资源。"
+        path="/tools"
+      />
       <ParticleBackground />
-      <div className="relative z-10 flex flex-col items-center px-4 py-12">
+      <main className="relative z-10 flex flex-col items-center px-4 py-12">
         <motion.button
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
@@ -52,7 +58,7 @@ const Tools = () => {
             </GlassCard>
           ))}
         </div>
-      </div>
+      </main>
     </div>
   );
 };

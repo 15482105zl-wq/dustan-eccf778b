@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
 import ParticleBackground from "@/components/ParticleBackground";
+import SEO from "@/components/SEO";
 import { ArrowLeft, Loader2 } from "lucide-react";
 import PasswordInput from "@/components/PasswordInput";
 import EmailInput from "@/components/EmailInput";
@@ -94,8 +95,14 @@ const Auth = () => {
 
   return (
     <div className="min-h-screen relative bg-[#050508]">
+      <SEO
+        title="登录 / 注册 · 资源导航站"
+        description="登录或注册账号，解锁全球加速与尊享资源。"
+        path="/auth"
+        noindex
+      />
       <ParticleBackground />
-      <div className="relative z-10 flex flex-col items-center px-4 py-12">
+      <main className="relative z-10 flex flex-col items-center px-4 py-12">
         <div className="pointer-events-none fixed inset-0 opacity-40 bg-[radial-gradient(ellipse_at_top,#b026ff22,transparent_60%),radial-gradient(ellipse_at_bottom,#00f0ff22,transparent_60%)]" />
         <motion.button
           initial={{ opacity: 0, x: -20 }}
@@ -196,7 +203,7 @@ const Auth = () => {
             </button>
           </p>
         </motion.div>
-      </div>
+      </main>
     </div>
   );
 };

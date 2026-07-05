@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { useToast } from "@/hooks/use-toast";
 import ParticleBackground from "@/components/ParticleBackground";
+import SEO from "@/components/SEO";
 import { ArrowLeft, Camera, Save, Loader2 } from "lucide-react";
 
 const Profile = () => {
@@ -147,8 +148,14 @@ const Profile = () => {
 
   return (
     <div className="min-h-screen relative">
+      <SEO
+        title="个人资料 · 资源导航站"
+        description="管理账号头像、昵称与个人资料。"
+        path="/profile"
+        noindex
+      />
       <ParticleBackground />
-      <div className="relative z-10 flex flex-col items-center px-4 py-12">
+      <main className="relative z-10 flex flex-col items-center px-4 py-12">
         <motion.button
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
@@ -240,7 +247,7 @@ const Profile = () => {
             {saving ? "保存中..." : "保存资料"}
           </Button>
         </motion.div>
-      </div>
+      </main>
     </div>
   );
 };

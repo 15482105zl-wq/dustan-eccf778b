@@ -6,6 +6,7 @@ import GlassCard from "@/components/GlassCard";
 import ParticleBackground from "@/components/ParticleBackground";
 import UserNav from "@/components/UserNav";
 import AuthGateModal from "@/components/AuthGateModal";
+import SEO from "@/components/SEO";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 
@@ -38,8 +39,13 @@ const Index = () => {
 
   return (
     <div className="min-h-screen relative">
+      <SEO
+        title="资源导航站 · 网盘直达与全球加速"
+        description="精选百度网盘、迅雷、夸克、UC 优质资源一键直达，并提供全球网络加速与 Clash 全能配置资源。"
+        path="/"
+      />
       <ParticleBackground />
-      <div className="relative z-10 flex flex-col items-center px-4 py-12">
+      <main className="relative z-10 flex flex-col items-center px-4 py-12">
         <div className="w-full max-w-2xl flex justify-end mb-4">
           <UserNav />
         </div>
@@ -57,6 +63,7 @@ const Index = () => {
           </p>
         </motion.div>
 
+        <h2 className="sr-only">资源通道</h2>
         <div className="w-full max-w-2xl grid grid-cols-2 gap-3 sm:gap-4 mb-6">
           {resourceLinks.map((item, i) => (
             <GlassCard
@@ -71,6 +78,7 @@ const Index = () => {
           ))}
         </div>
 
+        <h2 className="sr-only">增值服务</h2>
         <div className="w-full max-w-2xl">
           <GlassCard
             delay={0.5}
@@ -109,7 +117,7 @@ const Index = () => {
           <MessageCircle className="w-4 h-4" />
           帮助与反馈
         </motion.a>
-      </div>
+      </main>
 
       <AuthGateModal open={authOpen} onOpenChange={setAuthOpen} />
     </div>

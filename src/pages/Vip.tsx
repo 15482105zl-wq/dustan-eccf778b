@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft, Zap, Apple, Globe, Lock, Rocket, Send, type LucideIcon } from "lucide-react";
 import ParticleBackground from "@/components/ParticleBackground";
+import SEO from "@/components/SEO";
 import UserNav from "@/components/UserNav";
 import VipResourceCard from "@/components/VipResourceCard";
 import CommentSection from "@/components/CommentSection";
@@ -70,8 +71,14 @@ const Vip = () => {
 
   return (
     <div className="min-h-screen relative">
+      <SEO
+        title="尊享中心 · 资源导航站"
+        description="全球加速、Clash 共享节点、Apple 美区 ID 与 IP 环境查询的尊享资源。"
+        path="/vip"
+        noindex
+      />
       <ParticleBackground />
-      <div className="relative z-10 flex flex-col items-center px-4 py-10">
+      <main className="relative z-10 flex flex-col items-center px-4 py-10">
         <div className="w-full max-w-2xl flex items-center justify-between mb-6">
           <button
             onClick={() => navigate("/")}
@@ -112,7 +119,7 @@ const Vip = () => {
         <div className="w-full max-w-2xl">
           <CommentSection />
         </div>
-      </div>
+      </main>
 
       <UnlockForum open={forumOpen} onOpenChange={setForumOpen} />
     </div>

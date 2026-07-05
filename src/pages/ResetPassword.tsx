@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import ParticleBackground from "@/components/ParticleBackground";
+import SEO from "@/components/SEO";
 import { motion } from "framer-motion";
 import { Loader2, Mail, ArrowLeft, MailCheck } from "lucide-react";
 import PasswordInput from "@/components/PasswordInput";
@@ -236,8 +237,14 @@ const ResetPassword = () => {
 
   return (
     <div className="min-h-screen relative">
+      <SEO
+        title="重置密码 · 资源导航站"
+        description="通过邮件链接重置账号密码。"
+        path="/reset-password"
+        noindex
+      />
       <ParticleBackground />
-      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4">
+      <main className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -340,7 +347,7 @@ const ResetPassword = () => {
             </div>
           )}
         </motion.div>
-      </div>
+      </main>
     </div>
   );
 };
