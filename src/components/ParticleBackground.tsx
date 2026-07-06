@@ -52,14 +52,14 @@ const ParticleBackground = () => {
     };
 
     for (let i = 0; i < count; i++) {
-      const hue = Math.random() > 0.62 ? colors.accent : colors.primary;
+      const hue = Math.random() > 0.55 ? colors.accent : colors.primary;
       particles.push({
         x: Math.random() * width,
         y: Math.random() * height,
-        vx: (Math.random() - 0.5) * 0.5 + 0.18, // slight rightward drift
-        vy: (Math.random() - 0.5) * 0.35 - 0.05, // slight upward drift
-        r: Math.random() * 1.2 + 0.6,
-        o: Math.random() * 0.4 + 0.2,
+        vx: (Math.random() - 0.5) * 0.6 + 0.25, // rightward drift
+        vy: (Math.random() - 0.5) * 0.4 - 0.08, // slight upward drift
+        r: Math.random() * 1.6 + 0.9,
+        o: Math.random() * 0.45 + 0.45,
         hue,
         pulse: Math.random() * Math.PI * 2,
         pulseSpeed: 0.02 + Math.random() * 0.03,
