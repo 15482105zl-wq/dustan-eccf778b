@@ -52,14 +52,14 @@ const ParticleBackground = () => {
     };
 
     for (let i = 0; i < count; i++) {
-      const hue = Math.random() > 0.62 ? colors.accent : colors.primary;
+      const hue = Math.random() > 0.55 ? colors.accent : colors.primary;
       particles.push({
         x: Math.random() * width,
         y: Math.random() * height,
-        vx: (Math.random() - 0.5) * 0.5 + 0.18, // slight rightward drift
-        vy: (Math.random() - 0.5) * 0.35 - 0.05, // slight upward drift
-        r: Math.random() * 1.2 + 0.6,
-        o: Math.random() * 0.4 + 0.2,
+        vx: (Math.random() - 0.5) * 0.6 + 0.25, // rightward drift
+        vy: (Math.random() - 0.5) * 0.4 - 0.08, // slight upward drift
+        r: Math.random() * 1.6 + 0.9,
+        o: Math.random() * 0.45 + 0.45,
         hue,
         pulse: Math.random() * Math.PI * 2,
         pulseSpeed: 0.02 + Math.random() * 0.03,
@@ -94,12 +94,13 @@ const ParticleBackground = () => {
           const dy = particles[i].y - particles[j].y;
           const dist = Math.sqrt(dx * dx + dy * dy);
           if (dist < connectionDistance) {
-            const opacity = (1 - dist / connectionDistance) * 0.18;
+            const opacity = (1 - dist / connectionDistance) * 0.5;
+            const hueMix = (particles[i].hue + particles[j].hue) / 2;
             ctx.beginPath();
             ctx.moveTo(particles[i].x, particles[i].y);
             ctx.lineTo(particles[j].x, particles[j].y);
-            ctx.strokeStyle = `hsla(200, 100%, 55%, ${opacity})`;
-            ctx.lineWidth = 0.5;
+            ctx.strokeStyle = `hsla(${hueMix}, 95%, 62%, ${opacity})`;
+            ctx.lineWidth = 0.8;
             ctx.stroke();
             connections++;
           }
@@ -108,7 +109,7 @@ const ParticleBackground = () => {
     };
 
     const drawDataPacket = () => {
-      if (Math.random() > 0.04) return;
+      if (Math.random() > 0.18) return;
       const source = particles[Math.floor(Math.random() * particles.length)];
       const nearby = particles.filter((p) => {
         if (p === source) return false;
@@ -122,14 +123,18 @@ const ParticleBackground = () => {
       ctx.beginPath();
       ctx.moveTo(source.x, source.y);
       ctx.lineTo(target.x, target.y);
-      ctx.strokeStyle = `hsla(${colors.gold}, 90%, 60%, 0.4)`;
-      ctx.lineWidth = 1.2;
+      ctx.strokeStyle = `hsla(${colors.gold}, 95%, 65%, 0.85)`;
+      ctx.lineWidth = 1.6;
       ctx.stroke();
 
-      // bright packet at destination
+      // bright packet at destination with glow
       ctx.beginPath();
-      ctx.arc(target.x, target.y, 2.2, 0, Math.PI * 2);
-      ctx.fillStyle = `hsla(${colors.gold}, 90%, 70%, 0.65)`;
+      ctx.arc(target.x, target.y, 8, 0, Math.PI * 2);
+      ctx.fillStyle = `hsla(${colors.gold}, 95%, 65%, 0.25)`;
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(target.x, target.y, 3, 0, Math.PI * 2);
+      ctx.fillStyle = `hsla(${colors.gold}, 95%, 75%, 1)`;
       ctx.fill();
     };
 
@@ -141,8 +146,8 @@ const ParticleBackground = () => {
         width * 0.5, height * 0.5, 0,
         width * 0.5, height * 0.5, Math.max(width, height) * 0.7
       );
-      gradient.addColorStop(0, "hsla(220, 30%, 8%, 0)");
-      gradient.addColorStop(1, "hsla(270, 50%, 18%, 0.08)");
+      gradient.addColorStop(0, "hsla(200, 60%, 15%, 0.05)");
+      gradient.addColorStop(1, "hsla(270, 70%, 22%, 0.22)");
       ctx.fillStyle = gradient;
       ctx.fillRect(0, 0, width, height);
 
