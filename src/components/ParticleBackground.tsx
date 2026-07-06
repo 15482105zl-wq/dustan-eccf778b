@@ -123,14 +123,18 @@ const ParticleBackground = () => {
       ctx.beginPath();
       ctx.moveTo(source.x, source.y);
       ctx.lineTo(target.x, target.y);
-      ctx.strokeStyle = `hsla(${colors.gold}, 90%, 60%, 0.4)`;
-      ctx.lineWidth = 1.2;
+      ctx.strokeStyle = `hsla(${colors.gold}, 95%, 65%, 0.85)`;
+      ctx.lineWidth = 1.6;
       ctx.stroke();
 
-      // bright packet at destination
+      // bright packet at destination with glow
       ctx.beginPath();
-      ctx.arc(target.x, target.y, 2.2, 0, Math.PI * 2);
-      ctx.fillStyle = `hsla(${colors.gold}, 90%, 70%, 0.65)`;
+      ctx.arc(target.x, target.y, 8, 0, Math.PI * 2);
+      ctx.fillStyle = `hsla(${colors.gold}, 95%, 65%, 0.25)`;
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(target.x, target.y, 3, 0, Math.PI * 2);
+      ctx.fillStyle = `hsla(${colors.gold}, 95%, 75%, 1)`;
       ctx.fill();
     };
 
