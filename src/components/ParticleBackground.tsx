@@ -94,12 +94,13 @@ const ParticleBackground = () => {
           const dy = particles[i].y - particles[j].y;
           const dist = Math.sqrt(dx * dx + dy * dy);
           if (dist < connectionDistance) {
-            const opacity = (1 - dist / connectionDistance) * 0.18;
+            const opacity = (1 - dist / connectionDistance) * 0.5;
+            const hueMix = (particles[i].hue + particles[j].hue) / 2;
             ctx.beginPath();
             ctx.moveTo(particles[i].x, particles[i].y);
             ctx.lineTo(particles[j].x, particles[j].y);
-            ctx.strokeStyle = `hsla(200, 100%, 55%, ${opacity})`;
-            ctx.lineWidth = 0.5;
+            ctx.strokeStyle = `hsla(${hueMix}, 95%, 62%, ${opacity})`;
+            ctx.lineWidth = 0.8;
             ctx.stroke();
             connections++;
           }
@@ -108,7 +109,7 @@ const ParticleBackground = () => {
     };
 
     const drawDataPacket = () => {
-      if (Math.random() > 0.04) return;
+      if (Math.random() > 0.18) return;
       const source = particles[Math.floor(Math.random() * particles.length)];
       const nearby = particles.filter((p) => {
         if (p === source) return false;
