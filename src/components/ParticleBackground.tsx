@@ -28,8 +28,8 @@ const ParticleBackground = () => {
     };
 
     const particles: Particle[] = [];
-    const count = isMobile ? 28 : 52;
-    const connectionDistance = isMobile ? 85 : 135;
+    const count = isMobile ? 30 : 70;
+    const connectionDistance = isMobile ? 95 : 160;
     const maxConnectionsPerParticle = isMobile ? 4 : 6;
 
     const resize = () => {
