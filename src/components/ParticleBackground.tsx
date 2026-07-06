@@ -146,8 +146,8 @@ const ParticleBackground = () => {
         width * 0.5, height * 0.5, 0,
         width * 0.5, height * 0.5, Math.max(width, height) * 0.7
       );
-      gradient.addColorStop(0, "hsla(220, 30%, 8%, 0)");
-      gradient.addColorStop(1, "hsla(270, 50%, 18%, 0.08)");
+      gradient.addColorStop(0, "hsla(200, 60%, 15%, 0.05)");
+      gradient.addColorStop(1, "hsla(270, 70%, 22%, 0.22)");
       ctx.fillStyle = gradient;
       ctx.fillRect(0, 0, width, height);
 
