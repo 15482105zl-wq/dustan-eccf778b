@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { Download, Globe, Shield, Zap, MessageCircle, Rocket, QrCode } from "lucide-react";
+import { Download, Globe, Shield, Zap, MessageCircle, Rocket } from "lucide-react";
 import GlassCard from "@/components/GlassCard";
 import ParticleBackground from "@/components/ParticleBackground";
 import UserNav from "@/components/UserNav";
@@ -117,31 +117,6 @@ const Index = () => {
           <MessageCircle className="w-4 h-4" />
           帮助与反馈
         </motion.a>
-
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.9 }}
-          className="mt-8 w-full max-w-2xl"
-        >
-          <GlassCard className="p-5 flex flex-col items-center gap-3">
-            <div className="flex items-center gap-2 text-sm font-medium text-foreground/80">
-              <QrCode className="w-4 h-4 text-primary" />
-              扫码访问本站
-            </div>
-            <div className="p-2 bg-white rounded-lg shadow-glow-sm">
-              <img
-                src="/qr-code.png"
-                alt="资源导航站二维码"
-                width={160}
-                height={160}
-                className="block rounded"
-                loading="lazy"
-              />
-            </div>
-            <p className="text-xs text-muted-foreground">https://dustan.lovable.app</p>
-          </GlassCard>
-        </motion.div>
       </main>
 
       <AuthGateModal open={authOpen} onOpenChange={setAuthOpen} />
