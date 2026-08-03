@@ -78,7 +78,7 @@ const Index = () => {
           ))}
         </div>
 
-        <p className="text-center text-xs text-muted-foreground mt-1 mb-10">
+        <p className="text-center text-xs text-muted-foreground -mt-1 mb-12">
           一个资源库 · 多种下载方式
         </p>
 
@@ -94,8 +94,10 @@ const Index = () => {
                 <Globe className="w-7 h-7 text-accent" />
               </div>
               <div>
-                <p className="font-heading font-bold text-foreground text-xl">Global Services</p>
-                <p className="text-xs text-muted-foreground mt-0.5">
+                <p className="font-heading font-bold text-foreground text-xl sm:text-2xl leading-tight">
+                  Global Services
+                </p>
+                <p className="text-xs text-muted-foreground mt-1.5">
                   全球数字服务入口
                 </p>
               </div>
