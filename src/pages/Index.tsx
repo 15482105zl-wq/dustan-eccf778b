@@ -13,10 +13,10 @@ import { useToast } from "@/hooks/use-toast";
 const FEEDBACK_URL = "https://qm.qq.com/q/KECVhxL7a2";
 
 const resourceLinks = [
-  { icon: Zap, label: "迅雷资源通道", color: "text-primary", url: "https://pan.xunlei.com/s/VOSYGLtZIWaCQejBOvXrruR8A1?pwd=bbia" },
-  { icon: Download, label: "百度资源通道", color: "text-primary", url: "https://pan.baidu.com/s/1-XjPDoYVf48odKNe_VW8Yw?pwd=1p44" },
-  { icon: Globe, label: "夸克资源通道", color: "text-primary", url: "https://pan.quark.cn/s/29e2744b31f1" },
-  { icon: Shield, label: "UC资源通道", color: "text-primary", url: "https://drive.uc.cn/s/b2243269454c4" },
+  { icon: Zap, label: "迅雷网盘", color: "text-primary", url: "https://pan.xunlei.com/s/VOSYGLtZIWaCQejBOvXrruR8A1?pwd=bbia" },
+  { icon: Download, label: "百度网盘", color: "text-primary", url: "https://pan.baidu.com/s/1-XjPDoYVf48odKNe_VW8Yw?pwd=1p44" },
+  { icon: Globe, label: "夸克网盘", color: "text-primary", url: "https://pan.quark.cn/s/29e2744b31f1" },
+  { icon: Shield, label: "UC网盘", color: "text-primary", url: "https://drive.uc.cn/s/b2243269454c4" },
 ];
 
 const Index = () => {
@@ -78,8 +78,8 @@ const Index = () => {
           ))}
         </div>
 
-        <p className="text-center text-xs text-muted-foreground mt-1 mb-6">
-          一个资源库，多个下载方式
+        <p className="text-center text-xs text-muted-foreground mt-2 mb-8">
+          一个资源库 · 多种下载方式
         </p>
 
         <h2 className="sr-only">增值服务</h2>
