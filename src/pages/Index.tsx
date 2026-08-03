@@ -14,7 +14,7 @@ const FEEDBACK_URL = "https://qm.qq.com/q/KECVhxL7a2";
 
 const resourceLinks = [
   { icon: Zap, label: "迅雷资源通道", color: "text-primary", url: "https://pan.xunlei.com/s/VOSYGLtZIWaCQejBOvXrruR8A1?pwd=bbia" },
-  { icon: Download, label: "百度网盘通道", color: "text-primary", url: "https://pan.baidu.com/s/1nfoD2fSrMEnpLbbi2Q5ZyQ?pwd=dab7" },
+  { icon: Download, label: "百度资源通道", color: "text-primary", url: "https://pan.baidu.com/s/1-XjPDoYVf48odKNe_VW8Yw?pwd=1p44" },
   { icon: Globe, label: "夸克资源通道", color: "text-primary", url: "https://pan.quark.cn/s/29e2744b31f1" },
   { icon: Shield, label: "UC资源通道", color: "text-primary", url: "https://drive.uc.cn/s/b2243269454c4" },
 ];
@@ -56,10 +56,10 @@ const Index = () => {
           className="text-center mb-12"
         >
           <h1 className="font-heading text-3xl sm:text-4xl font-bold mb-3">
-            <span className="gradient-text glow-text">资源导航站</span>
+            <span className="gradient-text glow-text">Dustan Hub</span>
           </h1>
           <p className="text-muted-foreground text-sm max-w-md mx-auto">
-            精选优质资源 · 一键直达
+            AI工具 · 软件资源 · 实用服务 · 精选分享
           </p>
         </motion.div>
 
@@ -78,6 +78,10 @@ const Index = () => {
           ))}
         </div>
 
+        <p className="text-center text-xs text-muted-foreground mt-1 mb-6">
+          一个资源库，多个下载方式
+        </p>
+
         <h2 className="sr-only">增值服务</h2>
         <div className="w-full max-w-2xl">
           <GlassCard
@@ -90,9 +94,9 @@ const Index = () => {
                 <Globe className="w-7 h-7 text-accent" />
               </div>
               <div>
-                <p className="font-heading font-bold text-foreground text-xl">全球网络加速</p>
+                <p className="font-heading font-bold text-foreground text-xl">Global Services</p>
                 <p className="text-xs text-muted-foreground mt-0.5">
-                  {user?.email_confirmed_at ? "点击访问 →" : "登录后访问 →"}
+                  {user?.email_confirmed_at ? "全球数字服务入口" : "登录后访问 →"}
                 </p>
               </div>
             </div>
