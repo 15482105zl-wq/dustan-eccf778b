@@ -18,8 +18,8 @@ const Tools = () => {
   return (
     <div className="min-h-screen relative">
       <SEO
-        title="工具与配置 · Clash 与 V2pn 资源"
-        description="Clash / V2pn 全球加速节点、开源工具合集、Apple 美区 ID 与每日免费节点资源。"
+        title="工具与配置 · Clash 与 VPN 资源"
+        description="Clash / VPN 全球加速节点、开源工具合集、Apple 美区 ID 与每日免费节点资源。"
         path="/tools"
       />
       <ParticleBackground />
@@ -42,7 +42,7 @@ const Tools = () => {
           <h1 className="font-heading text-3xl sm:text-4xl font-bold mb-3">
             <span className="gradient-text glow-text">工具 & 配置</span>
           </h1>
-          <p className="text-muted-foreground text-sm">Clash · V2pn · 节点资源</p>
+          <p className="text-muted-foreground text-sm">Clash · VPN · 节点资源</p>
         </motion.div>
 
         <div className="w-full max-w-2xl grid grid-cols-1 sm:grid-cols-2 gap-4">
