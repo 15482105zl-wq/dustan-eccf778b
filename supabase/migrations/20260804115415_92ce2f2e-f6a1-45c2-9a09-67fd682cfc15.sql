@@ -1,0 +1,1 @@
+UPDATE public.vip_resources SET title = 'BBS' WHERE title = 'Unlock';
