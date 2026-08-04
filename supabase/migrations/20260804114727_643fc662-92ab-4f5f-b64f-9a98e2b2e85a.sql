@@ -1,0 +1,1 @@
+UPDATE vip_resources SET title = 'VPN专线' WHERE title = 'V2PN⚡专线' OR title LIKE 'V2PN%专线'

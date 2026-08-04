@@ -60,7 +60,7 @@ const Vip = () => {
         description: r.description,
         url: r.url ?? undefined,
         highlight: r.highlight,
-        onClick: r.title === "Unlock" ? () => setForumOpen(true) : undefined,
+        onClick: r.title === "BBS" ? () => setForumOpen(true) : undefined,
       });
       setPrimary((data as VipResourceRow[]).filter((r) => r.category === "primary").map(toCard));
       setSecondary((data as VipResourceRow[]).filter((r) => r.category === "secondary").map(toCard));
@@ -95,12 +95,12 @@ const Vip = () => {
           className="text-center mb-8"
         >
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent/15 border border-accent/40 text-xs text-accent mb-3">
-            <Rocket className="w-3 h-3" /> VIP 加速通道
+            <Rocket className="w-3 h-3" /> 高速加速通道
           </div>
           <h1 className="font-heading text-3xl sm:text-4xl font-bold mb-2">
             <span className="gradient-text glow-text">全球网络加速</span>
           </h1>
-          <p className="text-muted-foreground text-sm">精选高速通道 · 自由畅游全球</p>
+          <p className="text-muted-foreground text-sm">精选网络服务 · 畅享全球连接</p>
         </motion.div>
 
         <div className="w-full max-w-2xl grid grid-cols-6 gap-3 auto-rows-fr">
