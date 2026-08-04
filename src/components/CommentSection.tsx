@@ -235,7 +235,7 @@ const CommentSection = () => {
     <section className="w-full max-w-2xl mx-auto mt-10">
       <div className="flex items-center gap-2 mb-4">
         <MessageSquare className="w-5 h-5 text-accent" />
-        <h2 className="font-heading text-lg font-bold gradient-text">在线留言</h2>
+        <h2 className="font-heading text-lg font-bold gradient-text">软件需求 · 在线留言</h2>
         <span className="text-xs text-muted-foreground">· 已加载 {comments.length}</span>
       </div>
 
