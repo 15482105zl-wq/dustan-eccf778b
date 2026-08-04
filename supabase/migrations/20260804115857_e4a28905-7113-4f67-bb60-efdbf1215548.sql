@@ -1,0 +1,1 @@
+REVOKE ALL ON FUNCTION public.enforce_comment_daily_limit() FROM PUBLIC, anon, authenticated;
