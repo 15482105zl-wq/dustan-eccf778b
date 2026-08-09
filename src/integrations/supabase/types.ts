@@ -166,7 +166,6 @@ export type Database = {
           icon: string
           id: string
           sort_order: number
-          sub_description: string | null
           title: string
           updated_at: string
           url: string | null
@@ -180,7 +179,6 @@ export type Database = {
           icon: string
           id?: string
           sort_order?: number
-          sub_description?: string | null
           title: string
           updated_at?: string
           url?: string | null
@@ -194,7 +192,6 @@ export type Database = {
           icon?: string
           id?: string
           sort_order?: number
-          sub_description?: string | null
           title?: string
           updated_at?: string
           url?: string | null
