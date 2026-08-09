@@ -53,13 +53,14 @@ const Vip = () => {
     (async () => {
       const { data, error } = await supabase
         .from("vip_resources")
-        .select("id,category,icon,title,description,url,highlight,sort_order")
+        .select("id,category,icon,title,description,sub_description,url,highlight,sort_order")
         .order("sort_order", { ascending: true });
       if (error || !data) return;
       const toCard = (r: VipResourceRow): CardProps => ({
         icon: ICON_MAP[r.icon] ?? Rocket,
         title: r.title,
         description: r.description,
+        subDescription: r.sub_description ?? undefined,
         url: r.url ?? undefined,
         highlight: r.highlight,
         onClick: r.title === "BBS" ? () => setForumOpen(true) : undefined,
