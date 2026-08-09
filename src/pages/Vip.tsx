@@ -19,6 +19,7 @@ type VipResourceRow = {
   icon: string;
   title: string;
   description: string;
+  sub_description: string | null;
   url: string | null;
   highlight: boolean;
   sort_order: number;
@@ -28,6 +29,7 @@ type CardProps = {
   icon: LucideIcon;
   title: string;
   description: string;
+  subDescription?: string;
   url?: string;
   onClick?: () => void;
   highlight?: boolean;
