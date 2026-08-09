@@ -5,6 +5,7 @@ interface Props {
   icon: LucideIcon;
   title: string;
   description?: string;
+  subDescription?: string;
   url?: string;
   onClick?: () => void;
   highlight?: boolean;
@@ -12,7 +13,7 @@ interface Props {
   delay?: number;
 }
 
-const VipResourceCard = ({ icon: Icon, title, description, url, onClick, highlight, delay = 0 }: Props) => {
+const VipResourceCard = ({ icon: Icon, title, description, subDescription, url, onClick, highlight, delay = 0 }: Props) => {
   const handleClick = () => {
     if (onClick) return onClick();
     if (url) window.open(url, "_blank", "noopener,noreferrer");
@@ -45,6 +46,11 @@ const VipResourceCard = ({ icon: Icon, title, description, url, onClick, highlig
       {description && (
         <p className="text-[11px] text-muted-foreground mt-1 whitespace-nowrap">
           {description}
+        </p>
+      )}
+      {subDescription && (
+        <p className="text-[11px] text-muted-foreground mt-0.5 whitespace-nowrap">
+          {subDescription}
         </p>
       )}
     </motion.div>
