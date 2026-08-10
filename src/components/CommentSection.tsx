@@ -288,8 +288,9 @@ const CommentSection = () => {
             {posting ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Send className="w-3.5 h-3.5" />}
             {reachedLimit ? "已达上限" : "发送"}
           </Button>
-        </div>
       </div>
+      )}
+
 
       {/* List grouped by date (today expanded by default) */}
       <div className="space-y-3">
