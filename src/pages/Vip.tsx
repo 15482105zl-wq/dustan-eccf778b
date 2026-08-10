@@ -116,11 +116,12 @@ const Vip = () => {
         </div>
 
         <div className="w-full max-w-2xl">
-          <CommentSection />
+          <CommentSection onRequireAuth={requireAuth} />
         </div>
       </main>
 
       <UnlockForum open={forumOpen} onOpenChange={setForumOpen} />
+      <AuthGateModal open={authOpen} onOpenChange={setAuthOpen} />
     </div>
   );
 };
