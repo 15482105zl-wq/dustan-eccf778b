@@ -8,6 +8,7 @@ import UserNav from "@/components/UserNav";
 import VipResourceCard from "@/components/VipResourceCard";
 import CommentSection from "@/components/CommentSection";
 import UnlockForum from "@/components/UnlockForum";
+import AuthGateModal from "@/components/AuthGateModal";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 
