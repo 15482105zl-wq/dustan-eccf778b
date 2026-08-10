@@ -46,7 +46,7 @@ const startOfTodayISO = () => {
   return d.toISOString();
 };
 
-const CommentSection = () => {
+const CommentSection = ({ onRequireAuth }: { onRequireAuth?: () => void }) => {
   const { user, isAdmin } = useAuth();
   const { toast } = useToast();
 
