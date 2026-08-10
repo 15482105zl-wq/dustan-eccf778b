@@ -130,16 +130,23 @@ const CommentSection = ({ onRequireAuth }: { onRequireAuth?: () => void }) => {
       }
       await fetchProfilesFor(ids);
     } catch (e: any) {
-      toast({ title: "加载留言失败", description: e.message, variant: "destructive" });
+      // Anonymous visitors have no read access; stay silent instead of showing an error
+      if (user) toast({ title: "加载留言失败", description: e.message, variant: "destructive" });
     } finally {
       setLoading(false);
     }
-  }, [fetchProfilesFor, toast]);
+  }, [fetchProfilesFor, toast, user]);
 
   useEffect(() => {
+    if (!user) {
+      setComments([]);
+      setHasMore(false);
+      return;
+    }
     loadPage(0);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [user?.id]);
+
 
   // Refresh own profile so newly fetched displayName is current
   useEffect(() => {
