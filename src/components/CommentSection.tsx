@@ -46,7 +46,7 @@ const startOfTodayISO = () => {
   return d.toISOString();
 };
 
-const CommentSection = () => {
+const CommentSection = ({ onRequireAuth }: { onRequireAuth?: () => void }) => {
   const { user, isAdmin } = useAuth();
   const { toast } = useToast();
 
@@ -240,6 +240,18 @@ const CommentSection = () => {
       </div>
 
       {/* Input */}
+      {!user ? (
+        <div className="glass rounded-xl p-5 border border-glass-border/40 mb-6 flex flex-col items-center gap-3 text-center">
+          <p className="text-sm text-muted-foreground">留言需要注册并登录邮箱账号</p>
+          <Button
+            size="sm"
+            onClick={onRequireAuth}
+            className="bg-accent/20 text-accent border border-accent/40 hover:bg-accent/30"
+          >
+            登录 / 注册
+          </Button>
+        </div>
+      ) : (
       <div className="glass rounded-xl p-3 border border-glass-border/40 mb-6">
         {replyTo && (
           <div className="flex items-center justify-between text-xs text-muted-foreground mb-2 px-1">
@@ -278,6 +290,8 @@ const CommentSection = () => {
           </Button>
         </div>
       </div>
+      )}
+
 
       {/* List grouped by date (today expanded by default) */}
       <div className="space-y-3">

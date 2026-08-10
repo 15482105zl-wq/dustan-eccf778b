@@ -8,6 +8,7 @@ import UserNav from "@/components/UserNav";
 import VipResourceCard from "@/components/VipResourceCard";
 import CommentSection from "@/components/CommentSection";
 import UnlockForum from "@/components/UnlockForum";
+import AuthGateModal from "@/components/AuthGateModal";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -37,19 +38,16 @@ type CardProps = {
 
 const Vip = () => {
   const navigate = useNavigate();
-  const { user, loading } = useAuth();
+  const { user } = useAuth();
   const [forumOpen, setForumOpen] = useState(false);
+  const [authOpen, setAuthOpen] = useState(false);
   const [primary, setPrimary] = useState<CardProps[]>([]);
   const [secondary, setSecondary] = useState<CardProps[]>([]);
 
-  useEffect(() => {
-    if (!loading && (!user || !user.email_confirmed_at)) {
-      navigate("/", { replace: true });
-    }
-  }, [user, loading, navigate]);
+  const requireAuth = () => setAuthOpen(true);
+  const canInteract = !!user?.email_confirmed_at;
 
   useEffect(() => {
-    if (!user) return;
     (async () => {
       const { data, error } = await supabase
         .from("vip_resources")
@@ -61,16 +59,15 @@ const Vip = () => {
         title: r.title,
         description: r.description,
         subDescription: r.sub_description ?? undefined,
-        url: r.url ?? undefined,
+        url: r.title === "BBS" ? undefined : r.url ?? undefined,
         highlight: r.highlight,
-        onClick: r.title === "BBS" ? () => setForumOpen(true) : undefined,
+        onClick: r.title === "BBS" ? () => (canInteract ? setForumOpen(true) : requireAuth()) : undefined,
       });
       setPrimary((data as VipResourceRow[]).filter((r) => r.category === "primary").map(toCard));
       setSecondary((data as VipResourceRow[]).filter((r) => r.category === "secondary").map(toCard));
     })();
-  }, [user]);
+  }, [canInteract]);
 
-  if (loading || !user) return null;
 
   return (
     <div className="min-h-screen relative">
@@ -120,11 +117,12 @@ const Vip = () => {
         </div>
 
         <div className="w-full max-w-2xl">
-          <CommentSection />
+          <CommentSection onRequireAuth={requireAuth} />
         </div>
       </main>
 
       <UnlockForum open={forumOpen} onOpenChange={setForumOpen} />
+      <AuthGateModal open={authOpen} onOpenChange={setAuthOpen} />
     </div>
   );
 };
