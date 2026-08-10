@@ -26,16 +26,9 @@ const Index = () => {
   const [authOpen, setAuthOpen] = useState(false);
 
   const handleAccelClick = () => {
-    if (!user) {
-      setAuthOpen(true);
-      return;
-    }
-    if (!user.email_confirmed_at) {
-      toast({ title: "请先验证邮箱", description: "请前往邮箱点击验证链接后再访问", variant: "destructive" });
-      return;
-    }
     navigate("/vip");
   };
+
 
   return (
     <div className="min-h-screen relative">
