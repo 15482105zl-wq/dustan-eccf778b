@@ -26,8 +26,9 @@ const Index = () => {
   const [authOpen, setAuthOpen] = useState(false);
 
   const handleAccelClick = () => {
-    navigate("/vip");
+    navigate("/invite");
   };
+
 
 
   return (
