@@ -10,6 +10,7 @@ import Auth from "./pages/Auth";
 import Profile from "./pages/Profile";
 import ResetPassword from "./pages/ResetPassword";
 import Vip from "./pages/Vip";
+import Vpn from "./pages/Vpn";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
