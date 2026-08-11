@@ -61,9 +61,8 @@ const Vpn = () => {
 
           <div className="flex flex-wrap gap-3 mb-14">
             <button
-              onClick={() => navigate("/invite")}
+              onClick={() => open(PANEL_URL)}
               className="inline-flex items-center gap-2 rounded-full px-7 py-3 text-sm font-semibold bg-accent text-accent-foreground shadow-[0_0_28px_hsl(var(--accent)/0.45)] hover:shadow-[0_0_40px_hsl(var(--accent)/0.6)] transition-shadow"
-
             >
               立即开通 <ArrowRight className="w-4 h-4" />
             </button>
