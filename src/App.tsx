@@ -11,6 +11,7 @@ import Profile from "./pages/Profile";
 import ResetPassword from "./pages/ResetPassword";
 import Vip from "./pages/Vip";
 import Vpn from "./pages/Vpn";
+import Invite from "./pages/Invite";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -30,6 +31,7 @@ const App = () => (
             <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/vip" element={<Vip />} />
             <Route path="/vpn" element={<Vpn />} />
+            <Route path="/invite" element={<Invite />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AuthProvider>
@@ -39,3 +41,4 @@ const App = () => (
 );
 
 export default App;
+
