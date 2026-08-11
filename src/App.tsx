@@ -29,6 +29,7 @@ const App = () => (
             <Route path="/profile" element={<Profile />} />
             <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/vip" element={<Vip />} />
+            <Route path="/vpn" element={<Vpn />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AuthProvider>
