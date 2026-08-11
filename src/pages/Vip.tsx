@@ -59,14 +59,9 @@ const Vip = () => {
         title: r.title,
         description: r.description,
         subDescription: r.sub_description ?? undefined,
-        url: r.title === "BBS" || r.title === "VPN专线" ? undefined : r.url ?? undefined,
+        url: r.title === "BBS" ? undefined : r.url ?? undefined,
         highlight: r.highlight,
-        onClick:
-          r.title === "BBS"
-            ? () => (canInteract ? setForumOpen(true) : requireAuth())
-            : r.title === "VPN专线"
-              ? () => navigate("/vpn")
-              : undefined,
+        onClick: r.title === "BBS" ? () => (canInteract ? setForumOpen(true) : requireAuth()) : undefined,
       });
       setPrimary((data as VipResourceRow[]).filter((r) => r.category === "primary").map(toCard));
       setSecondary((data as VipResourceRow[]).filter((r) => r.category === "secondary").map(toCard));
