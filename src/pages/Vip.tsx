@@ -54,15 +54,23 @@ const Vip = () => {
         .select("id,category,icon,title,description,sub_description,url,highlight,sort_order")
         .order("sort_order", { ascending: true });
       if (error || !data) return;
-      const toCard = (r: VipResourceRow): CardProps => ({
-        icon: ICON_MAP[r.icon] ?? Rocket,
-        title: r.title,
-        description: r.description,
-        subDescription: r.sub_description ?? undefined,
-        url: r.title === "BBS" ? undefined : r.url ?? undefined,
-        highlight: r.highlight,
-        onClick: r.title === "BBS" ? () => (canInteract ? setForumOpen(true) : requireAuth()) : undefined,
-      });
+      const toCard = (r: VipResourceRow): CardProps => {
+        const isBBS = r.title === "BBS";
+        const isVpn = r.title.includes("VPN") || r.title.includes("V2PN");
+        return {
+          icon: ICON_MAP[r.icon] ?? Rocket,
+          title: r.title,
+          description: r.description,
+          subDescription: r.sub_description ?? undefined,
+          url: isBBS || isVpn ? undefined : r.url ?? undefined,
+          highlight: r.highlight,
+          onClick: isBBS
+            ? () => (canInteract ? setForumOpen(true) : requireAuth())
+            : isVpn
+              ? () => navigate("/vpn")
+              : undefined,
+        };
+      };
       setPrimary((data as VipResourceRow[]).filter((r) => r.category === "primary").map(toCard));
       setSecondary((data as VipResourceRow[]).filter((r) => r.category === "secondary").map(toCard));
     })();
