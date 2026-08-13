@@ -222,23 +222,67 @@ const Vpn = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-background/85 backdrop-blur-xl px-6"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-background/90 backdrop-blur-2xl px-6"
           >
             <motion.div
-              initial={{ scale: 0.92, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              className="glass rounded-2xl border-accent/40 p-8 w-full max-w-sm text-center animate-breathe-glow"
+              initial={{ scale: 0.94, opacity: 0, y: 10 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.96, opacity: 0 }}
+              transition={{ type: "spring", stiffness: 220, damping: 22 }}
+              className="glass relative w-full max-w-sm overflow-hidden rounded-3xl border-accent/40 p-8 text-center animate-breathe-glow"
             >
-              <p className="text-xs tracking-[0.2em] text-muted-foreground mb-4">正在跳转</p>
-              <p className="font-heading text-6xl font-bold gradient-text glow-text mb-4">{seconds}</p>
-              <p className="text-xs text-muted-foreground mb-2">秒后自动打开注册页</p>
-              <p className="text-[11px] text-primary break-all mb-6">{SIGNUP_URL}</p>
+              <div className="pointer-events-none absolute -top-20 left-1/2 h-40 w-40 -translate-x-1/2 rounded-full bg-accent/25 blur-3xl" />
+
+              <p className="relative text-[11px] tracking-[0.35em] text-muted-foreground mb-6">
+                安全通道建立中
+              </p>
+
+              {/* 进度环 */}
+              <div className="relative mx-auto mb-6 h-36 w-36">
+                <svg viewBox="0 0 100 100" className="h-full w-full -rotate-90">
+                  <circle cx="50" cy="50" r="44" fill="none" strokeWidth="4" className="stroke-glass-border/40" />
+                  <motion.circle
+                    cx="50"
+                    cy="50"
+                    r="44"
+                    fill="none"
+                    strokeWidth="4"
+                    strokeLinecap="round"
+                    className="stroke-accent"
+                    strokeDasharray={2 * Math.PI * 44}
+                    animate={{ strokeDashoffset: 2 * Math.PI * 44 * (1 - seconds / 5) }}
+                    transition={{ duration: 1, ease: "linear" }}
+                    style={{ filter: "drop-shadow(0 0 8px hsl(var(--accent) / 0.8))" }}
+                  />
+                </svg>
+                <div className="absolute inset-0 flex flex-col items-center justify-center">
+                  <AnimatePresence mode="popLayout">
+                    <motion.span
+                      key={seconds}
+                      initial={{ opacity: 0, scale: 1.4, filter: "blur(6px)" }}
+                      animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+                      exit={{ opacity: 0, scale: 0.7 }}
+                      transition={{ duration: 0.35 }}
+                      className="font-heading text-5xl font-bold gradient-text glow-text"
+                    >
+                      {seconds}
+                    </motion.span>
+                  </AnimatePresence>
+                  <span className="mt-1 text-[10px] tracking-[0.2em] text-muted-foreground">SECONDS</span>
+                </div>
+              </div>
+
+              <p className="text-xs text-muted-foreground mb-2">即将为你打开注册页</p>
+              <p className="mx-auto mb-6 max-w-[16rem] rounded-lg border border-glass-border/40 px-3 py-2 text-[11px] text-primary break-all">
+                {SIGNUP_URL}
+              </p>
+
               <button
                 onClick={copyLink}
-                className={`w-full py-3 rounded-full text-sm font-semibold inline-flex items-center justify-center gap-2 transition-colors ${
+                className={`w-full py-3 rounded-full text-sm font-semibold inline-flex items-center justify-center gap-2 transition-all ${
                   copied
                     ? "bg-primary/15 text-primary border border-primary/50"
-                    : "bg-accent text-accent-foreground shadow-[0_0_20px_hsl(var(--accent)/0.4)]"
+                    : "bg-accent text-accent-foreground shadow-[0_0_24px_hsl(var(--accent)/0.45)] hover:scale-[1.02]"
                 }`}
               >
                 {copied ? (
@@ -255,12 +299,13 @@ const Vpn = () => {
                 onClick={() => setCounting(false)}
                 className="mt-4 text-xs text-muted-foreground hover:text-foreground transition-colors"
               >
-                取消
+                取消跳转
               </button>
             </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
+
     </div>
   );
 };
