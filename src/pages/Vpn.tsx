@@ -7,7 +7,7 @@ import SEO from "@/components/SEO";
 import UserNav from "@/components/UserNav";
 
 const SIGNUP_URL = "https://kitty.fo/register?invite=110BKHP4";
-const CHANNEL_URL = "https://t.me/dustan_hub";
+const CHANNEL_URL = "https://t.me/bydustan";
 
 const stats = [
   { value: "30+", label: "全球节点" },
