@@ -36,13 +36,20 @@ type CardProps = {
   highlight?: boolean;
 };
 
+const FALLBACK_ROWS: VipResourceRow[] = [
+  { id: "f1", category: "primary", icon: "Zap", title: "VPN专线", description: "全球加速", sub_description: null, url: null, highlight: true, sort_order: 1 },
+  { id: "f2", category: "primary", icon: "Globe", title: "Clash节点", description: "每日分享", sub_description: null, url: "https://pan.xunlei.com/s/VOnGAtlOEyZgFgT8dYpo67d1A1?pwd=45tq#", highlight: true, sort_order: 2 },
+  { id: "f3", category: "secondary", icon: "Apple", title: "苹果美区ID", description: "Apple独享ID", sub_description: null, url: "https://docs.qq.com/doc/DRnR1Y25LY3NJbnNp", highlight: false, sort_order: 1 },
+  { id: "f4", category: "secondary", icon: "Lock", title: "BBS", description: "软件社区", sub_description: null, url: null, highlight: false, sort_order: 2 },
+  { id: "f5", category: "secondary", icon: "Send", title: "TG群组", description: "官方社群", sub_description: null, url: "https://t.me/bydustan", highlight: false, sort_order: 3 },
+];
+
 const Vip = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
   const [forumOpen, setForumOpen] = useState(false);
   const [authOpen, setAuthOpen] = useState(false);
-  const [primary, setPrimary] = useState<CardProps[]>([]);
-  const [secondary, setSecondary] = useState<CardProps[]>([]);
+  const [rows, setRows] = useState<VipResourceRow[]>(FALLBACK_ROWS);
 
   const requireAuth = () => setAuthOpen(true);
   const canInteract = !!user?.email_confirmed_at;
@@ -53,28 +60,32 @@ const Vip = () => {
         .from("vip_resources")
         .select("id,category,icon,title,description,sub_description,url,highlight,sort_order")
         .order("sort_order", { ascending: true });
-      if (error || !data) return;
-      const toCard = (r: VipResourceRow): CardProps => {
-        const isBBS = r.title === "BBS";
-        const isVpn = r.title.includes("VPN") || r.title.includes("V2PN");
-        return {
-          icon: ICON_MAP[r.icon] ?? Rocket,
-          title: r.title,
-          description: r.description,
-          subDescription: r.sub_description ?? undefined,
-          url: isBBS || isVpn ? undefined : r.url ?? undefined,
-          highlight: r.highlight,
-          onClick: isBBS
-            ? () => (canInteract ? setForumOpen(true) : requireAuth())
-            : isVpn
-              ? () => navigate("/vpn")
-              : undefined,
-        };
-      };
-      setPrimary((data as VipResourceRow[]).filter((r) => r.category === "primary").map(toCard));
-      setSecondary((data as VipResourceRow[]).filter((r) => r.category === "secondary").map(toCard));
+      if (error || !data || data.length === 0) return;
+      setRows(data as VipResourceRow[]);
     })();
-  }, [canInteract]);
+  }, []);
+
+  const toCard = (r: VipResourceRow): CardProps => {
+    const isBBS = r.title === "BBS";
+    const isVpn = r.title.includes("VPN") || r.title.includes("V2PN");
+    return {
+      icon: ICON_MAP[r.icon] ?? Rocket,
+      title: r.title,
+      description: r.description,
+      subDescription: r.sub_description ?? undefined,
+      url: isBBS || isVpn ? undefined : r.url ?? undefined,
+      highlight: r.highlight,
+      onClick: isBBS
+        ? () => (canInteract ? setForumOpen(true) : requireAuth())
+        : isVpn
+          ? () => navigate("/vpn")
+          : undefined,
+    };
+  };
+
+  const primary = rows.filter((r) => r.category === "primary").map(toCard);
+  const secondary = rows.filter((r) => r.category === "secondary").map(toCard);
+
 
 
   return (
