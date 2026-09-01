@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Zap, Apple, Globe, Lock, Rocket, Send, type LucideIcon } from "lucide-react";
+import { ArrowLeft, Zap, Apple, Globe, Lock, Rocket, Send, Search, type LucideIcon } from "lucide-react";
 import ParticleBackground from "@/components/ParticleBackground";
 import SEO from "@/components/SEO";
 import UserNav from "@/components/UserNav";
@@ -12,7 +12,7 @@ import AuthGateModal from "@/components/AuthGateModal";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 
-const ICON_MAP: Record<string, LucideIcon> = { Zap, Apple, Globe, Lock, Send };
+const ICON_MAP: Record<string, LucideIcon> = { Zap, Apple, Globe, Lock, Send, Rocket, Search };
 
 type VipResourceRow = {
   id: string;
@@ -37,11 +37,11 @@ type CardProps = {
 };
 
 const FALLBACK_ROWS: VipResourceRow[] = [
-  { id: "f1", category: "primary", icon: "Zap", title: "VPN专线", description: "全球加速", sub_description: null, url: null, highlight: true, sort_order: 1 },
-  { id: "f2", category: "primary", icon: "Globe", title: "Clash节点", description: "每日分享", sub_description: null, url: "https://pan.xunlei.com/s/VOnGAtlOEyZgFgT8dYpo67d1A1?pwd=45tq#", highlight: true, sort_order: 2 },
-  { id: "f3", category: "secondary", icon: "Apple", title: "苹果美区ID", description: "Apple独享ID", sub_description: null, url: "https://docs.qq.com/doc/DRnR1Y25LY3NJbnNp", highlight: false, sort_order: 1 },
-  { id: "f4", category: "secondary", icon: "Lock", title: "BBS", description: "软件社区", sub_description: null, url: null, highlight: false, sort_order: 2 },
-  { id: "f5", category: "secondary", icon: "Send", title: "TG群组", description: "官方社群", sub_description: null, url: "https://t.me/bydustan", highlight: false, sort_order: 3 },
+  { id: "f1", category: "primary", icon: "Rocket", title: "VPN专线", description: "全球加速", sub_description: null, url: null, highlight: true, sort_order: 1 },
+  { id: "f2", category: "primary", icon: "Apple", title: "苹果服务", description: "应用账号", sub_description: null, url: "https://docs.qq.com/doc/DRnR1Y25LY3NJbnNp", highlight: false, sort_order: 2 },
+  { id: "f3", category: "secondary", icon: "Globe", title: "Clash节点", description: "免费分享", sub_description: null, url: "https://pan.xunlei.com/s/VOnGAtlOEyZgFgT8dYpo67d1A1?pwd=45tq#", highlight: false, sort_order: 1 },
+  { id: "f4", category: "secondary", icon: "Search", title: "万能搜盘", description: "资源聚合", sub_description: null, url: "https://so.252035.xyz", highlight: false, sort_order: 2 },
+  { id: "f5", category: "secondary", icon: "Lock", title: "BBS", description: "软件社区", sub_description: null, url: null, highlight: false, sort_order: 3 },
 ];
 
 const Vip = () => {
@@ -78,7 +78,7 @@ const Vip = () => {
       onClick: isBBS
         ? () => (canInteract ? setForumOpen(true) : requireAuth())
         : isVpn
-          ? () => navigate("/vpn")
+          ? () => navigate("/vpn?go=1")
           : undefined,
     };
   };
