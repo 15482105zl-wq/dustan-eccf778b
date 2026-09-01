@@ -27,17 +27,13 @@ const VipResourceCard = ({ icon: Icon, title, description, subDescription, url, 
       whileHover={{ scale: 1.02, y: -2 }}
       whileTap={{ scale: 0.98 }}
       onClick={handleClick}
-      className={`glass rounded-xl p-3 cursor-pointer relative overflow-hidden group transition-all duration-300 min-h-[120px] flex flex-col items-center justify-center text-center ${
+      className={`bg-transparent backdrop-blur-xl rounded-xl p-3 cursor-pointer relative overflow-hidden group transition-all duration-300 min-h-[120px] flex flex-col items-center justify-center text-center border ${
         highlight
           ? "border-accent/50 animate-breathe-glow shadow-[0_0_24px_hsl(var(--accent)/0.35)]"
           : "border-glass-border/40 hover:border-primary/40 hover:shadow-glow-sm"
       }`}
     >
-      <div
-        className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 mb-2 ${
-          highlight ? "bg-accent/20 text-accent" : "bg-primary/15 text-primary"
-        }`}
-      >
+      <div className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0 mb-2 bg-primary/15 text-primary">
         <Icon className="w-5 h-5" />
       </div>
       <p className="font-heading font-semibold text-foreground text-[13px] leading-tight whitespace-nowrap">
