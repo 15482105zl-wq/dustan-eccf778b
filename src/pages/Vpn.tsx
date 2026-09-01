@@ -35,8 +35,9 @@ const plans = [
 
 const Vpn = () => {
   const navigate = useNavigate();
+  const autoStart = typeof window !== "undefined" && new URLSearchParams(window.location.search).has("go");
   const [tab, setTab] = useState<"plans" | "nodes">("plans");
-  const [counting, setCounting] = useState(false);
+  const [counting, setCounting] = useState(autoStart);
   const [seconds, setSeconds] = useState(5);
   const [copied, setCopied] = useState(false);
 

@@ -242,9 +242,19 @@ const CommentSection = ({ onRequireAuth }: { onRequireAuth?: () => void }) => {
     <section className="w-full max-w-2xl mx-auto mt-10">
       <div className="flex items-center gap-2 mb-4">
         <MessageSquare className="w-5 h-5 text-accent" />
-        <h2 className="font-heading text-lg font-bold gradient-text">软件需求 · 在线留言</h2>
+        <h2 className="font-heading text-lg font-bold gradient-text">帮助反馈 · 在线留言</h2>
         <span className="text-xs text-muted-foreground">· 已加载 {comments.length}</span>
       </div>
+
+      {user && (
+        <button
+          onClick={() => window.open("https://t.me/bydustan", "_blank", "noopener,noreferrer")}
+          className="glass w-full rounded-xl p-3 mb-4 border border-glass-border/40 hover:border-primary/40 hover:shadow-glow-sm transition-all flex items-center justify-center gap-2"
+        >
+          <Send className="w-4 h-4 text-primary" />
+          <span className="text-sm font-medium text-foreground/90">官方社群</span>
+        </button>
+      )}
 
       {/* Input */}
       {!user ? (
