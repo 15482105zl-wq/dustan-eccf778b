@@ -88,10 +88,10 @@ const Index = () => {
               </div>
               <div>
                 <p className="font-heading font-bold text-foreground text-xl sm:text-2xl leading-tight">
-                  Global Services
+                  全球数字服务入口
                 </p>
                 <p className="text-xs text-muted-foreground mt-1.5">
-                  全球数字服务入口
+                  Global Services
                 </p>
               </div>
             </div>
