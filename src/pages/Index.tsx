@@ -111,8 +111,6 @@ const Index = () => {
           帮助与反馈
         </motion.a>
       </main>
-
-      <AuthGateModal open={authOpen} onOpenChange={setAuthOpen} />
     </div>
   );
 };
