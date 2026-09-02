@@ -31,9 +31,18 @@ type VipResourceRow = {
 type CardProps = {
   icon: LucideIcon;
   title: string;
+  subtitle: string;
   url?: string;
   onClick?: () => void;
-  highlight?: boolean;
+};
+
+const SUBTITLE_MAP: Record<string, string> = {
+  "VPN专线": "全球加速",
+  "苹果服务": "应用账号",
+  "Clash节点": "免费分享",
+  "万能搜盘": "资源聚合",
+  "BBS": "软件社区",
+  "BBS论坛": "软件社区",
 };
 
 const FALLBACK_ROWS: VipResourceRow[] = [
@@ -99,13 +108,14 @@ const Vip = () => {
   };
 
   const toCard = (r: VipResourceRow): CardProps => {
-    const isBBS = r.title === "BBS";
+    const isBBS = r.title === "BBS" || r.title === "BBS论坛";
     const isVpn = r.title.includes("VPN") || r.title.includes("V2PN");
+    const title = isBBS ? "BBS论坛" : r.title;
     return {
       icon: ICON_MAP[r.icon] ?? Rocket,
-      title: r.title,
+      title,
+      subtitle: SUBTITLE_MAP[title] ?? "精选服务",
       url: isBBS || isVpn ? undefined : r.url ?? undefined,
-      highlight: r.highlight,
       onClick: isBBS
         ? () => (canInteract ? setForumOpen(true) : requireAuth())
         : isVpn

@@ -63,7 +63,7 @@ const Index = () => {
               key={item.label}
               delay={i * 0.1}
               onClick={() => window.open(item.url, "_blank", "noopener,noreferrer")}
-              className="p-5 flex flex-col items-center gap-3"
+              className="!bg-transparent !backdrop-blur-none !shadow-none p-5 flex flex-col items-center gap-3"
             >
               <item.icon className={`w-7 h-7 ${item.color}`} />
               <span className="text-sm font-medium text-foreground/90 text-center">{item.label}</span>
@@ -80,7 +80,7 @@ const Index = () => {
           <GlassCard
             delay={0.5}
             onClick={handleAccelClick}
-            className="p-6 flex items-center justify-between animate-breathe-glow border-accent/30"
+            className="!bg-transparent !backdrop-blur-none p-6 flex items-center justify-between animate-breathe-glow border-accent/30"
           >
             <div className="flex items-center gap-3">
               <div className="w-12 h-12 rounded-lg bg-accent/20 flex items-center justify-center">
