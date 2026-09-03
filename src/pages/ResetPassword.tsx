@@ -238,7 +238,7 @@ const ResetPassword = () => {
   return (
     <div className="min-h-screen relative">
       <SEO
-        title="重置密码 · 资源导航站"
+        title="重置密码 · Dustan Hub · 数字站"
         description="通过邮件链接重置账号密码。"
         path="/reset-password"
         noindex

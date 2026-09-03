@@ -130,8 +130,8 @@ const Vip = () => {
   return (
     <div className="min-h-screen relative">
       <SEO
-        title="尊享中心 · 资源导航站"
-        description="全球加速、Clash 共享节点、Apple 美区 ID 与 IP 环境查询的尊享资源。"
+        title="全球数字服务"
+        description=""
         path="/vip"
         noindex
       />
