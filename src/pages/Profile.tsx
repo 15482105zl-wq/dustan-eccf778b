@@ -103,12 +103,12 @@ const Profile = () => {
 
   const handleSave = async () => {
     if (!user) return;
-    if (displayName.trim().length > 50) {
-      toast({ title: "昵称最多 50 字", variant: "destructive" });
+    if (displayName.trim().length > 4) {
+      toast({ title: "昵称最多 4 个字", variant: "destructive" });
       return;
     }
-    if (bio.trim().length > 200) {
-      toast({ title: "简介最多 200 字", variant: "destructive" });
+    if (bio.trim().length > 20) {
+      toast({ title: "简介最多 20 个字", variant: "destructive" });
       return;
     }
     setSaving(true);
