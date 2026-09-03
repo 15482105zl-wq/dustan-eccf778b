@@ -96,7 +96,7 @@ const Auth = () => {
   return (
     <div className="min-h-screen relative bg-[#050508]">
       <SEO
-        title="登录 / 注册 · 资源导航站"
+        title="登录 / 注册 · Dustan Hub · 数字站"
         description="登录或注册账号，解锁全球加速与尊享资源。"
         path="/auth"
         noindex

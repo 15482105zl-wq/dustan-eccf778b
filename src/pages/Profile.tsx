@@ -149,7 +149,7 @@ const Profile = () => {
   return (
     <div className="min-h-screen relative">
       <SEO
-        title="个人资料 · 资源导航站"
+        title="个人资料 · Dustan Hub · 数字站"
         description="管理账号头像、昵称与个人资料。"
         path="/profile"
         noindex

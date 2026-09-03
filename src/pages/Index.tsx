@@ -27,7 +27,7 @@ const Index = () => {
   return (
     <div className="min-h-screen relative">
       <SEO
-        title="资源导航站 · 网盘直达与全球加速"
+        title="Dustan Hub · 数字站"
         description="精选百度网盘、迅雷、夸克、UC 优质资源一键直达，并提供全球网络加速与 Clash 全能配置资源。"
         path="/"
       />
