@@ -212,10 +212,11 @@ const Profile = () => {
               <Input
                 value={displayName}
                 onChange={(e) => setDisplayName(e.target.value)}
-                maxLength={50}
+                maxLength={4}
                 className="bg-secondary/50 border-border/50"
                 placeholder="你的昵称"
               />
+              <p className="text-[10px] text-muted-foreground mt-1 text-right">{displayName.length}/4</p>
             </div>
             <div>
               <label className="text-xs text-muted-foreground mb-1 block">邮箱</label>
@@ -230,11 +231,12 @@ const Profile = () => {
               <Textarea
                 value={bio}
                 onChange={(e) => setBio(e.target.value)}
-                maxLength={200}
-                rows={3}
+                maxLength={20}
+                rows={2}
                 className="bg-secondary/50 border-border/50 resize-none"
                 placeholder="介绍一下自己..."
               />
+              <p className="text-[10px] text-muted-foreground mt-1 text-right">{bio.length}/20</p>
             </div>
           </div>
 
