@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Apple, Globe, Lock, Rocket, Send, Search, Check, Copy, type LucideIcon } from "lucide-react";
+import { ArrowLeft, Apple, Globe, Lock, Rocket, Check, Copy, type LucideIcon } from "lucide-react";
 import ParticleBackground from "@/components/ParticleBackground";
 import SEO from "@/components/SEO";
 import UserNav from "@/components/UserNav";
@@ -12,11 +12,11 @@ import AuthGateModal from "@/components/AuthGateModal";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 
-const ICON_MAP: Record<string, LucideIcon> = { Rocket, Apple, Globe, Lock, Send, Search };
+const ICON_MAP: Record<string, LucideIcon> = { Rocket, Apple, Globe, Lock };
 
 const SIGNUP_URL = "https://kitty.fo/register?invite=110BKHP4";
 
-const CHANNEL_URL = "https://t.me/bydustan";
+
 
 type VipResourceRow = {
   id: string;
@@ -40,7 +40,6 @@ const SUBTITLE_MAP: Record<string, string> = {
   "VPN专线": "全球加速",
   "苹果服务": "应用账号",
   "Clash节点": "免费分享",
-  "万能搜盘": "资源聚合",
   "BBS": "软件社区",
   "BBS论坛": "软件社区",
 };
@@ -49,8 +48,7 @@ const FALLBACK_ROWS: VipResourceRow[] = [
   { id: "f1", category: "primary", icon: "Rocket", title: "VPN专线", url: null, highlight: true, sort_order: 1 },
   { id: "f2", category: "primary", icon: "Apple", title: "苹果服务", url: "https://dustan.id666.me", highlight: false, sort_order: 2 },
   { id: "f3", category: "secondary", icon: "Globe", title: "Clash节点", url: "https://pan.xunlei.com/s/VOnGAtlOEyZgFgT8dYpo67d1A1?pwd=45tq#", highlight: false, sort_order: 1 },
-  { id: "f4", category: "secondary", icon: "Search", title: "万能搜盘", url: "https://so.252035.xyz", highlight: false, sort_order: 2 },
-  { id: "f5", category: "secondary", icon: "Lock", title: "BBS", url: null, highlight: false, sort_order: 3 },
+  { id: "f5", category: "secondary", icon: "Lock", title: "BBS", url: null, highlight: false, sort_order: 2 },
 ];
 
 const Vip = () => {
