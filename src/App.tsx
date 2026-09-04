@@ -9,6 +9,7 @@ import Auth from "./pages/Auth";
 import Profile from "./pages/Profile";
 import ResetPassword from "./pages/ResetPassword";
 import Vip from "./pages/Vip";
+import Accelerate from "./pages/Accelerate";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -27,6 +28,7 @@ const App = () => (
             <Route path="/profile" element={<Profile />} />
             <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/vip" element={<Vip />} />
+            <Route path="/accelerate" element={<Accelerate />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AuthProvider>
