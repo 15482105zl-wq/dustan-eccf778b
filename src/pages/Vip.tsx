@@ -166,7 +166,7 @@ const Vip = () => {
             </div>
           ))}
           {secondary.map((c, i) => (
-            <div key={c.title} className="col-span-2">
+            <div key={c.title} className={secondary.length === 2 ? "col-span-3" : "col-span-2"}>
               <VipResourceCard {...c} delay={(i + 2) * 0.06} />
             </div>
           ))}
