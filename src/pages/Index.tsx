@@ -1,12 +1,10 @@
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { Download, Globe, Shield, Zap, MessageCircle, Rocket } from "lucide-react";
+import { Download, Globe, Shield, Zap, Rocket } from "lucide-react";
 import GlassCard from "@/components/GlassCard";
 import ParticleBackground from "@/components/ParticleBackground";
 import UserNav from "@/components/UserNav";
 import SEO from "@/components/SEO";
-
-const FEEDBACK_URL = "https://qm.qq.com/q/KECVhxL7a2";
 
 const resourceLinks = [
   { icon: Zap, label: "迅雷网盘", color: "text-primary", url: "https://pan.xunlei.com/s/VOSYGLtZIWaCQejBOvXrruR8A1?pwd=bbia" },
@@ -98,18 +96,14 @@ const Index = () => {
           </GlassCard>
         </div>
 
-        <motion.a
-          href={FEEDBACK_URL}
-          target="_blank"
-          rel="noopener noreferrer"
+        <motion.footer
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.7 }}
-          className="mt-12 flex items-center gap-1.5 text-sm text-foreground/70 hover:text-primary transition-colors"
+          className="mt-12 mb-4 text-center text-xs text-muted-foreground"
         >
-          <MessageCircle className="w-4 h-4" />
-          帮助与反馈
-        </motion.a>
+          © 2020 - 2026 Dustan Hub · 用心运营每一天 · All Rights Reserved.
+        </motion.footer>
       </main>
     </div>
   );
