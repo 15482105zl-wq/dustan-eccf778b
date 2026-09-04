@@ -37,7 +37,8 @@ type CardProps = {
 };
 
 const SUBTITLE_MAP: Record<string, string> = {
-  "VPN专线": "全球加速",
+  "网络加速": "免费专线",
+  "VPN专线": "免费专线",
   "苹果服务": "应用账号",
   "Clash节点": "免费分享",
   "BBS": "软件社区",
@@ -45,7 +46,7 @@ const SUBTITLE_MAP: Record<string, string> = {
 };
 
 const FALLBACK_ROWS: VipResourceRow[] = [
-  { id: "f1", category: "primary", icon: "Rocket", title: "VPN专线", url: null, highlight: true, sort_order: 1 },
+  { id: "f1", category: "primary", icon: "Rocket", title: "网络加速", url: null, highlight: true, sort_order: 1 },
   { id: "f2", category: "primary", icon: "Apple", title: "苹果服务", url: "https://dustan.id666.me", highlight: false, sort_order: 2 },
   { id: "f3", category: "secondary", icon: "Globe", title: "Clash节点", url: "https://pan.xunlei.com/s/VOnGAtlOEyZgFgT8dYpo67d1A1?pwd=45tq#", highlight: false, sort_order: 1 },
   { id: "f5", category: "secondary", icon: "Lock", title: "BBS", url: null, highlight: false, sort_order: 2 },
@@ -107,8 +108,8 @@ const Vip = () => {
 
   const toCard = (r: VipResourceRow): CardProps => {
     const isBBS = r.title === "BBS" || r.title === "BBS论坛";
-    const isVpn = r.title.includes("VPN") || r.title.includes("V2PN");
-    const title = isBBS ? "BBS论坛" : r.title;
+    const isVpn = r.title.includes("VPN") || r.title.includes("V2PN") || r.title.includes("网络加速");
+    const title = isBBS ? "BBS论坛" : isVpn ? "网络加速" : r.title;
     return {
       icon: ICON_MAP[r.icon] ?? Rocket,
       title,
@@ -117,7 +118,7 @@ const Vip = () => {
       onClick: isBBS
         ? () => (canInteract ? setForumOpen(true) : requireAuth())
         : isVpn
-          ? startCountdown
+          ? () => navigate("/accelerate")
           : undefined,
     };
   };
