@@ -96,18 +96,14 @@ const Index = () => {
           </GlassCard>
         </div>
 
-        <motion.a
-          href={FEEDBACK_URL}
-          target="_blank"
-          rel="noopener noreferrer"
+        <motion.footer
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.7 }}
-          className="mt-12 flex items-center gap-1.5 text-sm text-foreground/70 hover:text-primary transition-colors"
+          className="mt-12 mb-4 text-center text-xs text-muted-foreground"
         >
-          <MessageCircle className="w-4 h-4" />
-          帮助与反馈
-        </motion.a>
+          © 2020 - 2026 Dustan Hub · 用心运营每一天 · All Rights Reserved.
+        </motion.footer>
       </main>
     </div>
   );
