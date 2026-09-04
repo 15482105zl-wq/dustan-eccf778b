@@ -57,6 +57,21 @@ const Vip = () => {
   const [forumOpen, setForumOpen] = useState(false);
   const [authOpen, setAuthOpen] = useState(false);
   const [rows, setRows] = useState<VipResourceRow[]>(FALLBACK_ROWS);
+
+  const requireAuth = () => setAuthOpen(true);
+  const canInteract = !!user?.email_confirmed_at;
+
+  useEffect(() => {
+    (async () => {
+      const { data, error } = await supabase
+        .from("vip_resources")
+        .select("id,category,icon,title,url,highlight,sort_order")
+        .order("sort_order", { ascending: true });
+      if (error || !data || data.length === 0) return;
+      setRows(data as VipResourceRow[]);
+    })();
+  }, []);
+
   const toCard = (r: VipResourceRow): CardProps => {
     const isBBS = r.title === "BBS" || r.title === "BBS论坛";
     const isVpn = r.title.includes("VPN") || r.title.includes("V2PN") || r.title.includes("网络加速");
