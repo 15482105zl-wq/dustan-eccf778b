@@ -1,12 +1,10 @@
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { Download, Globe, Shield, Zap, MessageCircle, Rocket } from "lucide-react";
+import { Download, Globe, Shield, Zap, Rocket } from "lucide-react";
 import GlassCard from "@/components/GlassCard";
 import ParticleBackground from "@/components/ParticleBackground";
 import UserNav from "@/components/UserNav";
 import SEO from "@/components/SEO";
-
-const FEEDBACK_URL = "https://qm.qq.com/q/KECVhxL7a2";
 
 const resourceLinks = [
   { icon: Zap, label: "迅雷网盘", color: "text-primary", url: "https://pan.xunlei.com/s/VOSYGLtZIWaCQejBOvXrruR8A1?pwd=bbia" },
