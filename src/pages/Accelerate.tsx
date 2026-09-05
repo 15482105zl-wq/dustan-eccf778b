@@ -38,20 +38,18 @@ const Accelerate = () => {
   const start = (url: string, preload = false) => {
     if (preloadTimerRef.current) clearTimeout(preloadTimerRef.current);
     setCopied(false);
-    if (preload) {
-      setPreloading(true);
-      preloadTimerRef.current = setTimeout(() => {
-        setPreloading(false);
-        setSeconds(3);
-        setCouponCopied(false);
-        setTarget(url);
-      }, 1800);
-      return;
-    }
     setSeconds(3);
     setCouponCopied(false);
     setTarget(url);
+    if (preload) {
+      // 倒计时正常显示，同时在后台静默预访问一次
+      setPreloading(true);
+      preloadTimerRef.current = setTimeout(() => setPreloading(false), 1800);
+    } else {
+      setPreloading(false);
+    }
   };
+
 
   const copyText = async (text: string) => {
     try {
