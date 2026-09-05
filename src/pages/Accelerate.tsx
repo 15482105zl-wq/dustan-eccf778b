@@ -130,7 +130,7 @@ const Accelerate = () => {
             </button>
           </motion.div>
 
-          {/* 绿茶VPN */}
+          {/* 绿叶机场 */}
           <motion.div
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
@@ -142,7 +142,7 @@ const Accelerate = () => {
                 <Leaf className="w-5 h-5" />
               </div>
               <div>
-                <h2 className="font-heading text-lg font-semibold text-foreground">绿茶VPN</h2>
+                <h2 className="font-heading text-lg font-semibold text-foreground">绿叶机场</h2>
                 <p className="text-[11px] text-muted-foreground">永久免费 · 无广告 · 全自研</p>
               </div>
             </div>
