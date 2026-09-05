@@ -125,7 +125,7 @@ const Accelerate = () => {
             </button>
 
             <button
-              onClick={() => start(STARLINK_URL)}
+              onClick={() => start(STARLINK_URL, true)}
               className="mt-3 w-full rounded-full bg-accent py-3 text-sm font-semibold text-accent-foreground shadow-[0_0_24px_hsl(var(--accent)/0.45)] transition-transform hover:scale-[1.02]"
             >
               立即注册
