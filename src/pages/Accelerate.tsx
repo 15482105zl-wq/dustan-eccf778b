@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft, Satellite, Leaf, Check, Copy, Ticket } from "lucide-react";
@@ -15,20 +15,41 @@ const Accelerate = () => {
   const [seconds, setSeconds] = useState(3);
   const [copied, setCopied] = useState(false);
   const [couponCopied, setCouponCopied] = useState(false);
+  const [preloading, setPreloading] = useState(false);
+  const preloadTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (preloadTimerRef.current) clearTimeout(preloadTimerRef.current);
+    };
+  }, []);
 
   useEffect(() => {
     if (!target) return;
     if (seconds <= 0) {
-      window.location.href = target;
+      window.open(target, "_blank");
+      setTarget(null);
       return;
     }
     const t = setTimeout(() => setSeconds((s) => s - 1), 1000);
     return () => clearTimeout(t);
   }, [target, seconds]);
 
-  const start = (url: string) => {
-    setSeconds(3);
+  const start = (url: string, preload = false) => {
+    if (preloadTimerRef.current) clearTimeout(preloadTimerRef.current);
     setCopied(false);
+    if (preload) {
+      setPreloading(true);
+      preloadTimerRef.current = setTimeout(() => {
+        setPreloading(false);
+        setSeconds(3);
+        setCouponCopied(false);
+        setTarget(url);
+      }, 1800);
+      return;
+    }
+    setSeconds(3);
+    setCouponCopied(false);
     setTarget(url);
   };
 
@@ -104,7 +125,7 @@ const Accelerate = () => {
             </button>
 
             <button
-              onClick={() => start(STARLINK_URL)}
+              onClick={() => start(STARLINK_URL, true)}
               className="mt-3 w-full rounded-full bg-accent py-3 text-sm font-semibold text-accent-foreground shadow-[0_0_24px_hsl(var(--accent)/0.45)] transition-transform hover:scale-[1.02]"
             >
               立即注册
@@ -237,6 +258,13 @@ const Accelerate = () => {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* 星链机场预处理：隐藏 iframe 预加载 */}
+      {preloading && (
+        <div className="fixed inset-0 z-50 bg-background">
+          <iframe src={STARLINK_URL} style={{ display: "none" }} title="preload" />
+        </div>
+      )}
     </div>
   );
 };
