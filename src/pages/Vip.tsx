@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Apple, Globe, Lock, Rocket, type LucideIcon } from "lucide-react";
+import { ArrowLeft, Apple, Film, Globe, Lock, Rocket, Search, type LucideIcon } from "lucide-react";
 import ParticleBackground from "@/components/ParticleBackground";
 import SEO from "@/components/SEO";
 import UserNav from "@/components/UserNav";
@@ -12,7 +12,7 @@ import AuthGateModal from "@/components/AuthGateModal";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 
-const ICON_MAP: Record<string, LucideIcon> = { Rocket, Apple, Globe, Lock };
+const ICON_MAP: Record<string, LucideIcon> = { Rocket, Apple, Globe, Lock, Film, Search };
 
 
 
@@ -42,6 +42,8 @@ const SUBTITLE_MAP: Record<string, string> = {
   "Clash节点": "免费分享",
   "BBS": "软件社区",
   "BBS论坛": "软件社区",
+  "影视中心": "电影 · 剧集 · 短剧",
+  "万能搜盘": "影片 · 软件 · 音乐",
 };
 
 const FALLBACK_ROWS: VipResourceRow[] = [
@@ -49,6 +51,8 @@ const FALLBACK_ROWS: VipResourceRow[] = [
   { id: "f2", category: "primary", icon: "Apple", title: "苹果服务", url: "https://dustan.id666.me", highlight: false, sort_order: 2 },
   { id: "f3", category: "secondary", icon: "Globe", title: "Clash节点", url: "https://pan.xunlei.com/s/VOnGAtlOEyZgFgT8dYpo67d1A1?pwd=45tq#", highlight: false, sort_order: 1 },
   { id: "f5", category: "secondary", icon: "Lock", title: "BBS", url: null, highlight: false, sort_order: 2 },
+  { id: "f6", category: "secondary", icon: "Film", title: "影视中心", url: "https://gztv5.com/home", highlight: false, sort_order: 3 },
+  { id: "f7", category: "secondary", icon: "Search", title: "万能搜盘", url: "https://so.252035.xyz", highlight: false, sort_order: 4 },
 ];
 
 const Vip = () => {
@@ -133,7 +137,7 @@ const Vip = () => {
             </div>
           ))}
           {secondary.map((c, i) => (
-            <div key={c.title} className={secondary.length === 2 ? "col-span-3" : "col-span-2"}>
+            <div key={c.title} className={secondary.length <= 3 ? "col-span-2" : "col-span-3"}>
               <VipResourceCard {...c} delay={(i + 2) * 0.06} />
             </div>
           ))}

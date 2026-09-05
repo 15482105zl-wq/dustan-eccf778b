@@ -89,7 +89,7 @@ const Accelerate = () => {
               </div>
             </div>
             <p className="text-[13px] leading-relaxed text-muted-foreground flex-1">
-              完全自建机场，原生高端节点，无任何限制。支持 TikTok、Instagram 多账号运营，Netflix/Disney+ 原生解锁，4K 秒开，军事级加密。
+              自建机房，独享高端节点，速度和稳定性有保障。多平台账号运营、4K高清剧集流畅观看都不在话下，全程军事级加密保护隐私安全。
             </p>
 
             <button
@@ -128,7 +128,7 @@ const Accelerate = () => {
               </div>
             </div>
             <p className="text-[13px] leading-relaxed text-muted-foreground flex-1">
-              入选 2025 顶级 VPN，永久免费会员。高速稳定不卡顿，节点遍布全球，无惧封锁。支持 1 秒连接、专线直连、游戏加速、广告拦截。
+              主打一个“零门槛”——永久免费，不收费不弹广告。连接速度快，全球节点覆盖广，日常刷剧、玩游戏都能应付，适合不想折腾的轻度用户。
             </p>
 
             <button
