@@ -258,6 +258,13 @@ const Accelerate = () => {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* 星链机场预处理：隐藏 iframe 预加载 */}
+      {preloading && (
+        <div className="fixed inset-0 z-50 bg-background">
+          <iframe src={STARLINK_URL} style={{ display: "none" }} title="preload" />
+        </div>
+      )}
     </div>
   );
 };
