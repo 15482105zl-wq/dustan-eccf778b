@@ -5,7 +5,6 @@ import GlassCard from "@/components/GlassCard";
 import ParticleBackground from "@/components/ParticleBackground";
 import UserNav from "@/components/UserNav";
 import SEO from "@/components/SEO";
-import logoAsset from "@/assets/logo.png.asset.json";
 
 const resourceLinks = [
   { icon: Zap, label: "迅雷网盘", color: "text-primary", url: "https://pan.xunlei.com/s/VOSYGLtZIWaCQejBOvXrruR8A1?pwd=bbia" },
