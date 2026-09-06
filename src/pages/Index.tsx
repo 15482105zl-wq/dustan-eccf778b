@@ -33,7 +33,7 @@ const Index = () => {
       <main className="relative z-10 flex flex-col items-center px-4 py-12">
         <div className="w-full max-w-2xl flex items-center justify-between mb-4">
           <motion.img
-            src={logoAsset.url}
+            src="/logo.png"
             alt="Dustan Hub"
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
