@@ -15,6 +15,7 @@ const Accelerate = () => {
   const [seconds, setSeconds] = useState(3);
   const [copied, setCopied] = useState(false);
   const [couponCopied, setCouponCopied] = useState(false);
+  const [inviteCopied, setInviteCopied] = useState(false);
   const [preloading, setPreloading] = useState(false);
   const preloadTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -123,7 +124,19 @@ const Accelerate = () => {
                 {couponCopied ? "已复制优惠券 rXRW4708" : "优惠券：rXRW4708"}
               </span>
               <span className="text-[11px] text-primary/80">
-                注册时填写邀请码 <span className="font-semibold text-accent">PcjcmSQZ</span> 立享8.9折
+                注册时填写邀请码{" "}
+                <span
+                  onClick={async (e) => {
+                    e.stopPropagation();
+                    await copyText("PcjcmSQZ");
+                    setInviteCopied(true);
+                    setTimeout(() => setInviteCopied(false), 2000);
+                  }}
+                  className="font-semibold text-accent cursor-pointer hover:underline"
+                >
+                  {inviteCopied ? "已复制" : "PcjcmSQZ"}
+                </span>{" "}
+                立享8.9折
               </span>
             </button>
 
