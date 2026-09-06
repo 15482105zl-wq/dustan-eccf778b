@@ -116,10 +116,15 @@ const Accelerate = () => {
                 await copyText("rXRW4708");
                 setCouponCopied(true);
               }}
-              className="mt-4 inline-flex items-center justify-center gap-2 rounded-xl border border-primary/40 bg-primary/10 px-3 py-2 text-xs text-primary transition-colors hover:bg-primary/15"
+              className="mt-4 inline-flex flex-col items-center justify-center gap-1 rounded-xl border border-primary/40 bg-primary/10 px-3 py-2 text-xs text-primary transition-colors hover:bg-primary/15"
             >
-              <Ticket className="w-3.5 h-3.5" />
-              {couponCopied ? "已复制优惠券 rXRW4708" : "优惠券：rXRW4708（8.9折）"}
+              <span className="inline-flex items-center justify-center gap-2">
+                <Ticket className="w-3.5 h-3.5" />
+                {couponCopied ? "已复制优惠券 rXRW4708" : "优惠券：rXRW4708"}
+              </span>
+              <span className="text-[11px] text-primary/80">
+                注册时填写邀请码 <span className="font-semibold text-accent">PcjcmSQZ</span> 立享8.9折
+              </span>
             </button>
 
             <button
