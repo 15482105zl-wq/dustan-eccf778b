@@ -124,7 +124,7 @@ const Accelerate = () => {
                 {couponCopied ? "已复制优惠券 rXRW4708" : "优惠券：rXRW4708"}
               </span>
               <span className="text-[11px] text-primary/80">
-                注册时填写邀请码{" "}
+                填写邀请码{" "}
                 <span
                   onClick={async (e) => {
                     e.stopPropagation();
