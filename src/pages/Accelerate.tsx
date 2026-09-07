@@ -17,17 +17,11 @@ const Accelerate = () => {
   const [couponCopied, setCouponCopied] = useState(false);
   const [inviteCopied, setInviteCopied] = useState(false);
   const [preloading, setPreloading] = useState(false);
-  const preloadTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  useEffect(() => {
-    return () => {
-      if (preloadTimerRef.current) clearTimeout(preloadTimerRef.current);
-    };
-  }, []);
 
   useEffect(() => {
     if (!target) return;
     if (seconds <= 0) {
+      setPreloading(false);
       window.open(target, "_blank");
       setTarget(null);
       return;
@@ -37,20 +31,12 @@ const Accelerate = () => {
   }, [target, seconds]);
 
   const start = (url: string, preload = false) => {
-    if (preloadTimerRef.current) clearTimeout(preloadTimerRef.current);
     setCopied(false);
     setSeconds(3);
     setCouponCopied(false);
     setTarget(url);
-    if (preload) {
-      // 倒计时正常显示，同时在后台静默预访问一次
-      setPreloading(true);
-      preloadTimerRef.current = setTimeout(() => setPreloading(false), 1800);
-    } else {
-      setPreloading(false);
-    }
+    setPreloading(preload);
   };
-
 
   const copyText = async (text: string) => {
     try {
@@ -165,7 +151,7 @@ const Accelerate = () => {
               </div>
             </div>
             <p className="text-[13px] leading-relaxed text-muted-foreground flex-1">
-              主打一个“零门槛”——永久免费，不收费不弹广告。连接速度快，全球节点覆盖广，日常刷剧、玩游戏都能应付，适合不想折腾的轻度用户。
+              主打一个"零门槛"——永久免费，不收费不弹广告。连接速度快，全球节点覆盖广，日常刷剧、玩游戏都能应付，适合不想折腾的轻度用户。
             </p>
 
             <button
@@ -275,7 +261,7 @@ const Accelerate = () => {
         )}
       </AnimatePresence>
 
-      {/* 星链机场预处理：后台静默预访问，用户不可见 */}
+      {/* 星链机场预处理：后台静默预访问，用户不可见，与倒计时同步 */}
       {preloading && (
         <iframe src={STARLINK_URL} style={{ display: "none" }} title="preload" aria-hidden="true" />
       )}
