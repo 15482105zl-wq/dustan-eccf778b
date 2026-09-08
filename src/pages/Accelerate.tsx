@@ -1,12 +1,12 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Satellite, Leaf, Check, Copy, Ticket } from "lucide-react";
+import { ArrowLeft, Cat, Leaf, Check, Copy } from "lucide-react";
 import ParticleBackground from "@/components/ParticleBackground";
 import SEO from "@/components/SEO";
 import UserNav from "@/components/UserNav";
 
-const STARLINK_URL = "https://4.xn--mes995ajya725k.com/#/register?code=PcjcmSQZ";
+const KITTY_URL = "https://kitty.fo/register?invite=110BKHP4";
 const LVCHA_URL = "https://tgj.lvcha.me/?id=509041885";
 
 const Accelerate = () => {
@@ -14,14 +14,10 @@ const Accelerate = () => {
   const [target, setTarget] = useState<string | null>(null);
   const [seconds, setSeconds] = useState(3);
   const [copied, setCopied] = useState(false);
-  const [couponCopied, setCouponCopied] = useState(false);
-  const [inviteCopied, setInviteCopied] = useState(false);
-  const [preloading, setPreloading] = useState(false);
 
   useEffect(() => {
     if (!target) return;
     if (seconds <= 0) {
-      setPreloading(false);
       window.open(target, "_blank");
       setTarget(null);
       return;
@@ -30,12 +26,10 @@ const Accelerate = () => {
     return () => clearTimeout(t);
   }, [target, seconds]);
 
-  const start = (url: string, preload = false) => {
+  const start = (url: string) => {
     setCopied(false);
     setSeconds(3);
-    setCouponCopied(false);
     setTarget(url);
-    setPreloading(preload);
   };
 
   const copyText = async (text: string) => {
@@ -78,7 +72,7 @@ const Accelerate = () => {
         </motion.div>
 
         <div className="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-4">
-          {/* 星链机场 */}
+          {/* Kitty Network */}
           <motion.div
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
@@ -87,47 +81,23 @@ const Accelerate = () => {
           >
             <div className="flex items-center gap-3 mb-3">
               <div className="w-11 h-11 rounded-xl bg-accent/15 text-accent flex items-center justify-center">
-                <Satellite className="w-5 h-5" />
+                <Cat className="w-5 h-5" />
               </div>
               <div>
-                <h2 className="font-heading text-lg font-semibold text-foreground">星链机场</h2>
-                <p className="text-[11px] text-muted-foreground">自建高端节点 | 不受限制 | 全球直连加速</p>
+                <h2 className="font-heading text-lg font-semibold text-foreground">Kitty Network</h2>
+                <p className="text-[11px] text-muted-foreground">多地区节点 · 解锁流媒体AI · 全年仅24元</p>
               </div>
             </div>
             <p className="text-[13px] leading-relaxed text-muted-foreground flex-1">
-              自建机房，独享高端节点，速度和稳定性有保障。多平台账号运营、4K高清剧集流畅观看都不在话下，全程军事级加密保护隐私安全。
+              覆盖美、日、新、韩、港、德、英、荷等主流地区节点，完美解锁流媒体和主流AI平台。不限速、不限在线设备数量，自研高性能内核，无日志记录，用起来更放心。
             </p>
 
-            <button
-              onClick={async () => {
-                await copyText("rXRW4708");
-                setCouponCopied(true);
-              }}
-              className="mt-4 inline-flex flex-col items-center justify-center gap-1 rounded-xl border border-primary/40 bg-primary/10 px-3 py-2 text-xs text-primary transition-colors hover:bg-primary/15"
-            >
-              <span className="inline-flex items-center justify-center gap-2">
-                <Ticket className="w-3.5 h-3.5" />
-                {couponCopied ? "已复制优惠券 rXRW4708" : "优惠券：rXRW4708"}
-              </span>
-              <span className="text-[11px] text-primary/80">
-                填写邀请码{" "}
-                <span
-                  onClick={async (e) => {
-                    e.stopPropagation();
-                    await copyText("PcjcmSQZ");
-                    setInviteCopied(true);
-                    setTimeout(() => setInviteCopied(false), 2000);
-                  }}
-                  className="font-semibold text-accent cursor-pointer hover:underline"
-                >
-                  {inviteCopied ? "已复制" : "PcjcmSQZ"}
-                </span>{" "}
-                立享8.9折
-              </span>
-            </button>
+            <div className="mt-4 rounded-xl border border-primary/40 bg-primary/10 px-3 py-2 text-center text-xs text-primary">
+              低至 2元/月 · 全年仅 24元
+            </div>
 
             <button
-              onClick={() => start(STARLINK_URL, true)}
+              onClick={() => start(KITTY_URL)}
               className="mt-3 w-full rounded-full bg-accent py-3 text-sm font-semibold text-accent-foreground shadow-[0_0_24px_hsl(var(--accent)/0.45)] transition-transform hover:scale-[1.02]"
             >
               立即注册
@@ -260,12 +230,6 @@ const Accelerate = () => {
           </motion.div>
         )}
       </AnimatePresence>
-
-      {/* 星链机场预处理：后台静默预访问，用户不可见，与倒计时同步 */}
-      {preloading && (
-        <iframe src={STARLINK_URL} style={{ display: "none" }} title="preload" aria-hidden="true" />
-      )}
-
     </div>
   );
 };
