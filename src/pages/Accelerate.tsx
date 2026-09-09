@@ -32,6 +32,12 @@ const Accelerate = () => {
     setTarget(url);
   };
 
+  const jumpNow = () => {
+    if (!target) return;
+    window.open(target, "_blank");
+    setTarget(null);
+  };
+
   const copyText = async (text: string) => {
     try {
       await navigator.clipboard.writeText(text);
@@ -195,9 +201,13 @@ const Accelerate = () => {
               </div>
 
               <p className="text-xs text-muted-foreground mb-2">即将为你打开页面</p>
-              <p className="mx-auto mb-6 max-w-[16rem] rounded-lg border border-glass-border/40 px-3 py-2 text-[11px] text-primary">
-                正在为你跳转
-              </p>
+
+              <button
+                onClick={jumpNow}
+                className="mx-auto mb-6 block w-full max-w-[16rem] rounded-lg border border-glass-border/40 px-3 py-2 text-[11px] text-primary transition-colors hover:bg-primary/10"
+              >
+                立即跳转 →
+              </button>
 
               <button
                 onClick={async () => {
