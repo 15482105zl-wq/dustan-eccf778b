@@ -1,14 +1,13 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Cat, Leaf, Zap, Check, Copy } from "lucide-react";
+import { ArrowLeft, Cat, Leaf, Check, Copy } from "lucide-react";
 import ParticleBackground from "@/components/ParticleBackground";
 import SEO from "@/components/SEO";
 import UserNav from "@/components/UserNav";
 
 const KITTY_URL = "https://kitty.fo/register?invite=110BKHP4";
-const LVCHA_URL = "https://176.lvchavpn.me?id=509041885";
-const JISU_URL = "https://dalichuqiji.mmmoyou.com/#/register?code=iabWIfKj";
+const LVCHA_URL = "https://tgj.lvcha.me/?id=509041885";
 
 const Accelerate = () => {
   const navigate = useNavigate();
@@ -57,7 +56,7 @@ const Accelerate = () => {
       <SEO title="网络加速" description="" path="/accelerate" noindex />
       <ParticleBackground />
       <main className="relative z-10 flex flex-col items-center px-4 py-10">
-        <div className="w-full max-w-5xl flex items-center justify-between mb-6">
+        <div className="w-full max-w-4xl flex items-center justify-between mb-6">
           <button
             onClick={() => navigate("/vip")}
             className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-primary transition-colors"
@@ -78,7 +77,7 @@ const Accelerate = () => {
           <p className="text-muted-foreground text-sm">免费专线 · 全球直连</p>
         </motion.div>
 
-        <div className="w-full max-w-5xl grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Kitty Network */}
           <motion.div
             initial={{ opacity: 0, y: 18 }}
@@ -92,7 +91,7 @@ const Accelerate = () => {
               </div>
               <div>
                 <h2 className="font-heading text-lg font-semibold text-foreground">Kitty Network</h2>
-                <p className="text-[11px] text-muted-foreground">多地区节点 · 解锁流媒体AI</p>
+                <p className="text-[11px] text-muted-foreground">多地区节点 · 解锁流媒体AI · 全年仅24元</p>
               </div>
             </div>
             <p className="text-[13px] leading-relaxed text-muted-foreground flex-1">
@@ -111,43 +110,11 @@ const Accelerate = () => {
             </button>
           </motion.div>
 
-          {/* 极速网络 */}
-          <motion.div
-            initial={{ opacity: 0, y: 18 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.45, delay: 0.05 }}
-            className="glass rounded-2xl p-6 flex flex-col border-yellow-500/30"
-          >
-            <div className="flex items-center gap-3 mb-3">
-              <div className="w-11 h-11 rounded-xl bg-yellow-500/15 text-yellow-500 flex items-center justify-center">
-                <Zap className="w-5 h-5" />
-              </div>
-              <div>
-                <h2 className="font-heading text-lg font-semibold text-foreground">极速网络</h2>
-                <p className="text-[11px] text-muted-foreground">畅享18元包年 · 防失联备用</p>
-              </div>
-            </div>
-            <p className="text-[13px] leading-relaxed text-muted-foreground flex-1">
-              稳定顺畅、不失联、低延迟，Amazon 5Gbps 全球网络支持。全平台专属客户端，无倍率套路，不限设备不限速，AI、Netflix 等流媒体全部解锁。
-            </p>
-
-            <div className="mt-4 rounded-xl border border-yellow-500/40 bg-yellow-500/10 px-3 py-2 text-center text-xs text-yellow-500">
-              畅享18元包年 · 优惠码 duobao88
-            </div>
-
-            <button
-              onClick={() => start(JISU_URL)}
-              className="mt-3 w-full rounded-full bg-yellow-500 py-3 text-sm font-semibold text-black shadow-[0_0_24px_rgba(234,179,8,0.45)] transition-transform hover:scale-[1.02]"
-            >
-              立即注册
-            </button>
-          </motion.div>
-
           {/* 绿叶机场 */}
           <motion.div
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.45, delay: 0.1 }}
+            transition={{ duration: 0.45, delay: 0.08 }}
             className="glass rounded-2xl p-6 flex flex-col border-primary/30"
           >
             <div className="flex items-center gap-3 mb-3">
