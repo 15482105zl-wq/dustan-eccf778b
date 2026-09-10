@@ -7,7 +7,7 @@ import SEO from "@/components/SEO";
 import UserNav from "@/components/UserNav";
 
 const KITTY_URL = "https://kitty.fo/register?invite=110BKHP4";
-const LVCHA_URL = "https://tgj.lvcha.me/?id=509041885";
+const LVCHA_URL = "https://176.lvchavpn.me?id=509041885";
 
 const Accelerate = () => {
   const navigate = useNavigate();
