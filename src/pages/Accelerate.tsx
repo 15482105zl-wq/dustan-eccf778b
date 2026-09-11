@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Cat, Leaf, Check, Copy } from "lucide-react";
+import { ArrowLeft, Cat, Leaf, Zap, Check, Copy } from "lucide-react";
 import ParticleBackground from "@/components/ParticleBackground";
 import SEO from "@/components/SEO";
 import UserNav from "@/components/UserNav";
 
+const NICE_URL = "https://dustan.mmmoyou.com/#/register?code=0lc8ncSH";
 const KITTY_URL = "https://kitty.fo/register?invite=110BKHP4";
-const LVCHA_URL = "https://176.lvchavpn.me?id=509041885";
+const LVCHA_URL = "https://tgj.lvcha.me/?id=509041885";
 
 const Accelerate = () => {
   const navigate = useNavigate();
@@ -77,12 +78,52 @@ const Accelerate = () => {
           <p className="text-muted-foreground text-sm">免费专线 · 全球直连</p>
         </motion.div>
 
-        <div className="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-4">
-          {/* Kitty Network */}
+        <div className="w-full max-w-4xl flex flex-col gap-4">
+          {/* Nice云 - 主力推荐 */}
           <motion.div
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.45 }}
+            className="glass rounded-2xl p-6 flex flex-col relative"
+            style={{ border: "1.5px solid rgba(245, 158, 11, 0.5)" }}
+          >
+            <div
+              className="absolute -top-3 right-5 text-[10px] font-bold px-3 py-1 rounded-full"
+              style={{ background: "#f59e0b", color: "#000" }}
+            >
+              🔥 主力推荐
+            </div>
+            <div className="flex items-center gap-3 mb-3 mt-1">
+              <div className="w-11 h-11 rounded-xl flex items-center justify-center" style={{ background: "rgba(245,158,11,0.15)", color: "#b45309" }}>
+                <Zap className="w-5 h-5" />
+              </div>
+              <div>
+                <h2 className="font-heading text-lg font-semibold text-foreground">Nice云</h2>
+                <p className="text-[11px]" style={{ color: "#b45309" }}>全中转防失联 · 日重置流量</p>
+              </div>
+            </div>
+            <p className="text-[13px] leading-relaxed text-muted-foreground flex-1">
+              全线路走中转、内置防失联节点，就算主线路波动也能快速切换，稳定性有保障。订单流量按日重置，SS/Hy2/Vmess多协议可选，最大10Gbps峰值带宽，不限制在线客户端数量，多种流媒体一键解锁。
+            </p>
+
+            <div className="mt-4 rounded-xl px-3 py-2 text-center text-xs font-semibold" style={{ background: "rgba(245,158,11,0.15)", color: "#b45309" }}>
+              7折优惠券：nice888
+            </div>
+
+            <button
+              onClick={() => start(NICE_URL)}
+              className="mt-3 w-full rounded-full py-3 text-sm font-bold transition-transform hover:scale-[1.02]"
+              style={{ background: "#f59e0b", color: "#000", boxShadow: "0 0 24px rgba(245,158,11,0.45)" }}
+            >
+              立即注册
+            </button>
+          </motion.div>
+
+          {/* Kitty Network */}
+          <motion.div
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.45, delay: 0.05 }}
             className="glass rounded-2xl p-6 flex flex-col border-accent/30"
           >
             <div className="flex items-center gap-3 mb-3">
@@ -114,7 +155,7 @@ const Accelerate = () => {
           <motion.div
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.45, delay: 0.08 }}
+            transition={{ duration: 0.45, delay: 0.1 }}
             className="glass rounded-2xl p-6 flex flex-col border-primary/30"
           >
             <div className="flex items-center gap-3 mb-3">
