@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Cat, Leaf, Zap, Check, Copy } from "lucide-react";
+import { ArrowLeft, Leaf, Zap, Check, Copy } from "lucide-react";
 import ParticleBackground from "@/components/ParticleBackground";
 import SEO from "@/components/SEO";
 import UserNav from "@/components/UserNav";
 
 const NICE_URL = "https://dustan.mmmoyou.com/#/register?code=0lc8ncSH";
-const KITTY_URL = "https://kitty.fo/register?invite=110BKHP4";
 const LVCHA_URL = "https://da.nang.banhbao.im/?id=509041885";
 
 const Accelerate = () => {
@@ -15,6 +14,7 @@ const Accelerate = () => {
   const [target, setTarget] = useState<string | null>(null);
   const [seconds, setSeconds] = useState(3);
   const [copied, setCopied] = useState(false);
+  const [couponCopied, setCouponCopied] = useState(false);
 
   useEffect(() => {
     if (!target) return;
@@ -106,9 +106,25 @@ const Accelerate = () => {
               全线路走中转、内置防失联节点，就算主线路波动也能快速切换，稳定性有保障。订单流量按日重置，SS/Hy2/Vmess多协议可选，最大10Gbps峰值带宽，不限制在线客户端数量，多种流媒体一键解锁。
             </p>
 
-            <div className="mt-4 rounded-xl px-3 py-2 text-center text-xs font-semibold" style={{ background: "rgba(245,158,11,0.15)", color: "#b45309" }}>
-              7折优惠券：nice888
-            </div>
+            <button
+              onClick={async () => {
+                await copyText("nice888");
+                setCouponCopied(true);
+                setTimeout(() => setCouponCopied(false), 2000);
+              }}
+              className="mt-4 w-full rounded-xl px-3 py-2 text-center text-xs font-semibold inline-flex items-center justify-center gap-1.5 transition-opacity hover:opacity-80"
+              style={{ background: "rgba(245,158,11,0.15)", color: "#b45309" }}
+            >
+              {couponCopied ? (
+                <>
+                  <Check className="w-3.5 h-3.5" /> 已复制 nice888
+                </>
+              ) : (
+                <>
+                  <Copy className="w-3.5 h-3.5" /> 7折优惠券：nice888
+                </>
+              )}
+            </button>
 
             <button
               onClick={() => start(NICE_URL)}
@@ -119,43 +135,11 @@ const Accelerate = () => {
             </button>
           </motion.div>
 
-          {/* Kitty Network */}
-          <motion.div
-            initial={{ opacity: 0, y: 18 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.45, delay: 0.05 }}
-            className="glass rounded-2xl p-6 flex flex-col border-accent/30"
-          >
-            <div className="flex items-center gap-3 mb-3">
-              <div className="w-11 h-11 rounded-xl bg-accent/15 text-accent flex items-center justify-center">
-                <Cat className="w-5 h-5" />
-              </div>
-              <div>
-                <h2 className="font-heading text-lg font-semibold text-foreground">Kitty Network</h2>
-                <p className="text-[11px] text-muted-foreground">多地区节点 · 解锁流媒体AI · 全年仅24元</p>
-              </div>
-            </div>
-            <p className="text-[13px] leading-relaxed text-muted-foreground flex-1">
-              覆盖美、日、新、韩、港、德、英、荷等主流地区节点，完美解锁流媒体和主流AI平台。不限速、不限在线设备数量，自研高性能内核，无日志记录，用起来更放心。
-            </p>
-
-            <div className="mt-4 rounded-xl border border-primary/40 bg-primary/10 px-3 py-2 text-center text-xs text-primary">
-              低至 2元/月 · 全年仅 24元
-            </div>
-
-            <button
-              onClick={() => start(KITTY_URL)}
-              className="mt-3 w-full rounded-full bg-accent py-3 text-sm font-semibold text-accent-foreground shadow-[0_0_24px_hsl(var(--accent)/0.45)] transition-transform hover:scale-[1.02]"
-            >
-              立即注册
-            </button>
-          </motion.div>
-
           {/* 绿叶机场 */}
           <motion.div
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.45, delay: 0.1 }}
+            transition={{ duration: 0.45, delay: 0.05 }}
             className="glass rounded-2xl p-6 flex flex-col border-primary/30"
           >
             <div className="flex items-center gap-3 mb-3">
