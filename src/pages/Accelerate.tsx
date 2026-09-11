@@ -255,19 +255,22 @@ const Accelerate = () => {
                   await copyText(target);
                   setCopied(true);
                 }}
-                className={`w-full py-3 rounded-full text-sm font-semibold inline-flex items-center justify-center gap-2 transition-all ${
+                className={`w-full py-3 rounded-full text-sm font-semibold flex flex-col items-center justify-center gap-1 transition-all ${
                   copied
                     ? "bg-primary/15 text-primary border border-primary/50"
                     : "bg-accent text-accent-foreground shadow-[0_0_24px_hsl(var(--accent)/0.45)] hover:scale-[1.02]"
                 }`}
               >
                 {copied ? (
-                  <>
+                  <span className="inline-flex items-center gap-2">
                     <Check className="w-4 h-4" /> ✅ 已复制，请在浏览器中打开
-                  </>
+                  </span>
                 ) : (
                   <>
-                    <Copy className="w-4 h-4" /> 复制链接，浏览器打开
+                    <span className="inline-flex items-center gap-2">
+                      <Copy className="w-4 h-4" /> 复制链接，浏览器打开
+                    </span>
+                    <span className="text-xs opacity-75">（微信/QQ无法访问）</span>
                   </>
                 )}
               </button>
