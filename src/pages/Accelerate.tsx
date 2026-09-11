@@ -99,7 +99,7 @@ const Accelerate = () => {
               </div>
               <div>
                 <h2 className="font-heading text-lg font-semibold text-foreground">Nice云</h2>
-                <p className="text-[11px]" style={{ color: "#b45309" }}>全中转防失联 · 日重置流量</p>
+                <p className="text-[11px]" style={{ color: "#b45309" }}>老牌机场 · 线路稳定速度快</p>
               </div>
             </div>
             <p className="text-[13px] leading-relaxed text-muted-foreground flex-1">
