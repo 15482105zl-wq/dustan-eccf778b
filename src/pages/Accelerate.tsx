@@ -19,7 +19,7 @@ const Accelerate = () => {
   useEffect(() => {
     if (!target) return;
     if (seconds <= 0) {
-      window.open(target, "_blank");
+      window.open(target, "_blank", "noopener,noreferrer");
       setTarget(null);
       return;
     }
@@ -35,7 +35,7 @@ const Accelerate = () => {
 
   const jumpNow = () => {
     if (!target) return;
-    window.open(target, "_blank");
+    window.open(target, "_blank", "noopener,noreferrer");
     setTarget(null);
   };
 
