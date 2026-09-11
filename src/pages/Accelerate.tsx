@@ -8,7 +8,7 @@ import UserNav from "@/components/UserNav";
 
 const NICE_URL = "https://dustan.mmmoyou.com/#/register?code=0lc8ncSH";
 const KITTY_URL = "https://kitty.fo/register?invite=110BKHP4";
-const LVCHA_URL = "https://176.lvchavpn.me?id=509041885";
+const LVCHA_URL = "https://da.nang.banhbao.im/?id=509041885";
 
 const Accelerate = () => {
   const navigate = useNavigate();
