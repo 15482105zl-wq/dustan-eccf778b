@@ -38,7 +38,7 @@ type CardProps = {
 const SUBTITLE_MAP: Record<string, string> = {
   "网络加速": "免费专线",
   "VPN专线": "免费专线",
-  "苹果服务": "应用账号",
+  "苹果商店": "账号服务",
   "Clash节点": "免费分享",
   "BBS": "软件社区",
   "BBS论坛": "软件社区",
@@ -48,7 +48,7 @@ const SUBTITLE_MAP: Record<string, string> = {
 
 const FALLBACK_ROWS: VipResourceRow[] = [
   { id: "f1", category: "primary", icon: "Rocket", title: "网络加速", url: null, highlight: true, sort_order: 1 },
-  { id: "f2", category: "primary", icon: "Apple", title: "苹果服务", url: "https://dustan.id666.me", highlight: false, sort_order: 2 },
+  { id: "f2", category: "primary", icon: "Apple", title: "苹果商店", url: "https://dustan.id666.me", highlight: false, sort_order: 2 },
   { id: "f3", category: "secondary", icon: "Globe", title: "Clash节点", url: "https://pan.xunlei.com/s/VOnGAtlOEyZgFgT8dYpo67d1A1?pwd=45tq#", highlight: false, sort_order: 1 },
   { id: "f5", category: "secondary", icon: "Lock", title: "BBS", url: null, highlight: false, sort_order: 2 },
   { id: "f6", category: "secondary", icon: "Film", title: "影视中心", url: "https://gztv5.com/home", highlight: false, sort_order: 3 },
