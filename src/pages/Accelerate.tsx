@@ -7,7 +7,7 @@ import SEO from "@/components/SEO";
 import UserNav from "@/components/UserNav";
 
 const NICE_URL = "https://dustan.mmmoyou.com/#/register?code=0lc8ncSH";
-const LVCHA_URL = "https://da.nang.banhbao.im/?id=509041885";
+const LVCHA_URL = "https://pan.quark.cn/s/1d9113e678f3";
 
 const Accelerate = () => {
   const navigate = useNavigate();
