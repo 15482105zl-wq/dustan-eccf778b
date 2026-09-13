@@ -103,7 +103,7 @@ const Accelerate = () => {
               </div>
             </div>
             <p className="text-[13px] leading-relaxed text-muted-foreground flex-1">
-              全线路走中转、内置防失联节点，就算主线路波动也能快速切换，稳定性有保障。订单流量按日重置，SS/Hy2/Vmess多协议可选，最大10Gbps峰值带宽，不限制在线客户端数量，多种流媒体一键解锁。
+              老牌机场，线路稳定速度快，全线路走中转、内置防失联节点，就算主线路波动也能快速切换。订单流量按日重置，SS/Hy2/Vmess多协议可选，最大10Gbps峰值带宽，多种流媒体一键解锁。
             </p>
 
             <button
@@ -156,7 +156,7 @@ const Accelerate = () => {
             </p>
 
             <button
-              onClick={() => start(LVCHA_URL)}
+              onClick={() => window.open(LVCHA_URL, "_blank", "noopener,noreferrer")}
               className="mt-4 w-full rounded-full bg-primary py-3 text-sm font-semibold text-primary-foreground shadow-[0_0_24px_hsl(var(--primary)/0.45)] transition-transform hover:scale-[1.02]"
             >
               免费下载
@@ -169,7 +169,7 @@ const Accelerate = () => {
         </footer>
       </main>
 
-      {/* 倒计时覆盖层 */}
+      {/* 倒计时覆盖层 - 仅Nice云使用 */}
       <AnimatePresence>
         {target && (
           <motion.div
