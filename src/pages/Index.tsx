@@ -1,6 +1,7 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { Download, Globe, Shield, Zap, Rocket } from "lucide-react";
+import { Download, Globe, Shield, Zap, Rocket, Share2, Check } from "lucide-react";
 import GlassCard from "@/components/GlassCard";
 import ParticleBackground from "@/components/ParticleBackground";
 import UserNav from "@/components/UserNav";
@@ -15,18 +16,47 @@ const resourceLinks = [
 
 const Index = () => {
   const navigate = useNavigate();
+  const [shared, setShared] = useState(false);
 
   const handleAccelClick = () => {
     navigate("/vip");
   };
 
-
+  const handleShare = async () => {
+    const shareData = {
+      title: "Dustan Hub · 数字站",
+      text: "AI工具 · 软件资源 · 实用服务 · 精选分享",
+      url: window.location.href,
+    };
+    if (navigator.share) {
+      try {
+        await navigator.share(shareData);
+      } catch {
+        // 用户取消分享，忽略
+      }
+    } else {
+      try {
+        await navigator.clipboard.writeText(shareData.url);
+        setShared(true);
+        setTimeout(() => setShared(false), 2000);
+      } catch {
+        const ta = document.createElement("textarea");
+        ta.value = shareData.url;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand("copy");
+        document.body.removeChild(ta);
+        setShared(true);
+        setTimeout(() => setShared(false), 2000);
+      }
+    }
+  };
 
   return (
     <div className="min-h-screen relative">
       <SEO
         title="Dustan Hub · 数字站"
-        description="精选百度网盘、迅雷、夸克、UC 优质资源一键直达，并提供全球网络加速与 Clash 全能配置资源。"
+        description="网盘资源 · 全球加速 · 一站直达"
         path="/"
       />
       <ParticleBackground />
@@ -40,7 +70,17 @@ const Index = () => {
             transition={{ duration: 0.5 }}
             className="w-12 h-12 rounded-full object-cover ring-2 ring-primary/30 shadow-lg shadow-primary/20"
           />
-          <UserNav />
+          <div className="flex items-center gap-2">
+            <button
+              onClick={handleShare}
+              className="flex items-center gap-1.5 h-9 px-3 rounded-full bg-accent/15 border border-accent/40 text-accent text-xs transition-transform hover:scale-105"
+              aria-label="分享"
+            >
+              {shared ? <Check className="w-3.5 h-3.5" /> : <Share2 className="w-3.5 h-3.5" />}
+              {shared ? "已复制" : "分享"}
+            </button>
+            <UserNav />
+          </div>
         </div>
 
         <motion.div
