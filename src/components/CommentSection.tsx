@@ -146,7 +146,57 @@ const CommentSection = ({ onRequireAuth }: { onRequireAuth?: () => void }) => {
     loadPage(0);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?.id]);
+  // 实时监听：新留言/新回复免刷新即时展现
+  useEffect(() => {
+    if (!user) return;
 
+    const channel = supabase
+      .channel("public:comments")
+      .on(
+        "postgres_changes",
+        { event: "INSERT", schema: "public", table: "comments" },
+        async (payload) => {
+          const newComment = payload.new as Comment;
+          setComments((prev) => {
+            if (prev.some((c) => c.id === newComment.id)) return prev;
+            return [newComment, ...prev];
+          });
+          const idsToFetch = [newComment.user_id];
+          if (newComment.parent_id) {
+            const { data } = await supabase
+              .from("comments")
+              .select("id, user_id")
+              .eq("id", newComment.parent_id)
+              .single();
+            if (data?.user_id) idsToFetch.push(data.user_id);
+          }
+          await fetchProfilesFor(idsToFetch);
+        }
+      )
+      .on(
+        "postgres_changes",
+        { event: "UPDATE", schema: "public", table: "comments" },
+        (payload) => {
+          const updated = payload.new as Comment;
+          setComments((prev) =>
+            prev.map((c) => (c.id === updated.id ? { ...c, ...updated } : c))
+          );
+        }
+      )
+      .on(
+        "postgres_changes",
+        { event: "DELETE", schema: "public", table: "comments" },
+        (payload) => {
+          const deletedId = (payload.old as { id: string }).id;
+          setComments((prev) => prev.filter((c) => c.id !== deletedId && c.parent_id !== deletedId));
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [user, fetchProfilesFor]);
 
   // Refresh own profile so newly fetched displayName is current
   useEffect(() => {
