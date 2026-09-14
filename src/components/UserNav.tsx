@@ -1,10 +1,10 @@
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "@/hooks/useAuth";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Bell, CheckCheck, LogIn, LogOut, User } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import type { Session, User as SupabaseUser } from "@supabase/supabase-js";
 
 type Notification = {
   id: string;
@@ -18,15 +18,44 @@ type Notification = {
 
 const UserNav = () => {
   const navigate = useNavigate();
-  const { user, signOut, isAuthenticated, displayName, loading } = useAuth();
   const { toast } = useToast();
+
+  // 自己维护会话，不依赖 useAuth 的字段名
+  const [session, setSession] = useState<Session | null>(null);
+  const [loading, setLoading] = useState(true);
 
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const [showPanel, setShowPanel] = useState(false);
   const panelRef = useRef<HTMLDivElement>(null);
 
-  const fetchNotifications = async () => {
+  const user: SupabaseUser | null = session?.user ?? null;
+  const isAuthenticated = !!user;
+  const displayName =
+    (user?.user_metadata?.display_name as string | undefined) ||
+    (user?.user_metadata?.full_name as string | undefined) ||
+    (user?.user_metadata?.name as string | undefined) ||
+    user?.email?.split("@")[0] ||
+    "";
+
+  useEffect(() => {
+    // 先注册监听，再取当前会话，避免漏事件
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, newSession) => {
+      setSession(newSession);
+      setLoading(false);
+    });
+
+    supabase.auth.getSession().then(({ data }) => {
+      setSession(data.session);
+      setLoading(false);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const fetchNotifications = useCallback(async () => {
     if (!user) return;
     const { data, error } = await supabase
       .from("notifications")
@@ -42,7 +71,7 @@ const UserNav = () => {
 
     setNotifications(data || []);
     setUnreadCount((data || []).filter((n) => !n.read).length);
-  };
+  }, [user]);
 
   const markAllAsRead = async () => {
     if (!user || unreadCount === 0) return;
@@ -67,12 +96,16 @@ const UserNav = () => {
   };
 
   useEffect(() => {
-    if (!user) return;
+    if (!user) {
+      setNotifications([]);
+      setUnreadCount(0);
+      return;
+    }
 
     fetchNotifications();
 
     const channel = supabase
-      .channel("notifications")
+      .channel(`notifications-${user.id}`)
       .on(
         "postgres_changes",
         {
@@ -100,7 +133,7 @@ const UserNav = () => {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [user, toast]);
+  }, [user, toast, fetchNotifications]);
 
   // 点击面板外部关闭
   useEffect(() => {
@@ -120,8 +153,9 @@ const UserNav = () => {
   }, [showPanel]);
 
   const handleSignOut = async () => {
-    await signOut();
-    navigate("/auth");
+    await supabase.auth.signOut();
+    setSession(null);
+    navigate("/auth", { replace: true });
   };
 
   if (loading) return null;
@@ -205,13 +239,11 @@ const UserNav = () => {
           >
             <Avatar className="h-8 w-8">
               <AvatarImage
-                src={user?.user_metadata?.avatar_url || ""}
+                src={(user?.user_metadata?.avatar_url as string) || ""}
                 alt={displayName || "用户"}
               />
               <AvatarFallback className="bg-primary text-primary-foreground text-sm">
-                {displayName?.[0]?.toUpperCase() || (
-                  <User className="h-4 w-4" />
-                )}
+                {displayName?.[0]?.toUpperCase() || <User className="h-4 w-4" />}
               </AvatarFallback>
             </Avatar>
             <span className="hidden text-sm font-medium text-foreground sm:inline">
