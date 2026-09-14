@@ -37,8 +37,8 @@ const formatTime = (iso: string) => {
   return d.toLocaleDateString("zh-CN");
 };
 
-const DAILY_LIMIT = 5;
-const MAX_LEN = 60;
+const DAILY_LIMIT = 10;
+const MAX_LEN = 100;
 
 const startOfTodayISO = () => {
   const d = new Date();
