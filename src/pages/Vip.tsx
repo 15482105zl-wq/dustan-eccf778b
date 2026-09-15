@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft, Apple, Film, Globe, Lock, Rocket, Search, MessageCircle, type LucideIcon } from "lucide-react";
 import ParticleBackground from "@/components/ParticleBackground";
+import GlassCard from "@/components/GlassCard";
 import SEO from "@/components/SEO";
 import UserNav from "@/components/UserNav";
 import VipResourceCard from "@/components/VipResourceCard";
@@ -94,8 +95,9 @@ const Vip = () => {
 
   const primary = rows.filter((r) => r.category === "primary").map(toCard);
   const secondary = rows.filter((r) => r.category === "secondary").map(toCard);
-  const chatCard = secondary.find((c) => c.title === "在线聊天室");
   const gridSecondary = secondary.filter((c) => c.title !== "在线聊天室");
+
+  const handleChatClick = () => (canInteract ? setChatOpen(true) : requireAuth());
 
   return (
     <div className="min-h-screen relative">
@@ -131,7 +133,7 @@ const Vip = () => {
           <p className="text-muted-foreground text-sm">精选网络服务 · 畅享全球连接</p>
         </motion.div>
 
-        <div className="w-full max-w-2xl grid grid-cols-6 gap-3 auto-rows-fr">
+        <div className="w-full max-w-2xl grid grid-cols-6 gap-3 auto-rows-fr mb-6">
           {primary.map((c, i) => (
             <div key={c.title} className="col-span-3">
               <VipResourceCard {...c} delay={i * 0.06} />
@@ -144,18 +146,15 @@ const Vip = () => {
           ))}
         </div>
 
-        {/* 在线聊天室 - 与"全球数字服务入口"同款大卡片样式 */}
-        {chatCard && (
-          <motion.div
-            initial={{ opacity: 0, y: 18 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            onClick={() => (canInteract ? setChatOpen(true) : requireAuth())}
-            className="w-full max-w-2xl mt-6 cursor-pointer rounded-2xl border border-primary/30 bg-glass/20 backdrop-blur-md p-6 flex items-center justify-between hover:border-primary/50 transition-all group animate-breathe-glow"
+        <div className="w-full max-w-2xl">
+          <GlassCard
+            delay={0.3}
+            onClick={handleChatClick}
+            className="!bg-transparent !backdrop-blur-none p-6 flex items-center justify-between animate-breathe-glow border-accent/30"
           >
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-lg bg-primary/20 flex items-center justify-center">
-                <MessageCircle className="w-7 h-7 text-primary" />
+              <div className="w-12 h-12 rounded-lg bg-accent/20 flex items-center justify-center">
+                <MessageCircle className="w-7 h-7 text-accent" />
               </div>
               <div>
                 <p className="font-heading font-bold text-foreground text-xl sm:text-2xl leading-tight">
@@ -167,13 +166,22 @@ const Vip = () => {
               </div>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-2.5 h-2.5 rounded-full bg-primary animate-pulse" />
-              <div className="w-9 h-9 rounded-full bg-primary/15 border border-primary/40 flex items-center justify-center">
-                <MessageCircle className="w-4 h-4 text-primary" />
+              <div className="w-2.5 h-2.5 rounded-full bg-accent animate-pulse" />
+              <div className="w-9 h-9 rounded-full bg-accent/15 border border-accent/40 flex items-center justify-center">
+                <Rocket className="w-4 h-4 text-accent" />
               </div>
             </div>
-          </motion.div>
-        )}
+          </GlassCard>
+        </div>
+
+        <motion.footer
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.6 }}
+          className="mt-10 mb-4 text-center text-xs text-muted-foreground"
+        >
+          © 2020 - 2026 Dustan Hub · 用心运营每一天 · All Rights Reserved.
+        </motion.footer>
       </main>
 
       <UnlockForum open={forumOpen} onOpenChange={setForumOpen} />
