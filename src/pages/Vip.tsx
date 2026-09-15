@@ -180,7 +180,9 @@ const Vip = () => {
           transition={{ delay: 0.6 }}
           className="mt-10 mb-4 text-center text-xs text-muted-foreground"
         >
-          © 2020 - 2026 Dustan Hub · 用心运营每一天 · All Rights Reserved.
+          © 2020 - 2026 Dustan Hub · 用心运营每一天
+<br />
+All Rights Reserved.
         </motion.footer>
       </main>
 
