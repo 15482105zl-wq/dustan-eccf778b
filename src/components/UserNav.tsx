@@ -17,12 +17,18 @@ type Notification = {
   mention_type?: string;
 };
 
+type MyProfile = {
+  avatar_url?: string | null;
+  display_name?: string | null;
+};
+
 const UserNav = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
 
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
+  const [myProfile, setMyProfile] = useState<MyProfile | null>(null);
 
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
@@ -32,6 +38,7 @@ const UserNav = () => {
   const user: SupabaseUser | null = session?.user ?? null;
   const isAuthenticated = !!user;
   const displayName =
+    myProfile?.display_name ||
     (user?.user_metadata?.display_name as string | undefined) ||
     (user?.user_metadata?.full_name as string | undefined) ||
     (user?.user_metadata?.name as string | undefined) ||
@@ -53,6 +60,22 @@ const UserNav = () => {
 
     return () => subscription.unsubscribe();
   }, []);
+
+  // 查自己的 profile，拿真实头像和昵称
+  useEffect(() => {
+    if (!user) {
+      setMyProfile(null);
+      return;
+    }
+    supabase
+      .from("profiles")
+      .select("avatar_url, display_name")
+      .eq("user_id", user.id)
+      .maybeSingle()
+      .then(({ data }) => {
+        if (data) setMyProfile(data);
+      });
+  }, [user]);
 
   const attachSenderNames = async (list: Notification[]): Promise<Notification[]> => {
     const senderIds = Array.from(
@@ -140,7 +163,12 @@ const UserNav = () => {
           const raw = payload.new as Notification;
           const [withName] = await attachSenderNames([raw]);
 
-          setNotifications((prev) => [withName, ...prev].slice(0, 10));
+          setNotifications((prev) => {
+            if (prev.some((item) => item.id === withName.id)) {
+              return prev;
+            }
+            return [withName, ...prev].slice(0, 10);
+          });
 
           if (!withName.is_read) {
             setUnreadCount((c) => c + 1);
@@ -227,7 +255,7 @@ const UserNav = () => {
                         onClick={async () => {
                           await markOneRead(n.id);
                           setShowPanel(false);
-                          navigate("/messages");
+                          navigate("/vip");
                         }}
                         className={`flex w-full flex-col gap-1 border-b border-border px-4 py-3 text-left transition-colors hover:bg-accent ${
                           n.is_read ? "opacity-60" : ""
@@ -258,7 +286,7 @@ const UserNav = () => {
             className="flex items-center gap-2 transition-opacity hover:opacity-80"
           >
             <Avatar className="w-7 h-7 border border-primary/30">
-              <AvatarImage src={undefined} />
+              <AvatarImage src={myProfile?.avatar_url || undefined} />
               <AvatarFallback className="bg-secondary text-xs">
                 {displayName?.[0]?.toUpperCase() || <User className="w-3 h-3" />}
               </AvatarFallback>
