@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Apple, Film, Globe, Lock, Rocket, Search, type LucideIcon } from "lucide-react";
+import { ArrowLeft, Apple, Film, Globe, Lock, Rocket, Search, MessageCircle, type LucideIcon } from "lucide-react";
 import ParticleBackground from "@/components/ParticleBackground";
 import SEO from "@/components/SEO";
 import UserNav from "@/components/UserNav";
@@ -9,13 +9,11 @@ import VipResourceCard from "@/components/VipResourceCard";
 import CommentSection from "@/components/CommentSection";
 import UnlockForum from "@/components/UnlockForum";
 import AuthGateModal from "@/components/AuthGateModal";
+import ChatRoomModal from "@/components/ChatRoomModal";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 
-const ICON_MAP: Record<string, LucideIcon> = { Rocket, Apple, Globe, Lock, Film, Search };
-
-
-
+const ICON_MAP: Record<string, LucideIcon> = { Rocket, Apple, Globe, Lock, Film, Search, MessageCircle };
 
 type VipResourceRow = {
   id: string;
@@ -42,6 +40,7 @@ const SUBTITLE_MAP: Record<string, string> = {
   "Clash节点": "免费分享",
   "BBS": "软件社区",
   "BBS论坛": "软件社区",
+  "在线聊天室": "实时互动 · 大家一起聊",
 };
 
 const FALLBACK_ROWS: VipResourceRow[] = [
@@ -49,12 +48,14 @@ const FALLBACK_ROWS: VipResourceRow[] = [
   { id: "f2", category: "primary", icon: "Apple", title: "苹果商店", url: "https://dustan.id666.me", highlight: false, sort_order: 2 },
   { id: "f3", category: "secondary", icon: "Globe", title: "Clash节点", url: "https://pan.xunlei.com/s/VOnGAtlOEyZgFgT8dYpo67d1A1?pwd=45tq#", highlight: false, sort_order: 1 },
   { id: "f5", category: "secondary", icon: "Lock", title: "BBS", url: null, highlight: false, sort_order: 2 },
+  { id: "f8", category: "secondary", icon: "MessageCircle", title: "在线聊天室", url: null, highlight: false, sort_order: 3 },
 ];
 
 const Vip = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
   const [forumOpen, setForumOpen] = useState(false);
+  const [chatOpen, setChatOpen] = useState(false);
   const [authOpen, setAuthOpen] = useState(false);
   const [rows, setRows] = useState<VipResourceRow[]>(FALLBACK_ROWS);
 
@@ -75,17 +76,20 @@ const Vip = () => {
   const toCard = (r: VipResourceRow): CardProps => {
     const isBBS = r.title === "BBS" || r.title === "BBS论坛";
     const isVpn = r.title.includes("VPN") || r.title.includes("V2PN") || r.title.includes("网络加速");
+    const isChatRoom = r.title === "在线聊天室";
     const title = isBBS ? "BBS论坛" : isVpn ? "网络加速" : r.title;
     return {
       icon: ICON_MAP[r.icon] ?? Rocket,
       title,
       subtitle: SUBTITLE_MAP[title] ?? "精选服务",
-      url: isBBS || isVpn ? undefined : r.url ?? undefined,
+      url: isBBS || isVpn || isChatRoom ? undefined : r.url ?? undefined,
       onClick: isBBS
         ? () => (canInteract ? setForumOpen(true) : requireAuth())
         : isVpn
           ? () => navigate("/accelerate")
-          : undefined,
+          : isChatRoom
+            ? () => (canInteract ? setChatOpen(true) : requireAuth())
+            : undefined,
     };
   };
 
@@ -145,8 +149,8 @@ const Vip = () => {
       </main>
 
       <UnlockForum open={forumOpen} onOpenChange={setForumOpen} />
+      <ChatRoomModal open={chatOpen} onOpenChange={setChatOpen} />
       <AuthGateModal open={authOpen} onOpenChange={setAuthOpen} />
-
     </div>
   );
 };
