@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Leaf, Zap, Check, Copy } from "lucide-react";
+import { ArrowLeft, Leaf, Zap, Copy, Check } from "lucide-react";
+import { motion } from "framer-motion";
+import { useState } from "react";
 import ParticleBackground from "@/components/ParticleBackground";
 import SEO from "@/components/SEO";
 import UserNav from "@/components/UserNav";
@@ -11,33 +11,7 @@ const LVCHA_URL = "https://pan.quark.cn/s/1d9113e678f3";
 
 const Accelerate = () => {
   const navigate = useNavigate();
-  const [target, setTarget] = useState<string | null>(null);
-  const [seconds, setSeconds] = useState(3);
-  const [copied, setCopied] = useState(false);
   const [couponCopied, setCouponCopied] = useState(false);
-
-  useEffect(() => {
-    if (!target) return;
-    if (seconds <= 0) {
-      window.open(target, "_blank", "noopener,noreferrer");
-      setTarget(null);
-      return;
-    }
-    const t = setTimeout(() => setSeconds((s) => s - 1), 1000);
-    return () => clearTimeout(t);
-  }, [target, seconds]);
-
-  const start = (url: string) => {
-    setCopied(false);
-    setSeconds(3);
-    setTarget(url);
-  };
-
-  const jumpNow = () => {
-    if (!target) return;
-    window.open(target, "_blank", "noopener,noreferrer");
-    setTarget(null);
-  };
 
   const copyText = async (text: string) => {
     try {
@@ -84,22 +58,18 @@ const Accelerate = () => {
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.45 }}
-            className="glass rounded-2xl p-6 flex flex-col relative"
-            style={{ border: "1.5px solid rgba(245, 158, 11, 0.5)" }}
+            className="glass rounded-2xl p-6 flex flex-col relative border-accent/30 animate-breathe-glow"
           >
-            <div
-              className="absolute -top-3 right-5 text-[10px] font-bold px-3 py-1 rounded-full"
-              style={{ background: "#f59e0b", color: "#000" }}
-            >
+            <div className="absolute -top-3 right-5 text-[10px] font-bold px-3 py-1 rounded-full bg-accent text-accent-foreground">
               🔥 主力推荐
             </div>
             <div className="flex items-center gap-3 mb-3 mt-1">
-              <div className="w-11 h-11 rounded-xl flex items-center justify-center" style={{ background: "rgba(245,158,11,0.15)", color: "#b45309" }}>
-                <Zap className="w-5 h-5" />
+              <div className="w-11 h-11 rounded-xl bg-accent/20 flex items-center justify-center">
+                <Zap className="w-5 h-5 text-accent" />
               </div>
               <div>
                 <h2 className="font-heading text-lg font-semibold text-foreground">Nice云</h2>
-                <p className="text-[11px]" style={{ color: "#b45309" }}>老牌机场 · 线路稳定速度快</p>
+                <p className="text-[11px] text-accent">老牌机场 · 线路稳定速度快</p>
               </div>
             </div>
             <p className="text-[13px] leading-relaxed text-muted-foreground flex-1">
@@ -112,8 +82,7 @@ const Accelerate = () => {
                 setCouponCopied(true);
                 setTimeout(() => setCouponCopied(false), 2000);
               }}
-              className="mt-4 w-full rounded-xl px-3 py-2 text-center text-xs font-semibold inline-flex items-center justify-center gap-1.5 transition-opacity hover:opacity-80"
-              style={{ background: "rgba(245,158,11,0.15)", color: "#b45309" }}
+              className="mt-4 w-full rounded-xl bg-accent/15 px-3 py-2 text-center text-xs font-semibold text-accent inline-flex items-center justify-center gap-1.5 transition-opacity hover:opacity-80"
             >
               {couponCopied ? (
                 <>
@@ -127,11 +96,10 @@ const Accelerate = () => {
             </button>
 
             <button
-              onClick={() => start(NICE_URL)}
-              className="mt-3 w-full rounded-full py-3 text-sm font-bold transition-transform hover:scale-[1.02]"
-              style={{ background: "#f59e0b", color: "#000", boxShadow: "0 0 24px rgba(245,158,11,0.45)" }}
+              onClick={() => window.open(NICE_URL, "_blank", "noopener,noreferrer")}
+              className="mt-3 w-full rounded-full bg-accent py-3 text-sm font-bold text-accent-foreground shadow-[0_0_24px_hsl(var(--accent)/0.45)] transition-transform hover:scale-[1.02]"
             >
-              立即注册
+              立即开始
             </button>
           </motion.div>
 
@@ -168,106 +136,6 @@ const Accelerate = () => {
           © 2020 - 2026 Dustan Hub · 用心运营每一天 · All Rights Reserved.
         </footer>
       </main>
-
-      {/* 倒计时覆盖层 - 仅Nice云使用 */}
-      <AnimatePresence>
-        {target && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-background/90 backdrop-blur-2xl px-6"
-          >
-            <motion.div
-              initial={{ scale: 0.94, opacity: 0, y: 10 }}
-              animate={{ scale: 1, opacity: 1, y: 0 }}
-              exit={{ scale: 0.96, opacity: 0 }}
-              transition={{ type: "spring", stiffness: 220, damping: 22 }}
-              className="glass relative w-full max-w-sm overflow-hidden rounded-3xl border-accent/40 p-8 text-center animate-breathe-glow"
-            >
-              <div className="pointer-events-none absolute -top-20 left-1/2 h-40 w-40 -translate-x-1/2 rounded-full bg-accent/25 blur-3xl" />
-
-              <p className="relative text-[11px] tracking-[0.35em] text-muted-foreground mb-6">
-                安全通道建立中
-              </p>
-
-              <div className="relative mx-auto mb-6 h-36 w-36">
-                <svg viewBox="0 0 100 100" className="h-full w-full -rotate-90">
-                  <circle cx="50" cy="50" r="44" fill="none" strokeWidth="4" className="stroke-glass-border/40" />
-                  <motion.circle
-                    cx="50"
-                    cy="50"
-                    r="44"
-                    fill="none"
-                    strokeWidth="4"
-                    strokeLinecap="round"
-                    className="stroke-accent"
-                    strokeDasharray={2 * Math.PI * 44}
-                    animate={{ strokeDashoffset: 2 * Math.PI * 44 * (1 - seconds / 3) }}
-                    transition={{ duration: 1, ease: "linear" }}
-                    style={{ filter: "drop-shadow(0 0 8px hsl(var(--accent) / 0.8))" }}
-                  />
-                </svg>
-                <div className="absolute inset-0 flex flex-col items-center justify-center">
-                  <AnimatePresence mode="popLayout">
-                    <motion.span
-                      key={seconds}
-                      initial={{ opacity: 0, scale: 1.4, filter: "blur(6px)" }}
-                      animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
-                      exit={{ opacity: 0, scale: 0.7 }}
-                      transition={{ duration: 0.35 }}
-                      className="font-heading text-5xl font-bold gradient-text glow-text"
-                    >
-                      {seconds}
-                    </motion.span>
-                  </AnimatePresence>
-                  <span className="mt-1 text-[10px] tracking-[0.2em] text-muted-foreground">SECONDS</span>
-                </div>
-              </div>
-
-              <p className="text-xs text-muted-foreground mb-2">即将为你打开页面</p>
-
-              <button
-                onClick={jumpNow}
-                className="mx-auto mb-6 block w-full max-w-[16rem] rounded-lg border border-glass-border/40 px-3 py-2 text-[11px] text-primary transition-colors hover:bg-primary/10"
-              >
-                立即跳转 →
-              </button>
-
-              <button
-                onClick={async () => {
-                  await copyText(target);
-                  setCopied(true);
-                }}
-                className={`w-full py-3 rounded-full text-sm font-semibold flex flex-col items-center justify-center gap-1 transition-all ${
-                  copied
-                    ? "bg-primary/15 text-primary border border-primary/50"
-                    : "bg-accent text-accent-foreground shadow-[0_0_24px_hsl(var(--accent)/0.45)] hover:scale-[1.02]"
-                }`}
-              >
-                {copied ? (
-                  <span className="inline-flex items-center gap-2">
-                    <Check className="w-4 h-4" /> ✅ 已复制，请在浏览器中打开
-                  </span>
-                ) : (
-                  <>
-                    <span className="inline-flex items-center gap-2">
-                      <Copy className="w-4 h-4" /> 复制链接，浏览器打开
-                    </span>
-                    <span className="text-xs opacity-75">（微信/QQ无法访问）</span>
-                  </>
-                )}
-              </button>
-              <button
-                onClick={() => setTarget(null)}
-                className="mt-4 text-xs text-muted-foreground hover:text-foreground transition-colors"
-              >
-                取消跳转
-              </button>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </div>
   );
 };
