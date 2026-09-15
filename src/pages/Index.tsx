@@ -150,7 +150,9 @@ const Index = () => {
           transition={{ delay: 0.7 }}
           className="mt-12 mb-4 text-center text-xs text-muted-foreground"
         >
-          © 2020 - 2026 Dustan Hub · 用心运营每一天 · All Rights Reserved.
+          © 2020 - 2026 Dustan Hub · 用心运营每一天
+<br />
+All Rights Reserved.
         </motion.footer>
       </main>
     </div>
