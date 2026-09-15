@@ -111,7 +111,7 @@ const Index = () => {
           ))}
         </div>
 
-        <p className="text-center text-xs text-muted-foreground -mt-1 mb-12">
+        <p className="text-center text-xs text-muted-foreground -mt-1 mb-6">
           一个资源库 · 多种下载方式
         </p>
 
