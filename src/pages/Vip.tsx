@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft, Apple, Film, Globe, Lock, Rocket, Search, MessageCircle, type LucideIcon } from "lucide-react";
 import ParticleBackground from "@/components/ParticleBackground";
@@ -94,6 +94,8 @@ const Vip = () => {
 
   const primary = rows.filter((r) => r.category === "primary").map(toCard);
   const secondary = rows.filter((r) => r.category === "secondary").map(toCard);
+  const chatCard = secondary.find((c) => c.title === "在线聊天室");
+  const gridSecondary = secondary.filter((c) => c.title !== "在线聊天室");
 
   return (
     <div className="min-h-screen relative">
@@ -135,12 +137,38 @@ const Vip = () => {
               <VipResourceCard {...c} delay={i * 0.06} />
             </div>
           ))}
-          {secondary.map((c, i) => (
-            <div key={c.title} className={secondary.length <= 2 ? "col-span-3" : "col-span-2"}>
+          {gridSecondary.map((c, i) => (
+            <div key={c.title} className="col-span-3">
               <VipResourceCard {...c} delay={(i + 2) * 0.06} />
             </div>
           ))}
         </div>
+
+        {/* 在线聊天室 - 独立横幅大卡片 */}
+        {chatCard && (
+          <motion.div
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            onClick={() => (canInteract ? setChatOpen(true) : requireAuth())}
+            className="w-full max-w-2xl mt-6 cursor-pointer rounded-2xl border border-glass-border/50 bg-glass/20 backdrop-blur-md p-5 flex items-center justify-between hover:border-primary/50 transition-all group shadow-lg"
+          >
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0 bg-primary/15 text-primary group-hover:scale-105 transition-transform">
+                <MessageCircle className="w-6 h-6" />
+              </div>
+              <div>
+                <h3 className="font-heading font-bold text-base text-foreground group-hover:text-primary transition-colors">
+                  在线聊天室
+                </h3>
+                <p className="text-xs text-muted-foreground mt-0.5">实时互动 · 大家一起聊</p>
+              </div>
+            </div>
+            <span className="text-xs px-3 py-1.5 rounded-full bg-primary/15 text-primary font-medium">
+              点击进入
+            </span>
+          </motion.div>
+        )}
       </main>
 
       <UnlockForum open={forumOpen} onOpenChange={setForumOpen} />
