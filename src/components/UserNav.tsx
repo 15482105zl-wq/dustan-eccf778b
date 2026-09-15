@@ -10,7 +10,8 @@ type Notification = {
   id: string;
   content: string;
   created_at: string;
-  read: boolean;
+  is_read: boolean;
+  sender_id?: string;
   sender_name?: string;
   message_id?: string;
   mention_type?: string;
@@ -20,7 +21,6 @@ const UserNav = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  // 自己维护会话，不依赖 useAuth 的字段名
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -39,7 +39,6 @@ const UserNav = () => {
     "";
 
   useEffect(() => {
-    // 先注册监听，再取当前会话，避免漏事件
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, newSession) => {
@@ -55,6 +54,28 @@ const UserNav = () => {
     return () => subscription.unsubscribe();
   }, []);
 
+  const attachSenderNames = async (list: Notification[]): Promise<Notification[]> => {
+    const senderIds = Array.from(
+      new Set(list.map((n) => n.sender_id).filter((id): id is string => !!id))
+    );
+    if (senderIds.length === 0) return list;
+
+    const { data: profs } = await supabase
+      .from("profiles")
+      .select("user_id, display_name")
+      .in("user_id", senderIds);
+
+    const nameMap: Record<string, string> = {};
+    profs?.forEach((p: any) => {
+      nameMap[p.user_id] = p.display_name;
+    });
+
+    return list.map((n) => ({
+      ...n,
+      sender_name: n.sender_id ? nameMap[n.sender_id] || "某用户" : n.sender_name,
+    }));
+  };
+
   const fetchNotifications = useCallback(async () => {
     if (!user) return;
     const { data, error } = await supabase
@@ -69,8 +90,9 @@ const UserNav = () => {
       return;
     }
 
-    setNotifications(data || []);
-    setUnreadCount((data || []).filter((n) => !n.read).length);
+    const withNames = await attachSenderNames((data || []) as Notification[]);
+    setNotifications(withNames);
+    setUnreadCount(withNames.filter((n) => !n.is_read).length);
   }, [user]);
 
   const markAllAsRead = async () => {
@@ -78,19 +100,19 @@ const UserNav = () => {
 
     await supabase
       .from("notifications")
-      .update({ read: true })
+      .update({ is_read: true })
       .eq("user_id", user.id)
-      .eq("read", false);
+      .eq("is_read", false);
 
-    setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
+    setNotifications((prev) => prev.map((n) => ({ ...n, is_read: true })));
     setUnreadCount(0);
   };
 
   const markOneRead = async (id: string) => {
-    await supabase.from("notifications").update({ read: true }).eq("id", id);
+    await supabase.from("notifications").update({ is_read: true }).eq("id", id);
 
     setNotifications((prev) =>
-      prev.map((n) => (n.id === id ? { ...n, read: true } : n))
+      prev.map((n) => (n.id === id ? { ...n, is_read: true } : n))
     );
     setUnreadCount((c) => Math.max(0, c - 1));
   };
@@ -114,16 +136,17 @@ const UserNav = () => {
           table: "notifications",
           filter: `user_id=eq.${user.id}`,
         },
-        (payload) => {
-          const n = payload.new as Notification;
+        async (payload) => {
+          const raw = payload.new as Notification;
+          const [withName] = await attachSenderNames([raw]);
 
-          setNotifications((prev) => [n, ...prev].slice(0, 10));
+          setNotifications((prev) => [withName, ...prev].slice(0, 10));
 
-          if (!n.read) {
+          if (!withName.is_read) {
             setUnreadCount((c) => c + 1);
             toast({
-              title: `🔔 ${n.sender_name || "系统通知"}`,
-              description: n.content,
+              title: `🔔 ${withName.sender_name || "系统通知"}`,
+              description: withName.content,
             });
           }
         }
@@ -135,7 +158,6 @@ const UserNav = () => {
     };
   }, [user, toast, fetchNotifications]);
 
-  // 点击面板外部关闭
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (panelRef.current && !panelRef.current.contains(e.target as Node)) {
@@ -161,42 +183,41 @@ const UserNav = () => {
   if (loading) return null;
 
   return (
-    <div className="relative flex items-center gap-2">
+    <div className="flex items-center gap-3" ref={panelRef}>
       {isAuthenticated ? (
         <>
-          {/* 通知铃铛 */}
-          <div className="relative" ref={panelRef}>
+          <div className="relative">
             <button
               onClick={() => setShowPanel((prev) => !prev)}
               className="relative rounded-full p-2 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
               aria-label="通知"
             >
-              <Bell className="h-5 w-5" />
+              <Bell className="w-5 h-5" />
               {unreadCount > 0 && (
-                <span className="absolute -right-0.5 -top-0.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-destructive px-1 text-[10px] font-semibold text-destructive-foreground">
+                <span className="absolute -top-1 -right-1 bg-destructive text-destructive-foreground text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center">
                   {unreadCount > 9 ? "9+" : unreadCount}
                 </span>
               )}
             </button>
 
             {showPanel && (
-              <div className="absolute right-0 top-full z-50 mt-2 w-80 overflow-hidden rounded-lg border border-border bg-popover shadow-lg">
+              <div className="absolute right-0 top-11 w-72 sm:w-80 bg-background/95 backdrop-blur-md border border-border rounded-xl shadow-2xl z-50">
                 <div className="flex items-center justify-between border-b border-border px-4 py-3">
-                  <span className="font-medium text-foreground">通知</span>
+                  <span className="text-sm font-semibold text-foreground">通知</span>
                   {unreadCount > 0 && (
                     <button
                       onClick={markAllAsRead}
-                      className="flex items-center gap-1 text-xs text-muted-foreground transition-colors hover:text-foreground"
+                      className="flex items-center gap-1 text-xs text-muted-foreground hover:text-primary"
                     >
-                      <CheckCheck className="h-3.5 w-3.5" />
+                      <CheckCheck className="w-3.5 h-3.5" />
                       全部已读
                     </button>
                   )}
                 </div>
 
-                <div className="max-h-80 overflow-y-auto">
+                <div className="max-h-72 overflow-y-auto">
                   {notifications.length === 0 ? (
-                    <div className="px-4 py-8 text-center text-sm text-muted-foreground">
+                    <div className="py-8 text-center text-sm text-muted-foreground">
                       暂无通知
                     </div>
                   ) : (
@@ -209,10 +230,10 @@ const UserNav = () => {
                           navigate("/messages");
                         }}
                         className={`flex w-full flex-col gap-1 border-b border-border px-4 py-3 text-left transition-colors hover:bg-accent ${
-                          n.read ? "opacity-60" : ""
+                          n.is_read ? "opacity-60" : ""
                         }`}
                       >
-                        <div className="flex items-center justify-between text-xs text-muted-foreground">
+                        <div className="flex items-center justify-between text-[11px] text-muted-foreground">
                           <span>{n.sender_name || "系统通知"}</span>
                           <span>
                             {new Date(n.created_at).toLocaleTimeString("zh-CN", {
@@ -221,9 +242,9 @@ const UserNav = () => {
                             })}
                           </span>
                         </div>
-                        <p className="line-clamp-2 text-sm text-foreground">
+                        <div className="text-sm text-foreground line-clamp-2">
                           {n.content}
-                        </p>
+                        </div>
                       </button>
                     ))
                   )}
@@ -232,32 +253,28 @@ const UserNav = () => {
             )}
           </div>
 
-          {/* 用户头像与资料 */}
           <button
             onClick={() => navigate("/profile")}
             className="flex items-center gap-2 transition-opacity hover:opacity-80"
           >
-            <Avatar className="h-8 w-8">
-              <AvatarImage
-                src={(user?.user_metadata?.avatar_url as string) || ""}
-                alt={displayName || "用户"}
-              />
-              <AvatarFallback className="bg-primary text-primary-foreground text-sm">
-                {displayName?.[0]?.toUpperCase() || <User className="h-4 w-4" />}
+            <Avatar className="w-7 h-7 border border-primary/30">
+              <AvatarImage src={undefined} />
+              <AvatarFallback className="bg-secondary text-xs">
+                {displayName?.[0]?.toUpperCase() || <User className="w-3 h-3" />}
               </AvatarFallback>
             </Avatar>
-            <span className="hidden text-sm font-medium text-foreground sm:inline">
+            <span className="text-sm text-foreground/80 hidden sm:inline">
               {displayName || "我的"}
             </span>
           </button>
 
-          {/* 退出按钮 */}
           <button
             onClick={handleSignOut}
+            className="text-muted-foreground hover:text-destructive transition-colors"
             title="退出登录"
-            className="p-1.5 text-muted-foreground transition-colors hover:text-destructive"
+            aria-label="退出登录"
           >
-            <LogOut className="h-4 w-4" />
+            <LogOut className="w-4 h-4" />
           </button>
         </>
       ) : (
@@ -265,7 +282,7 @@ const UserNav = () => {
           onClick={() => navigate("/auth")}
           className="flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium text-foreground transition-colors hover:bg-accent"
         >
-          <LogIn className="h-4 w-4" />
+          <LogIn className="w-4 h-4" />
           登录
         </button>
       )}
