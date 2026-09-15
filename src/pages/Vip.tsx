@@ -144,29 +144,34 @@ const Vip = () => {
           ))}
         </div>
 
-        {/* 在线聊天室 - 独立横幅大卡片 */}
+        {/* 在线聊天室 - 与"全球数字服务入口"同款大卡片样式 */}
         {chatCard && (
           <motion.div
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
             onClick={() => (canInteract ? setChatOpen(true) : requireAuth())}
-            className="w-full max-w-2xl mt-6 cursor-pointer rounded-2xl border border-glass-border/50 bg-glass/20 backdrop-blur-md p-5 flex items-center justify-between hover:border-primary/50 transition-all group shadow-lg"
+            className="w-full max-w-2xl mt-6 cursor-pointer rounded-2xl border border-primary/30 bg-glass/20 backdrop-blur-md p-6 flex items-center justify-between hover:border-primary/50 transition-all group animate-breathe-glow"
           >
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0 bg-primary/15 text-primary group-hover:scale-105 transition-transform">
-                <MessageCircle className="w-6 h-6" />
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 rounded-lg bg-primary/20 flex items-center justify-center">
+                <MessageCircle className="w-7 h-7 text-primary" />
               </div>
               <div>
-                <h3 className="font-heading font-bold text-base text-foreground group-hover:text-primary transition-colors">
+                <p className="font-heading font-bold text-foreground text-xl sm:text-2xl leading-tight">
                   在线聊天室
-                </h3>
-                <p className="text-xs text-muted-foreground mt-0.5">实时互动 · 大家一起聊</p>
+                </p>
+                <p className="text-xs text-muted-foreground mt-1.5">
+                  实时互动 · 大家一起聊
+                </p>
               </div>
             </div>
-            <span className="text-xs px-3 py-1.5 rounded-full bg-primary/15 text-primary font-medium">
-              点击进入
-            </span>
+            <div className="flex items-center gap-2">
+              <div className="w-2.5 h-2.5 rounded-full bg-primary animate-pulse" />
+              <div className="w-9 h-9 rounded-full bg-primary/15 border border-primary/40 flex items-center justify-center">
+                <MessageCircle className="w-4 h-4 text-primary" />
+              </div>
+            </div>
           </motion.div>
         )}
       </main>
