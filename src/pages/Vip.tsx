@@ -6,7 +6,6 @@ import ParticleBackground from "@/components/ParticleBackground";
 import SEO from "@/components/SEO";
 import UserNav from "@/components/UserNav";
 import VipResourceCard from "@/components/VipResourceCard";
-import CommentSection from "@/components/CommentSection";
 import UnlockForum from "@/components/UnlockForum";
 import AuthGateModal from "@/components/AuthGateModal";
 import ChatRoomModal from "@/components/ChatRoomModal";
@@ -141,10 +140,6 @@ const Vip = () => {
               <VipResourceCard {...c} delay={(i + 2) * 0.06} />
             </div>
           ))}
-        </div>
-
-        <div className="w-full max-w-2xl">
-          <CommentSection onRequireAuth={requireAuth} />
         </div>
       </main>
 
