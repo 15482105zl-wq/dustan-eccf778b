@@ -8,7 +8,7 @@ import UserNav from "@/components/UserNav";
 
 const NICE_URL = "https://dustan.mmmoyou.com/#/register?code=0lc8ncSH";
 const LVCHA_URL = "https://pan.quark.cn/s/1d9113e678f3";
-
+const APP_DOWNLOAD_URL = "https://github.com/15482105zl-wq/dustan-eccf778b/releases/download/v1.0.0/Dustan.Hub.apk";
 const Accelerate = () => {
   const navigate = useNavigate();
   const [couponCopied, setCouponCopied] = useState(false);
@@ -131,7 +131,17 @@ const Accelerate = () => {
             </button>
           </motion.div>
         </div>
-
+<motion.a
+          href={APP_DOWNLOAD_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="mt-10 text-sm font-bold animate-app-link"
+          style={{ color: "#a855f7" }}
+        >
+          📲 下载 Dustan Hub App
+        </motion.a>
         <footer
           className="mt-12 mb-2 text-center text-xs text-muted-foreground"
           style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
