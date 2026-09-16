@@ -13,7 +13,7 @@ const resourceLinks = [
   { icon: Globe, label: "夸克网盘", color: "text-primary", url: "https://pan.quark.cn/s/29e2744b31f1" },
   { icon: Shield, label: "UC网盘", color: "text-primary", url: "https://drive.uc.cn/s/b2243269454c4" },
 ];
-const APP_DOWNLOAD_URL = "https://pan.quark.cn/s/4b40771599e9";
+const APP_DOWNLOAD_URL = "https://pan.quark.cn/s/d9edf950d8fd";
 const Index = () => {
   const navigate = useNavigate();
   const [shared, setShared] = useState(false);
