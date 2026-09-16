@@ -1,0 +1,8 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "app.dustanhub.web",
+    "sha256_cert_fingerprints": ["74:67:EA:1A:F8:88:D9:FE:73:E9:22:76:CB:20:10:47:AB:0D:E0:C0:71:1A:89:22:14:0B:32:61:A3:80:CA:2C"]
+  }
+}]
