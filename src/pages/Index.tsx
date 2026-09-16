@@ -56,7 +56,7 @@ const Index = () => {
     <div className="min-h-screen relative">
       <SEO
         title="Dustan Hub · 数字站"
-        description="网盘资源 · 全球加速 · 一站直达"
+        description=""
         path="/"
       />
       <ParticleBackground />
@@ -148,11 +148,12 @@ const Index = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.7 }}
-          className="mt-12 mb-4 text-center text-xs text-muted-foreground"
+          className="mt-12 mb-2 text-center text-xs text-muted-foreground"
+          style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
         >
           © 2020 - 2026 Dustan Hub · 用心运营每一天
-<br />
-All Rights Reserved.
+          <br />
+          All Rights Reserved.
         </motion.footer>
       </main>
     </div>
