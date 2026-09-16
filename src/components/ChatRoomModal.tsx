@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { X, Send, MessageCircle } from "lucide-react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
 import type { Session, User as SupabaseUser } from "@supabase/supabase-js";
 
 type ChatMessage = {
@@ -27,12 +28,14 @@ interface ChatRoomModalProps {
 const MAX_LENGTH = 200;
 
 const ChatRoomModal = ({ open, onOpenChange }: ChatRoomModalProps) => {
+  const { isAdmin } = useAuth();
   const [session, setSession] = useState<Session | null>(null);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [profileMap, setProfileMap] = useState<Record<string, Profile>>({});
   const [input, setInput] = useState("");
   const [sending, setSending] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
 
   const user: SupabaseUser | null = session?.user ?? null;
 
@@ -112,6 +115,15 @@ const ChatRoomModal = ({ open, onOpenChange }: ChatRoomModalProps) => {
     }
   }, [messages]);
 
+  const handleAtUser = (name?: string | null) => {
+    if (!name) return;
+    setInput((prev) => {
+      const trimmed = prev.trim();
+      return trimmed ? `${trimmed} @${name} ` : `@${name} `;
+    });
+    inputRef.current?.focus();
+  };
+
   const handleSend = async () => {
     const trimmed = input.trim();
     if (!trimmed || !user || sending) return;
@@ -179,7 +191,12 @@ const ChatRoomModal = ({ open, onOpenChange }: ChatRoomModalProps) => {
                     key={m.id}
                     className={`flex items-end gap-2 ${isMine ? "flex-row-reverse" : "flex-row"}`}
                   >
-                    <Avatar className="w-8 h-8 border border-border flex-shrink-0">
+                    <Avatar
+                      className={`w-8 h-8 border border-border flex-shrink-0 ${
+                        !isMine ? "cursor-pointer hover:opacity-80 transition-opacity" : ""
+                      }`}
+                      onClick={!isMine ? () => handleAtUser(name) : undefined}
+                    >
                       <AvatarImage src={avatarUrl} />
                       <AvatarFallback className="bg-secondary text-xs">
                         {name?.[0]?.toUpperCase() || "?"}
@@ -187,7 +204,12 @@ const ChatRoomModal = ({ open, onOpenChange }: ChatRoomModalProps) => {
                     </Avatar>
                     <div className={`flex flex-col max-w-[70%] ${isMine ? "items-end" : "items-start"}`}>
                       {!isMine && (
-                        <span className="text-[11px] text-muted-foreground mb-0.5 px-1">{name}</span>
+                        <span
+                          className="text-[11px] text-muted-foreground mb-0.5 px-1 cursor-pointer hover:opacity-80 transition-opacity"
+                          onClick={() => handleAtUser(name)}
+                        >
+                          {name}
+                        </span>
                       )}
                       <div
                         className={`px-3 py-2 rounded-2xl text-sm break-words whitespace-pre-wrap ${
@@ -211,9 +233,22 @@ const ChatRoomModal = ({ open, onOpenChange }: ChatRoomModalProps) => {
             )}
           </div>
 
+          {/* 管理员专属广播标签 */}
+          {isAdmin && (
+            <div className="px-3 pt-2">
+              <button
+                onClick={() => handleAtUser("所有人")}
+                className="text-xs font-medium px-3 py-1.5 rounded-full bg-primary/15 text-primary border border-primary/30 hover:bg-primary/25 transition-colors"
+              >
+                [@所有人]
+              </button>
+            </div>
+          )}
+
           {/* 底部输入条 */}
           <div className="border-t border-border p-3 flex items-end gap-2">
             <textarea
+              ref={inputRef}
               value={input}
               onChange={(e) => setInput(e.target.value.slice(0, MAX_LENGTH))}
               onKeyDown={handleKeyDown}
