@@ -8,7 +8,7 @@ import UserNav from "@/components/UserNav";
 
 const NICE_URL = "https://dustan.mmmoyou.com/#/register?code=0lc8ncSH";
 const LVCHA_URL = "https://pan.quark.cn/s/1d9113e678f3";
-const APP_DOWNLOAD_URL = "https://pan.quark.cn/s/4b40771599e9";
+const APP_DOWNLOAD_URL = "https://pan.quark.cn/s/d9edf950d8fd";
 const Accelerate = () => {
   const navigate = useNavigate();
   const [couponCopied, setCouponCopied] = useState(false);
