@@ -51,7 +51,7 @@ const FALLBACK_ROWS: VipResourceRow[] = [
   { id: "f8", category: "secondary", icon: "MessageCircle", title: "在线聊天室", url: null, highlight: false, sort_order: 3 },
 ];
 
-const APP_DOWNLOAD_URL = "https://github.com/15482105zl-wq/dustan-eccf778b/releases/download/v1.0.0/Dustan.Hub.apk";
+const APP_DOWNLOAD_URL = "https://pan.quark.cn/s/4b40771599e9";
 const Vip = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
