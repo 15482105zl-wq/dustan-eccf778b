@@ -143,7 +143,18 @@ const Index = () => {
             </div>
           </GlassCard>
         </div>
-
+<motion.a
+          href={APP_DOWNLOAD_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.65 }}
+          className="mt-10 text-sm font-bold animate-app-link"
+          style={{ color: "#a855f7" }}
+        >
+          📲 下载 Dustan Hub App
+        </motion.a>
         <motion.footer
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
