@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Dustan Hub · 数字站</title>
     <link rel="icon" href="/favicon.png" type="image/png" />
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#05050a" />
     <meta name="description" content="AI工具 · 软件资源 · 精选分享">
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://dustan.lovable.app/" />
@@ -25,5 +27,14 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <script>
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+          navigator.serviceWorker.register("/sw.js").catch((err) => {
+            console.warn("Service worker registration failed:", err);
+          });
+        });
+      }
+    </script>
   </body>
 </html>
