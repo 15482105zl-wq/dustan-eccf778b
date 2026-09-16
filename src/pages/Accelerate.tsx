@@ -132,10 +132,13 @@ const Accelerate = () => {
           </motion.div>
         </div>
 
-        <footer className="mt-12 mb-4 text-center text-xs text-muted-foreground">
+        <footer
+          className="mt-12 mb-2 text-center text-xs text-muted-foreground"
+          style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
+        >
           © 2020 - 2026 Dustan Hub · 用心运营每一天
-<br />
-All Rights Reserved.
+          <br />
+          All Rights Reserved.
         </footer>
       </main>
     </div>
