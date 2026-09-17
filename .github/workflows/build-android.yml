@@ -29,12 +29,53 @@ jobs:
       - name: Add Android platform
         run: npx cap add android || npx cap sync android
 
+      - name: Generate app icons
+        run: npx @capacitor/assets generate --android
+
+      - name: Sync icons to native project
+        run: npx cap sync android
+
       - name: Generate signing key
         run: |
           keytool -genkeypair -v -keystore release.keystore -alias dustanhub \
             -keyalg RSA -keysize 2048 -validity 10000 \
             -storepass dustanhub123 -keypass dustanhub123 \
             -dname "CN=Dustan, OU=DustanHub, O=DustanHub, L=Inner Mongolia, ST=Inner Mongolia, C=CN"
+          cp release.keystore android/app/release.keystore
+
+      - name: Configure signing in build.gradle
+        run: |
+          cd android/app
+          cat >> build.gradle << 'EOF'
+
+          android {
+              signingConfigs {
+                  release {
+                      storeFile file("release.keystore")
+                      storePassword "dustanhub123"
+                      keyAlias "dustanhub"
+                      keyPassword "dustanhub123"
+                  }
+              }
+              buildTypes {
+                  release {
+                      signingConfig signingConfigs.release
+                  }
+              }
+          }
+          EOF
+
+      - name: Build signed APK
+        run: |
+          cd android
+          chmod +x gradlew
+          ./gradlew assembleRelease
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: dustan-hub-apk-signed
+          path: android/app/build/outputs/apk/release/app-release.apk            -dname "CN=Dustan, OU=DustanHub, O=DustanHub, L=Inner Mongolia, ST=Inner Mongolia, C=CN"
           cp release.keystore android/app/release.keystore
 
       - name: Configure signing in build.gradle
