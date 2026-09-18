@@ -320,11 +320,11 @@ const ChatRoomModal = ({ open, onOpenChange }: ChatRoomModalProps) => {
                 {/* 所有人可见的蓝色 AI助手 快捷按钮 */}
                 <button
                   type="button"
-                  onClick={() => handleAtUser("AI助手")}
+                  onClick={() => handleAtUser("D助手")}
                   className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-blue-600/20 text-blue-400 border border-blue-500/30 hover:bg-blue-600/30 hover:border-blue-500/50 transition-all active:scale-95 shadow-sm"
                 >
                   <Bot className="w-3.5 h-3.5 text-blue-400" />
-                  <span>@AI助手</span>
+                  <span>@D助手</span>
                 </button>
 
                 {/* 管理员专用的 @所有人 快捷按钮 */}
