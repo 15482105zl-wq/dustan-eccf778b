@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { X, Send, MessageCircle } from "lucide-react";
+import { X, Send, MessageCircle, Bot } from "lucide-react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
@@ -25,7 +25,7 @@ interface ChatRoomModalProps {
   onOpenChange: (open: boolean) => void;
 }
 
-const MAX_LENGTH = 200;
+const MAX_LENGTH = 500;
 
 const ChatRoomModal = ({ open, onOpenChange }: ChatRoomModalProps) => {
   const { isAdmin } = useAuth();
@@ -93,7 +93,7 @@ const ChatRoomModal = ({ open, onOpenChange }: ChatRoomModalProps) => {
       .on(
         "postgres_changes",
         { event: "INSERT", schema: "public", table: "comments" },
-        (payload) => {
+(payload) => {
           const raw = payload.new as ChatMessage;
           setMessages((prev) => {
             if (prev.some((m) => m.id === raw.id)) return prev;
@@ -152,123 +152,153 @@ const ChatRoomModal = ({ open, onOpenChange }: ChatRoomModalProps) => {
   return (
     <AnimatePresence>
       {open && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          className="fixed inset-0 z-[60] bg-background/95 backdrop-blur-md flex flex-col"
-        >
-          {/* 顶部栏 */}
-          <div className="flex items-center justify-between px-4 py-3 border-b border-border">
-            <div className="flex items-center gap-2">
-              <MessageCircle className="w-5 h-5 text-primary" />
-              <span className="font-heading font-semibold text-foreground">在线聊天室</span>
-            </div>
-            <button
-              onClick={() => onOpenChange(false)}
-              className="text-muted-foreground hover:text-foreground transition-colors p-1"
-              aria-label="关闭"
-            >
-              <X className="w-5 h-5" />
-            </button>
-          </div>
-
-          {/* 消息流 */}
-          <div ref={scrollRef} className="flex-1 overflow-y-auto px-3 py-4 space-y-3">
-            {messages.length === 0 ? (
-              <div className="text-center text-sm text-muted-foreground py-10">
-                还没有消息，来说第一句话吧 ✨
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            transition={{ duration: 0.2 }}
+            className="w-full max-w-2xl h-[85vh] bg-card/95 border border-border/50 rounded-2xl shadow-2xl flex flex-col overflow-hidden backdrop-blur-xl"
+          >
+            {/* Header */}
+            <div className="flex items-center justify-between px-5 py-4 border-b border-border/40 bg-secondary/20">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+                  <MessageCircle className="w-4 h-4" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-foreground text-base">在线聊天室</h3>
+                  <p className="text-xs text-muted-foreground">实时互动 · 大家一起聊</p>
+                </div>
               </div>
-            ) : (
-              messages.map((m) => {
-                const isMine = m.user_id === user?.id;
-                const profile = profileMap[m.user_id];
-                const name = profile?.display_name || "用户";
-                const avatarUrl = profile?.avatar_url || undefined;
+              <button
+                onClick={() => onOpenChange(false)}
+                className="w-8 h-8 rounded-full flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-secondary/60 transition-colors"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
 
-                return (
-                  <div
-                    key={m.id}
-                    className={`flex items-end gap-2 ${isMine ? "flex-row-reverse" : "flex-row"}`}
-                  >
-                    <Avatar
-                      className={`w-8 h-8 border border-border flex-shrink-0 ${
-                        !isMine ? "cursor-pointer hover:opacity-80 transition-opacity" : ""
+            {/* Message List */}
+            <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 space-y-4">
+              {messages.length === 0 ? (
+                <div className="h-full flex items-center justify-center text-sm text-muted-foreground">
+                  暂无消息，来发第一条吧~
+                </div>
+              ) : (
+                messages.map((m) => {
+                  const isMine = user && m.user_id === user.id;
+                  const profile = profileMap[m.user_id];
+                  const name = profile?.display_name || "用户";
+                  const avatar = profile?.avatar_url;
+
+                  return (
+                    <div
+                      key={m.id}
+                      className={`flex gap-2.5 max-w-[85%]
+
+${
+                        isMine ? "ml-auto flex-row-reverse" : "mr-auto"
                       }`}
-                      onClick={!isMine ? () => handleAtUser(name) : undefined}
                     >
-                      <AvatarImage src={avatarUrl} />
-                      <AvatarFallback className="bg-secondary text-xs">
-                        {name?.[0]?.toUpperCase() || "?"}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div className={`flex flex-col max-w-[70%] ${isMine ? "items-end" : "items-start"}`}>
-                      {!isMine && (
+                      <Avatar
+                        className={`w-8 h-8 flex-shrink-0 cursor-pointer ${
+                          !isMine ? "hover:opacity-80 ring-1 ring-border" : ""
+                        }`}
+                        onClick={!isMine ? () => handleAtUser(name) : undefined}
+                      >
+                        {avatar && <AvatarImage src={avatar} alt={name} />}
+                        <AvatarFallback className="bg-primary/10 text-primary text-xs">
+                          {name.slice(0, 1)}
+                        </AvatarFallback>
+                      </Avatar>
+
+                      <div className={`flex flex-col ${isMine ? "items-end" : "items-start"}`}>
                         <span
-                          className="text-[11px] text-muted-foreground mb-0.5 px-1 cursor-pointer hover:opacity-80 transition-opacity"
-                          onClick={() => handleAtUser(name)}
+                          className={`text-[11px] text-muted-foreground mb-1 px-1 cursor-pointer ${
+                            !isMine ? "hover:text-primary transition-colors" : ""
+                          }`}
+                          onClick={!isMine ? () => handleAtUser(name) : undefined}
                         >
                           {name}
                         </span>
-                      )}
-                      <div
-                        className={`px-3 py-2 rounded-2xl text-sm break-words whitespace-pre-wrap ${
-                          isMine
-                            ? "bg-primary text-primary-foreground rounded-br-sm"
-                            : "bg-secondary text-foreground rounded-bl-sm"
-                        }`}
-                      >
-                        {m.content}
+                        <div
+                          className={`px-3.5 py-2 rounded-2xl text-sm break-words whitespace-pre-wrap leading-relaxed shadow-sm ${
+                            isMine
+                              ? "bg-primary text-primary-foreground rounded-tr-sm"
+                              : "bg-secondary/80 text-foreground rounded-tl-sm border border-border/40"
+                          }`}
+                        >
+                          {m.content}
+                        </div>
+                        <span className="text-[10px] text-muted-foreground/60 mt-1 px-1">
+                          {new Date(m.created_at).toLocaleTimeString([], {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })}
+                        </span>
                       </div>
-                      <span className="text-[10px] text-muted-foreground mt-0.5 px-1">
-                        {new Date(m.created_at).toLocaleTimeString("zh-CN", {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })}
-                      </span>
                     </div>
-                  </div>
-                );
-              })
-            )}
-          </div>
-
-          {/* 管理员专属广播标签 */}
-          {isAdmin && (
-            <div className="px-3 pt-2">
-              <button
-                onClick={() => handleAtUser("所有人")}
-                className="text-xs font-medium px-3 py-1.5 rounded-full bg-primary/15 text-primary border border-primary/30 hover:bg-primary/25 transition-colors"
-              >
-                [@所有人]
-              </button>
+                  );
+                })
+              )}
             </div>
-          )}
 
-          {/* 底部输入条 */}
-          <div className="border-t border-border p-3 flex items-end gap-2">
-            <textarea
-              ref={inputRef}
-              value={input}
-              onChange={(e) => setInput(e.target.value.slice(0, MAX_LENGTH))}
-              onKeyDown={handleKeyDown}
-              placeholder="说点什么…"
-              rows={1}
-              className="flex-1 resize-none rounded-xl bg-secondary/50 border border-border px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary max-h-24"
-            />
-            <button
-              onClick={handleSend}
-              disabled={!input.trim() || sending}
-              className="rounded-full bg-primary text-primary-foreground p-2.5 disabled:opacity-40 transition-opacity"
-              aria-label="发送"
-            >
-              <Send className="w-4 h-4" />
-            </button>
-          </div>
-          <div className="text-right px-3 pb-2 text-[10px] text-muted-foreground">
-            {input.length}/{MAX_LENGTH}
-          </div>
-        </motion.div>
+            {/* Input Bar */}
+            <div className="p-3 border-t border-border/40 bg-secondary/10 flex flex-col gap-2">
+              <div className="flex items-center gap-2 px-1">
+                {/* 所有人可见的蓝色 AI 助手快捷按钮 */}
+                <button
+                  type="button"
+                  onClick={() => handleAtUser("AI助手")}
+                  className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-blue-600/20 text-blue-400 border border-blue-500/30 hover:bg-blue-600/30 hover:border-blue-500/50 transition-all active:scale-95 shadow-sm"
+                >
+                  <Bot className="w-3.5 h-3.5 text-blue-400" />
+                  <span>@AI助手</span>
+                </button>
+
+                {/* 管理员专用的 @所有人 快捷按钮 */}
+                {isAdmin && (
+                  <button
+                    type="button"
+                    onClick={() => handleAtUser("所有人")}
+                    className="inline-flex items-center px-2 py-0.5 rounded text-[11px] text-primary hover:bg-primary/10 transition-colors"
+                  >
+                    [@所有人]
+                  </button>
+                )}
+              </div>
+
+              <div className="flex items-end gap-2">
+                <textarea
+                  ref={inputRef}
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  placeholder={user ? "说点什么…" : "登录后即可参与聊天"}
+                  disabled={!user || sending}
+                  maxLength={MAX_LENGTH}
+                  rows={2}
+                  className="flex-1 resize-none rounded-xl bg-secondary/50 border border-border px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary max-h-24"
+                />
+                <button
+                  type="button"
+                  onClick={handleSend}
+                  disabled={!user || !input.trim() || sending}
+                  className="w-10 h-10 rounded-xl bg-primary text-primary-foreground flex items-center justify-center disabled:opacity-40 hover:bg-primary/90 transition-colors flex-shrink-0"
+                >
+                  <Send className="w-4 h-4" />
+                </button>
+              </div>
+
+              <div className="flex justify-end px-1">
+                <span className="text-[10px] text-muted-foreground">
+                  {input.length}/{MAX_LENGTH}
+                </span>
+              </div>
+            </div>
+          </motion.div>
+        </div>
       )}
     </AnimatePresence>
   );
