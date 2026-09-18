@@ -172,10 +172,6 @@ const UserNav = () => {
 
           if (!withName.is_read) {
             setUnreadCount((c) => c + 1);
-            toast({
-              title: `🔔 ${withName.sender_name || "系统通知"}`,
-              description: withName.content,
-            });
           }
         }
       )
