@@ -170,11 +170,11 @@ const Vip = () => {
           ))}
         </div>
 
-        {/* 底部横向在线聊天室卡片 */}
+    {/* 底部横向在线聊天室卡片 */}
         <div className="w-full max-w-2xl">
-          <GlassCard
+          <div
             onClick={handleChatClick}
-            className="!bg-transparent !backdrop-blur-none p-6 cursor-pointer hover:border-primary/50 transition-all flex items-center justify-between group animate-breathe-glow border-primary/30"
+            className="bg-transparent rounded-xl p-4 cursor-pointer relative overflow-hidden transition-colors duration-300 border border-glass-border/40 hover:border-primary/40 flex items-center justify-between group animate-breathe-glow"
           >
             <div className="flex items-center gap-3.5">
               <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary group-hover:scale-105 transition-transform">
@@ -192,7 +192,7 @@ const Vip = () => {
                 </p>
               </div>
             </div>
-          </GlassCard>
+          </div>
         </div>
 
         <motion.a
