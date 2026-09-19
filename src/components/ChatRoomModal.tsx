@@ -154,10 +154,10 @@ const ChatRoomModal = ({ open, onOpenChange, targetMessageId }: ChatRoomModalPro
                 })
               )}
             </div>
-            <div className="relative z-10 p-3 border-t border-border/40 bg-secondary/10 flex flex-col gap-2">
+            <div className="relative z-10 p-3 border-t border-border/40 bg-secondary/10 flex flex-col gap-2" style={{ paddingBottom: "calc(1.25rem + env(safe-area-inset-bottom))" }}>
               <div className="flex items-center gap-2 px-1">
-                <button type="button" onClick={() => handleAtUser("D助手")} className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-blue-500/15 text-blue-500 border border-blue-500/30 hover:bg-blue-500/25 transition-colors">
-                  <Bot className="w-3.5 h-3.5" /><span>@D助手</span>
+                <button type="button" onClick={() => handleAtUser("D助手")} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium bg-blue-500/15 text-blue-500 border border-blue-500/30 hover:bg-blue-500/25 transition-colors">
+                  <Bot className="w-4 h-4" /><span>@D助手</span>
                 </button>
                 {isAdmin && (
                   <button type="button" onClick={() => handleAtUser("所有人")} className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-amber-500/15 text-amber-500 border border-amber-500/30 hover:bg-amber-500/25 transition-colors">
@@ -167,11 +167,11 @@ const ChatRoomModal = ({ open, onOpenChange, targetMessageId }: ChatRoomModalPro
               </div>
               <div className="flex items-end gap-2">
                 <div className="flex-1 relative">
-                  <textarea ref={inputRef} value={input} onChange={(e) => setInput(e.target.value)} onKeyDown={handleKeyDown} placeholder={user ? "问点什么，或点上面的 @D助手 直接提问... (Enter 发送)" : "请先登录后参与聊天"} disabled={!user || sending} maxLength={MAX_LENGTH} rows={2} className="w-full resize-none rounded-xl bg-background/80 border border-border/50 px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary disabled:opacity-50" />
-                  <div className="absolute right-2 bottom-1.5 text-[10px] text-muted-foreground/60">{input.length}/{MAX_LENGTH}</div>
+                  <textarea ref={inputRef} value={input} onChange={(e) => setInput(e.target.value)} onKeyDown={handleKeyDown} placeholder={user ? "问点什么，或点上面的 @D助手 直接提问... (Enter 发送)" : "请先登录后参与聊天"} disabled={!user || sending} maxLength={MAX_LENGTH} rows={3} className="w-full resize-none rounded-xl bg-background/80 border border-border/50 px-4 pt-3 pb-6 text-base focus:outline-none focus:ring-1 focus:ring-primary disabled:opacity-50" />
+                  <div className="absolute right-3 bottom-2 text-xs text-muted-foreground/60">{input.length}/{MAX_LENGTH}</div>
                 </div>
-                <button onClick={handleSend} disabled={!user || !input.trim() || sending || input.length > MAX_LENGTH} className="h-10 px-4 rounded-xl bg-primary text-primary-foreground font-medium text-sm flex items-center justify-center gap-1.5 disabled:opacity-50 hover:bg-primary/90 transition-colors shrink-0">
-                  <Send className="w-4 h-4" />
+                <button onClick={handleSend} disabled={!user || !input.trim() || sending || input.length > MAX_LENGTH} className="h-12 px-5 rounded-xl bg-primary text-primary-foreground font-medium text-sm flex items-center justify-center gap-1.5 disabled:opacity-50 hover:bg-primary/90 transition-colors shrink-0">
+                  <Send className="w-5 h-5" />
                 </button>
               </div>
             </div>
