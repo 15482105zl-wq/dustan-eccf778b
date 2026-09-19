@@ -172,23 +172,21 @@ const Vip = () => {
         <div className="w-full max-w-2xl">
           <div
             onClick={handleChatClick}
-            className="bg-transparent rounded-xl p-4 cursor-pointer relative overflow-hidden transition-colors duration-300 border border-glass-border/40 hover:border-primary/40 flex items-center justify-between group animate-breathe-glow"
+            className="bg-transparent rounded-xl py-5 px-16 cursor-pointer relative overflow-hidden transition-colors duration-300 border border-glass-border/40 hover:border-primary/40 group animate-breathe-glow"
           >
-            <div className="flex items-center gap-3.5">
-              <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary group-hover:scale-105 transition-transform">
-                <MessageCircle className="w-5 h-5" />
+            <div className="absolute left-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-xl bg-primary/10 flex items-center justify-center text-primary group-hover:scale-105 transition-transform">
+              <MessageCircle className="w-6 h-6" />
+            </div>
+            <div className="text-center">
+              <div className="flex items-center justify-center gap-2">
+                <h3 className="font-semibold text-lg text-foreground">在线聊天室</h3>
+                <span className="text-xs px-2.5 py-1 rounded-full bg-primary/20 text-primary font-medium">
+                  公共频道
+                </span>
               </div>
-              <div className="text-left">
-                <div className="flex items-center gap-2">
-                  <h3 className="font-semibold text-sm text-foreground">在线聊天室</h3>
-                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-primary/20 text-primary font-medium">
-                    公共频道
-                  </span>
-                </div>
-                <p className="text-xs text-muted-foreground mt-0.5">
-                  实时互动 · 大家一起聊
-                </p>
-              </div>
+              <p className="text-sm text-muted-foreground mt-1">
+                实时互动 · 大家一起聊
+              </p>
             </div>
           </div>
         </div>
