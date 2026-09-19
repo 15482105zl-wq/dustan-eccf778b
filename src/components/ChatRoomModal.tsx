@@ -122,13 +122,13 @@ const ChatRoomModal = ({ open, onOpenChange, targetMessageId }: ChatRoomModalPro
             <div className="relative z-10 flex items-center justify-between px-5 py-4 border-b border-border/40 bg-secondary/20">
               <div className="flex items-center gap-2.5">
                 <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary"><MessageCircle className="w-4 h-4" /></div>
-                <div><h3 className="font-semibold text-sm">在线聊天室</h3><p className="text-xs text-muted-foreground">实时互动 · 大家一起聊</p></div>
+                <div><h3 className="font-semibold text-sm">Dustan AI助手</h3><p className="text-xs text-muted-foreground">点 @D助手 直接提问 · 大家一起聊</p></div>
               </div>
               <button onClick={() => onOpenChange(false)} className="w-8 h-8 rounded-full hover:bg-secondary flex items-center justify-center transition-colors"><X className="w-4 h-4" /></button>
             </div>
             <div ref={scrollRef} className="relative z-10 flex-1 overflow-y-auto p-4 space-y-4">
               {messages.length === 0 ? (
-                <div className="h-full flex items-center justify-center text-sm text-muted-foreground">暂无消息，来发第一条吧~</div>
+                <div className="h-full flex items-center justify-center text-sm text-muted-foreground">暂无消息，点 @D助手 问它第一个问题吧~</div>
               ) : (
                 messages.map((m) => {
                   const isMine = user && m.user_id === user.id;
@@ -167,7 +167,7 @@ const ChatRoomModal = ({ open, onOpenChange, targetMessageId }: ChatRoomModalPro
               </div>
               <div className="flex items-end gap-2">
                 <div className="flex-1 relative">
-                  <textarea ref={inputRef} value={input} onChange={(e) => setInput(e.target.value)} onKeyDown={handleKeyDown} placeholder={user ? "发条消息吧... (Enter 发送)" : "请先登录后参与聊天"} disabled={!user || sending} maxLength={MAX_LENGTH} rows={2} className="w-full resize-none rounded-xl bg-background/80 border border-border/50 px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary disabled:opacity-50" />
+                  <textarea ref={inputRef} value={input} onChange={(e) => setInput(e.target.value)} onKeyDown={handleKeyDown} placeholder={user ? "问点什么，或点上面的 @D助手 直接提问... (Enter 发送)" : "请先登录后参与聊天"} disabled={!user || sending} maxLength={MAX_LENGTH} rows={2} className="w-full resize-none rounded-xl bg-background/80 border border-border/50 px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary disabled:opacity-50" />
                   <div className="absolute right-2 bottom-1.5 text-[10px] text-muted-foreground/60">{input.length}/{MAX_LENGTH}</div>
                 </div>
                 <button onClick={handleSend} disabled={!user || !input.trim() || sending || input.length > MAX_LENGTH} className="h-10 px-4 rounded-xl bg-primary text-primary-foreground font-medium text-sm flex items-center justify-center gap-1.5 disabled:opacity-50 hover:bg-primary/90 transition-colors shrink-0">
