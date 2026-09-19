@@ -313,7 +313,7 @@ const UserNav = () => {
       ) : (
         <button
           type="button"
-          onClick={() => navigate("/login")}
+          onClick={() => navigate("/auth")}
           className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-primary text-primary-foreground hover:bg-primary/90 transition-all shadow-sm"
         >
           <LogIn className="w-3.5 h-3.5" />
