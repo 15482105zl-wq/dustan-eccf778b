@@ -174,7 +174,7 @@ const Vip = () => {
         <div className="w-full max-w-2xl">
           <GlassCard
             onClick={handleChatClick}
-            className="p-4 cursor-pointer hover:border-primary/50 transition-all flex items-center justify-between group animate-breathe-glow border-primary/30"
+            className="!bg-transparent !backdrop-blur-none p-6 cursor-pointer hover:border-primary/50 transition-all flex items-center justify-between group animate-breathe-glow border-primary/30"
           >
             <div className="flex items-center gap-3.5">
               <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary group-hover:scale-105 transition-transform">
