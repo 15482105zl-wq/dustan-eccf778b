@@ -45,11 +45,24 @@ const ChatRoomModal = ({ open, onOpenChange, targetMessageId }: ChatRoomModalPro
   }, [profileMap]);
 
   const loadMessages = useCallback(async () => {
-    const { data, error } = await supabase.from("comments").select("id, content, user_id, created_at").order("created_at", { ascending: true }).limit(200);
-    if (error) return console.error(error);
-    const list = (data || []) as ChatMessage[];
+    const { data, error } = await supabase
+      .from("comments")
+      .select("id, content, user_id, created_at")
+      .order("created_at", { ascending: false })
+      .limit(200);
+
+    if (error) {
+      console.error("load messages error:", error);
+      return;
+    }
+
+    const list = ((data || []) as ChatMessage[]).reverse();
+
     setMessages(list);
-    fetchProfiles(Array.from(new Set(list.map((m) => m.user_id))));
+
+    const ids = Array.from(new Set(list.map((m) => m.user_id)));
+
+    fetchProfiles(ids);
   }, [fetchProfiles]);
 
   useEffect(() => {
