@@ -113,7 +113,8 @@ const UserNav = () => {
       return;
     }
 
-    const withNames = await attachSenderNames((data || []) as Notification[]);
+    const withNames = await attachSenderNames((data || []) as
+Notification[]);
     setNotifications(withNames);
     setUnreadCount(withNames.filter((n) => !n.is_read).length);
   }, [user]);
@@ -150,7 +151,7 @@ const UserNav = () => {
     fetchNotifications();
 
     const channel = supabase
-      .channel(`notifications-${user.id}`)
+      .channel("user-notifications")
       .on(
         "postgres_changes",
         {
@@ -160,15 +161,9 @@ const UserNav = () => {
           filter: `user_id=eq.${user.id}`,
         },
         async (payload) => {
-          const raw = payload.new as Notification;
-          const [withName] = await attachSenderNames([raw]);
-
-          setNotifications((prev) => {
-            if (prev.some((item) => item.id === withName.id)) {
-              return prev;
-            }
-            return [withName, ...prev].slice(0, 10);
-          });
+          const newNotif = payload.new as Notification;
+          const [withName] = await attachSenderNames([newNotif]);
+          setNotifications((prev) => [withName, ...prev.slice(0, 9)]);
 
           if (!withName.is_read) {
             setUnreadCount((c) => c + 1);
@@ -180,58 +175,69 @@ const UserNav = () => {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [user, toast, fetchNotifications]);
+  }, [user, fetchNotifications]);
 
+  // 点击外部收起通知面板
   useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
+    const handleOutsideClick = (e: MouseEvent) => {
       if (panelRef.current && !panelRef.current.contains(e.target as Node)) {
         setShowPanel(false);
       }
     };
-
     if (showPanel) {
-      document.addEventListener("mousedown", handleClickOutside);
+      document.addEventListener("mousedown", handleOutsideClick);
     }
-
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("mousedown", handleOutsideClick);
     };
   }, [showPanel]);
 
-  const handleSignOut = async () => {
+  const handleLogout = async () => {
     await supabase.auth.signOut();
-    setSession(null);
-    navigate("/auth", { replace: true });
+    toast({ title: "已退出登录" });
+    navigate("/");
   };
 
   if (loading) return null;
 
   return (
-    <div className="flex items-center gap-3" ref={panelRef}>
+    <div className="flex items-center gap-2 relative">
       {isAuthenticated ? (
         <>
-          <div className="relative">
+          {/* 通知铃铛 */}
+          <div className="relative" ref={panelRef}>
             <button
-              onClick={() => setShowPanel((prev) => !prev)}
-              className="relative rounded-full p-2 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
-              aria-label="通知"
+              type="button"
+              onClick={() => setShowPanel(!showPanel)}
+              className="relative p-2 rounded-full text-foreground/80 hover:text-foreground hover:bg-secondary/50 transition-colors"
+              title="通知中心"
             >
               <Bell className="w-5 h-5" />
               {unreadCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-destructive text-destructive-foreground text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center">
+                <span className="absolute top-1 right-1 flex h-4 w-4 items-center justify-center rounded-full bg-destructive text-[10px] font-bold text-destructive-foreground animate-pulse">
                   {unreadCount > 9 ? "9+" : unreadCount}
                 </span>
               )}
             </button>
 
+            {/* 通知浮窗 */}
             {showPanel && (
-              <div className="absolute right-0 top-11 w-72 sm:w-80 bg-background/95 backdrop-blur-md border border-border rounded-xl shadow-2xl z-50">
-                <div className="flex items-center justify-between border-b border-border px-4 py-3">
-                  <span className="text-sm font-semibold text-foreground">通知</span>
+              <div className="absolute right-0 mt-2 w-80 sm:w-96 rounded-xl border border-border/50 bg-background/95 backdrop-blur-md shadow-2xl p-4 z-50 animate-in fade-in zoom-in-95 duration-150">
+                <div className="flex items-center justify-between pb-3 border-b border-border/40">
+                  <div className="flex items-center gap-2">
+                    <span className="font-semibold text-sm">通知中心</span>
+                    {unreadCount > 0 && (
+                      <span className="text-xs bg-primary/10
+text-primary px-2 py-0.5 rounded-full">
+                        {unreadCount} 条未读
+                      </span>
+                    )}
+                  </div>
                   {unreadCount > 0 && (
                     <button
+                      type="button"
                       onClick={markAllAsRead}
-                      className="flex items-center gap-1 text-xs text-muted-foreground hover:text-primary"
+                      className="text-xs text-muted-foreground hover:text-foreground flex items-center gap-1 transition-colors"
                     >
                       <CheckCheck className="w-3.5 h-3.5" />
                       全部已读
@@ -239,37 +245,42 @@ const UserNav = () => {
                   )}
                 </div>
 
-                <div className="max-h-72 overflow-y-auto">
+                <div className="max-h-80 overflow-y-auto divide-y divide-border/20 py-1">
                   {notifications.length === 0 ? (
-                    <div className="py-8 text-center text-sm text-muted-foreground">
-                      暂无通知
+                    <div className="text-center py-8 text-xs text-muted-foreground">
+                      暂无任何通知
                     </div>
                   ) : (
                     notifications.map((n) => (
-                      <button
+                      <div
                         key={n.id}
                         onClick={async () => {
                           await markOneRead(n.id);
                           setShowPanel(false);
-                          navigate("/vip");
+                          const targetUrl = n.message_id
+                            ? `/vip?chat=true&msgId=${n.message_id}`
+                            : `/vip?chat=true`;
+                          navigate(targetUrl);
                         }}
-                        className={`flex w-full flex-col gap-1 border-b border-border px-4 py-3 text-left transition-colors hover:bg-accent ${
-                          n.is_read ? "opacity-60" : ""
+                        className={`p-3 text-xs cursor-pointer rounded-lg my-1 transition-colors ${
+                          n.is_read
+                            ? "text-muted-foreground hover:bg-secondary/20"
+                            : "bg-secondary/40 text-foreground font-medium hover:bg-secondary/60"
                         }`}
                       >
-                        <div className="flex items-center justify-between text-[11px] text-muted-foreground">
-                          <span>{n.sender_name || "系统通知"}</span>
-                          <span>
-                            {new Date(n.created_at).toLocaleTimeString("zh-CN", {
+                        <div className="flex items-center justify-between mb-1">
+                          <span className="text-primary font-semibold">
+                            {n.sender_name || "系统消息"}
+                          </span>
+                          <span className="text-[10px] text-muted-foreground">
+                            {new Date(n.created_at).toLocaleTimeString([], {
                               hour: "2-digit",
                               minute: "2-digit",
                             })}
                           </span>
                         </div>
-                        <div className="text-sm text-foreground line-clamp-2">
-                          {n.content}
-                        </div>
-                      </button>
+                        <p className="line-clamp-2 leading-relaxed">{n.content}</p>
+                      </div>
                     ))
                   )}
                 </div>
@@ -277,37 +288,40 @@ const UserNav = () => {
             )}
           </div>
 
-          <button
+          {/* 用户头像与信息 */}
+          <div
             onClick={() => navigate("/profile")}
-            className="flex items-center gap-2 transition-opacity hover:opacity-80"
+            className="flex items-center gap-2 px-2.5 py-1.5 rounded-full bg-secondary/30 hover:bg-secondary/60 border border-border/30 cursor-pointer transition-all"
           >
-            <Avatar className="w-7 h-7 border border-primary/30">
-              <AvatarImage src={myProfile?.avatar_url || undefined} />
-              <AvatarFallback className="bg-secondary text-xs">
-                {displayName?.[0]?.toUpperCase() || <User className="w-3 h-3" />}
+            <Avatar className="w-6 h-6 border border-border/50">
+              <AvatarImage src={myProfile?.avatar_url || ""} />
+              <AvatarFallback className="text-[10px] bg-primary/20 text-primary">
+                {displayName.slice(0, 1).toUpperCase() || <User className="w-3 h-3" />}
               </AvatarFallback>
             </Avatar>
-            <span className="text-sm text-foreground/80 hidden sm:inline">
-              {displayName || "我的"}
+            <span className="text-xs font-medium max-w-[80px] truncate">
+              {displayName || "会员"}
             </span>
-          </button>
+          </div>
 
           <button
-            onClick={handleSignOut}
-            className="text-muted-foreground hover:text-destructive transition-colors"
+            type="button"
+            onClick={handleLogout}
+            className="p-2 rounded-full text-muted-foreground hover:text-destructive hover:bg-destructive/10
+transition-colors"
             title="退出登录"
-            aria-label="退出登录"
           >
             <LogOut className="w-4 h-4" />
           </button>
         </>
       ) : (
         <button
-          onClick={() => navigate("/auth")}
-          className="flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium text-foreground transition-colors hover:bg-accent"
+          type="button"
+          onClick={() => navigate("/login")}
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-primary text-primary-foreground hover:bg-primary/90 transition-all shadow-sm"
         >
-          <LogIn className="w-4 h-4" />
-          登录
+          <LogIn className="w-3.5 h-3.5" />
+          <span>登录</span>
         </button>
       )}
     </div>
