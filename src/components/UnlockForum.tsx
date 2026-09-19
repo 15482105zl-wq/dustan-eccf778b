@@ -8,7 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Lock, Plus, Send, Trash2, User as UserIcon, X } from "lucide-react";
+import { Loader2, Lock, Pencil, Pin, Plus, Send, Trash2, User as UserIcon, X } from "lucide-react";
 import { motion } from "framer-motion";
 
 
@@ -22,6 +22,7 @@ interface Thread {
   title: string;
   content: string;
   created_at: string;
+  pinned: boolean;
 }
 interface Reply {
   id: string;
@@ -50,6 +51,32 @@ const formatTime = (iso: string) => {
   return d.toLocaleDateString("zh-CN");
 };
 
+// 把文本里的网址转成可点击链接
+const linkify = (text: string) => {
+  const parts = text.split(/(https?:\/\/[^\s]+)/g);
+  return parts.map((part, i) =>
+    /^https?:\/\//.test(part) ? (
+      <a
+        key={i}
+        href={part}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-accent underline break-all"
+      >
+        {part}
+      </a>
+    ) : (
+      <span key={i}>{part}</span>
+    )
+  );
+};
+
+const sortThreads = (list: Thread[]) =>
+  [...list].sort((a, b) => {
+    if (a.pinned !== b.pinned) return a.pinned ? -1 : 1;
+    return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+  });
+
 const UnlockForum = ({ open, onOpenChange }: Props) => {
   const { user, isAdmin } = useAuth();
   const { toast } = useToast();
@@ -65,6 +92,12 @@ const UnlockForum = ({ open, onOpenChange }: Props) => {
   const [posting, setPosting] = useState(false);
   const [replyInputs, setReplyInputs] = useState<Record<string, string>>({});
   const [replying, setReplying] = useState<string | null>(null);
+
+  // 编辑主贴相关状态
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editTitle, setEditTitle] = useState("");
+  const [editBody, setEditBody] = useState("");
+  const [savingEdit, setSavingEdit] = useState(false);
 
   const fetchProfiles = useCallback(async (ids: string[]) => {
     const missing = Array.from(new Set(ids)).filter((id) => id && !profiles[id]);
@@ -88,6 +121,7 @@ const UnlockForum = ({ open, onOpenChange }: Props) => {
       const { data: ts } = await supabase
         .from("forum_threads")
         .select("*")
+        .order("pinned", { ascending: false })
         .order("created_at", { ascending: false })
         .limit(50);
       const tList = (ts || []) as Thread[];
@@ -140,10 +174,10 @@ const UnlockForum = ({ open, onOpenChange }: Props) => {
       const { data, error } = await supabase
         .from("forum_threads")
         .insert(payload)
-        .select("id, user_id, title, content, created_at")
+        .select("id, user_id, title, content, created_at, pinned")
         .single();
       if (error) throw error;
-      if (data) setThreads((prev) => [data as Thread, ...prev]);
+      if (data) setThreads((prev) => sortThreads([data as Thread, ...prev]));
       await fetchProfiles([user.id]);
       setTitle("");
       setBody("");
@@ -192,13 +226,64 @@ const UnlockForum = ({ open, onOpenChange }: Props) => {
     setReplies((prev) => ({ ...prev, [tid]: (prev[tid] || []).filter((r) => r.id !== rid) }));
   };
 
+  const handleStartEdit = (t: Thread) => {
+    setEditingId(t.id);
+    setEditTitle(t.title);
+    setEditBody(t.content);
+  };
+
+  const handleCancelEdit = () => {
+    setEditingId(null);
+    setEditTitle("");
+    setEditBody("");
+  };
+
+  const handleSaveEdit = async (id: string) => {
+    const t = editTitle.trim().slice(0, MAX_TITLE);
+    const c = editBody.trim().slice(0, MAX_BODY);
+    if (!t || !c) return;
+    setSavingEdit(true);
+    try {
+      const { error } = await supabase
+        .from("forum_threads")
+        .update({ title: t, content: c })
+        .eq("id", id);
+      if (error) throw error;
+      setThreads((prev) =>
+        prev.map((th) => (th.id === id ? { ...th, title: t, content: c } : th))
+      );
+      handleCancelEdit();
+      toast({ title: "已保存修改 ✨" });
+    } catch (e: any) {
+      toast({ title: "保存失败", description: e.message, variant: "destructive" });
+    } finally {
+      setSavingEdit(false);
+    }
+  };
+
+  const handleTogglePin = async (t: Thread) => {
+    const next = !t.pinned;
+    const { error } = await supabase
+      .from("forum_threads")
+      .update({ pinned: next })
+      .eq("id", t.id);
+    if (error) {
+      toast({ title: "操作失败", description: error.message, variant: "destructive" });
+      return;
+    }
+    setThreads((prev) =>
+      sortThreads(prev.map((th) => (th.id === t.id ? { ...th, pinned: next } : th)))
+    );
+    toast({ title: next ? "已置顶 📌" : "已取消置顶" });
+  };
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-2xl glass border-accent/40 shadow-[0_0_40px_hsl(var(--accent)/0.35)] max-h-[85vh] overflow-hidden flex flex-col">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 font-heading">
             <Lock className="w-5 h-5 text-accent" />
-            <span className="gradient-text">BBS · 纯文字论坛</span>
+            <span className="gradient-text">BBS</span>
           </DialogTitle>
         </DialogHeader>
 
@@ -266,6 +351,7 @@ const UnlockForum = ({ open, onOpenChange }: Props) => {
             {threads.map((t) => {
               const author = profiles[t.user_id];
               const list = replies[t.id] || [];
+              const isEditing = editingId === t.id;
               return (
                 <AccordionItem
                   key={t.id}
@@ -281,7 +367,14 @@ const UnlockForum = ({ open, onOpenChange }: Props) => {
                         </AvatarFallback>
                       </Avatar>
                       <div className="flex-1 min-w-0">
-                        <div className="font-heading font-semibold text-foreground text-sm break-words">{t.title}</div>
+                        <div className="flex items-center gap-1.5">
+                          <div className="font-heading font-semibold text-foreground text-sm break-words">{t.title}</div>
+                          {t.pinned && (
+                            <span className="shrink-0 text-[10px] px-1.5 py-0.5 rounded-full bg-accent/20 text-accent border border-accent/40 inline-flex items-center gap-0.5">
+                              <Pin className="w-2.5 h-2.5" /> 置顶
+                            </span>
+                          )}
+                        </div>
                         <div className="text-[11px] text-muted-foreground mt-0.5">
                           {nameOf(t.user_id)} · {formatTime(t.created_at)} · {list.length} 回帖
                         </div>
@@ -289,16 +382,66 @@ const UnlockForum = ({ open, onOpenChange }: Props) => {
                     </div>
                   </AccordionTrigger>
                   <AccordionContent className="px-4 pb-4">
-                    <p className="text-sm text-foreground/85 whitespace-pre-wrap break-words mb-3 border-l-2 border-accent/40 pl-3">
-                      {t.content}
-                    </p>
-                    {isOwner && (
-                      <button
-                        onClick={() => handleDeleteThread(t.id)}
-                        className="text-[11px] text-muted-foreground hover:text-destructive inline-flex items-center gap-1 mb-3"
-                      >
-                        <Trash2 className="w-3 h-3" /> 删除主贴
-                      </button>
+                    {isEditing ? (
+                      <div className="space-y-2 mb-3">
+                        <Input
+                          value={editTitle}
+                          onChange={(e) => setEditTitle(e.target.value.slice(0, MAX_TITLE))}
+                          placeholder="主题标题"
+                          maxLength={MAX_TITLE}
+                          className="bg-transparent border-accent/30"
+                        />
+                        <Textarea
+                          value={editBody}
+                          onChange={(e) => setEditBody(e.target.value.slice(0, MAX_BODY))}
+                          placeholder="纯文字正文（最多 500 字）"
+                          maxLength={MAX_BODY}
+                          className="bg-transparent border-accent/30 min-h-[100px] resize-none"
+                        />
+                        <div className="flex items-center justify-between text-xs text-muted-foreground">
+                          <span>{editBody.length}/{MAX_BODY}</span>
+                          <div className="flex gap-2">
+                            <Button size="sm" variant="ghost" onClick={handleCancelEdit}>
+                              取消
+                            </Button>
+                            <Button
+                              size="sm"
+                              disabled={savingEdit || !editTitle.trim() || !editBody.trim()}
+                              onClick={() => handleSaveEdit(t.id)}
+                              className="bg-accent/20 text-accent border border-accent/40 hover:bg-accent/30"
+                            >
+                              {savingEdit ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : "保存"}
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
+                    ) : (
+                      <p className="text-sm text-foreground/85 whitespace-pre-wrap break-words mb-3 border-l-2 border-accent/40 pl-3">
+                        {linkify(t.content)}
+                      </p>
+                    )}
+
+                    {isOwner && !isEditing && (
+                      <div className="flex items-center gap-3 mb-3">
+                        <button
+                          onClick={() => handleDeleteThread(t.id)}
+                          className="text-[11px] text-muted-foreground hover:text-destructive inline-flex items-center gap-1"
+                        >
+                          <Trash2 className="w-3 h-3" /> 删除主贴
+                        </button>
+                        <button
+                          onClick={() => handleStartEdit(t)}
+                          className="text-[11px] text-muted-foreground hover:text-accent inline-flex items-center gap-1"
+                        >
+                          <Pencil className="w-3 h-3" /> 编辑
+                        </button>
+                        <button
+                          onClick={() => handleTogglePin(t)}
+                          className="text-[11px] text-muted-foreground hover:text-accent inline-flex items-center gap-1"
+                        >
+                          <Pin className="w-3 h-3" /> {t.pinned ? "取消置顶" : "置顶"}
+                        </button>
+                      </div>
                     )}
 
                     <div className="space-y-2 mt-2">
@@ -327,7 +470,7 @@ const UnlockForum = ({ open, onOpenChange }: Props) => {
                                   </button>
                                 )}
                               </div>
-                              <p className="text-sm text-foreground/85 mt-0.5 whitespace-pre-wrap break-words">{r.content}</p>
+                              <p className="text-sm text-foreground/85 mt-0.5 whitespace-pre-wrap break-words">{linkify(r.content)}</p>
                             </div>
                           </motion.div>
                         );
