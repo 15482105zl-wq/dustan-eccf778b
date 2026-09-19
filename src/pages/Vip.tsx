@@ -185,7 +185,7 @@ const Vip = () => {
                 </span>
               </div>
               <p className="text-sm text-muted-foreground mt-1">
-                点 @D助手 直接提问 · 大家一起聊
+                点 @D助手 直接提问
               </p>
             </div>
           </div>
