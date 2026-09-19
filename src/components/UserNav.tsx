@@ -113,10 +113,10 @@ const UserNav = () => {
       return;
     }
 
-    const withNames = await attachSenderNames((data || []) as
-Notification[]);
+    const withNames = await attachSenderNames((data || []) as Notification[]);
     setNotifications(withNames);
-    setUnreadCount(withNames.filter((n) => !n.is_read).length);
+    setUnreadCount(withNames.filter((n) => !n.is_re
+ad).length);
   }, [user]);
 
   const markAllAsRead = async () => {
@@ -227,8 +227,7 @@ Notification[]);
                   <div className="flex items-center gap-2">
                     <span className="font-semibold text-sm">通知中心</span>
                     {unreadCount > 0 && (
-                      <span className="text-xs bg-primary/10
-text-primary px-2 py-0.5 rounded-full">
+                      <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full">
                         {unreadCount} 条未读
                       </span>
                     )}
@@ -288,33 +287,32 @@ text-primary px-2 py-0.5 rounded-full">
             )}
           </div>
 
-          {/* 用户头像与信息 */}
-          <div
+          {/* 用户头像（已去除旁边名字，仅保留头像） */}
+          <button
+            type="button"
             onClick={() => navigate("/profile")}
-            className="flex items-center gap-2 px-2.5 py-1.5 rounded-full bg-secondary/30 hover:bg-secondary/60 border border-border/30 cursor-pointer transition-all"
+            className="rounded-full hover:ring-2 hover:ring-primary/50 transition-all shrink-0 cursor-pointer"
+            title={displayName || "个人中心"}
           >
-            <Avatar className="w-6 h-6 border border-border/50">
+            <Avatar className="w-7 h-7 border border-border/50">
               <AvatarImage src={myProfile?.avatar_url || ""} />
               <AvatarFallback className="text-[10px] bg-primary/20 text-primary">
                 {displayName.slice(0, 1).toUpperCase() || <User className="w-3 h-3" />}
               </AvatarFallback>
             </Avatar>
-            <span className="text-xs font-medium max-w-[80px] truncate">
-              {displayName || "会员"}
-            </span>
-          </div>
+          </button>
 
           <button
             type="button"
             onClick={handleLogout}
-            className="p-2 rounded-full text-muted-foreground hover:text-destructive hover:bg-destructive/10
-transition-colors"
+            className="p-2 rounded-full text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors"
             title="退出登录"
           >
             <LogOut className="w-4 h-4" />
           </button>
         </>
-      ) : (
+      ) :
+(
         <button
           type="button"
           onClick={() => navigate("/login")}
