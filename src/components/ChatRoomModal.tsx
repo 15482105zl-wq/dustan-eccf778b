@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { X, Send, MessageCircle, Bot } from "lucide-react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import ParticleBackground from "@/components/ParticleBackground";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import type { Session, User as SupabaseUser } from "@supabase/supabase-js";
@@ -193,10 +194,12 @@ const ChatRoomModal = ({ open, onOpenChange }: ChatRoomModalProps) => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 20 }}
             transition={{ duration: 0.2 }}
-            className="w-full h-full bg-card flex flex-col overflow-hidden"
+            className="w-full h-full relative flex flex-col overflow-hidden bg-background"
           >
+            <ParticleBackground />
+
             {/* Header */}
-            <div className="flex items-center justify-between px-5 py-4 border-b border-border/40 bg-secondary/20">
+            <div className="relative z-10 flex items-center justify-between px-5 py-4 border-b border-border/40 bg-secondary/20">
               <div className="flex items-center gap-2.5">
                 <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary">
                   <MessageCircle className="w-4 h-4" />
@@ -224,7 +227,7 @@ const ChatRoomModal = ({ open, onOpenChange }: ChatRoomModalProps) => {
             {/* Message List */}
             <div
               ref={scrollRef}
-              className="flex-1 overflow-y-auto p-4 space-y-4"
+              className="relative z-10 flex-1 overflow-y-auto p-4 space-y-4"
             >
               {messages.length === 0 ? (
                 <div className="h-full flex items-center justify-center text-sm text-muted-foreground">
@@ -315,7 +318,7 @@ const ChatRoomModal = ({ open, onOpenChange }: ChatRoomModalProps) => {
             </div>
 
             {/* Input Bar */}
-            <div className="p-3 border-t border-border/40 bg-secondary/10 flex flex-col gap-2">
+            <div className="relative z-10 p-3 border-t border-border/40 bg-secondary/10 flex flex-col gap-2">
               <div className="flex items-center gap-2 px-1">
                 {/* 所有人可见的蓝色 AI助手 快捷按钮 */}
                 <button
