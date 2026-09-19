@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { ArrowLeft, Apple, Film, Globe, Lock, Rocket, Search, MessageCircle, type LucideIcon } from "lucide-react";
 import ParticleBackground from "@/components/ParticleBackground";
 import GlassCard from "@/components/GlassCard";
@@ -52,8 +52,10 @@ const FALLBACK_ROWS: VipResourceRow[] = [
 ];
 
 const APP_DOWNLOAD_URL = "https://pxyfbbohoazbslneagix.supabase.co/storage/v1/object/public/downloads//DustanHub.apk";
+
 const Vip = () => {
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const { user } = useAuth();
   const [forumOpen, setForumOpen] = useState(false);
   const [chatOpen, setChatOpen] = useState(false);
@@ -62,6 +64,30 @@ const Vip = () => {
 
   const requireAuth = () => setAuthOpen(true);
   const canInteract = !!user?.email_confirmed_at;
+
+  const targetMsgId = searchParams.get("msgId") || undefined;
+
+  // 监听 URL 参数：如果包含 chat=true 则自动拉起聊天室
+  useEffect(() => {
+if (searchParams.get("chat") === "true") {
+      if (canInteract) {
+        setChatOpen(true);
+      } else {
+        requireAuth();
+      }
+    }
+  }, [searchParams, canInteract]);
+
+  // 关闭聊天室时清理 URL 中的 chat 和 msgId 参数
+  const handleChatOpenChange = (open: boolean) => {
+    setChatOpen(open);
+    if (!open && searchParams.get("chat")) {
+      const nextParams = new URLSearchParams(searchParams);
+      nextParams.delete("chat");
+      nextParams.delete("msgId");
+      setSearchParams(nextParams, { replace: true });
+    }
+  };
 
   useEffect(() => {
     (async () => {
@@ -109,98 +135,80 @@ const Vip = () => {
         noindex
       />
       <ParticleBackground />
-      <main className="relative z-10 flex flex-col items-center px-4 py-10">
+
+      <main className="relative z-10 px-4 py-8 flex flex-col items-center min-h-screen">
         <div className="w-full max-w-2xl flex items-center justify-between mb-6">
           <button
             onClick={() => navigate("/")}
-            className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-primary transition-colors"
+            className="p-2 rounded-full bg-secondary/50 hover:bg-secondary text-muted-foreground hover:text-foreground transition-all"
+            aria-label="返回首页"
           >
-            <ArrowLeft className="w-4 h-4" /> 返回
+            <ArrowLeft className="w-5 h-5" />
           </button>
           <UserNav />
         </div>
 
         <motion.div
-          initial={{ opacity: 0, y: -16 }}
+          initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-8"
         >
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent/15 border border-accent/40 text-xs text-accent mb-3">
-            <Rocket className="w-3 h-3" /> 高速加速通道
-          </div>
-          <h1 className="font-heading text-3xl sm:text-4xl font-bold mb-2">
-            <span className="gradient-text glow-text">全球网络加速</span>
+          <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-primary via-blue-400 to-primary/70 bg-clip-text text-transparent">
+            全球数字服务
           </h1>
-          <p className="text-muted-foreground text-sm">精选网络服务 · 畅享全球连接</p>
+          <p className="text-xs sm:text-sm text-muted-foreground mt-1">
+            尊享节点 · 独享账号 · 极速体验
+          </p>
         </motion.div>
 
         <div className="w-full max-w-2xl grid grid-cols-6 gap-3 auto-rows-fr mb-6">
           {primary.map((c, i) => (
-            <div key={c.title} className="col-span-3">
+            <div key={i} className="col-span-3">
               <VipResourceCard {...c} delay={i * 0.06} />
             </div>
           ))}
           {gridSecondary.map((c, i) => (
-            <div key={c.title} className="col-span-3">
+   <div key={i} className="col-span-3">
               <VipResourceCard {...c} delay={(i + 2) * 0.06} />
             </div>
           ))}
         </div>
 
+        {/* 底部横向在线聊天室卡片 */}
         <div className="w-full max-w-2xl">
           <GlassCard
-            delay={0.3}
             onClick={handleChatClick}
-            className="!bg-transparent !backdrop-blur-none p-6 flex items-center justify-between animate-breathe-glow border-accent/30"
+            className="p-4 cursor-pointer hover:border-primary/50 transition-all flex items-center justify-between group"
           >
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-lg bg-accent/20 flex items-center justify-center">
-                <MessageCircle className="w-7 h-7 text-accent" />
+            <div className="flex items-center gap-3.5">
+              <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary group-hover:scale-105 transition-transform">
+                <MessageCircle className="w-5 h-5" />
               </div>
-              <div>
-                <p className="font-heading font-bold text-foreground text-xl sm:text-2xl leading-tight">
-                  在线聊天室
-                </p>
-                <p className="text-xs text-muted-foreground mt-1.5">
+              <div className="text-left">
+                <div className="flex items-center gap-2">
+                  <h3 className="font-semibold text-sm text-foreground">在线聊天室</h3>
+                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-primary/20 text-primary font-medium">
+                    公共频道
+                  </span>
+                </div>
+                <p className="text-xs text-muted-foreground mt-0.5">
                   实时互动 · 大家一起聊
                 </p>
               </div>
             </div>
-            <div className="flex items-center gap-2">
-              <div className="w-2.5 h-2.5 rounded-full bg-accent animate-pulse" />
-              <div className="w-9 h-9 rounded-full bg-accent/15 border border-accent/40 flex items-center justify-center">
-                <Rocket className="w-4 h-4 text-accent" />
-              </div>
+            <div className="text-xs text-primary font-medium group-hover:translate-x-0.5 transition-transform">
+              进入 &rarr;
             </div>
           </GlassCard>
         </div>
-<motion.a
-          href={APP_DOWNLOAD_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.6 }}
-          className="mt-10 text-sm font-bold animate-app-link"
-          style={{ color: "#a855f7" }}
-        >
-          📲 下载 Dustan Hub App
-        </motion.a>
-        <motion.footer
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.6 }}
-          className="mt-10 mb-2 text-center text-xs text-muted-foreground"
-          style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
-        >
-          © 2020 - 2026 Dustan Hub · 用心运营每一天
-          <br />
-          All Rights Reserved.
-        </motion.footer>
       </main>
 
       <UnlockForum open={forumOpen} onOpenChange={setForumOpen} />
-      <ChatRoomModal open={chatOpen} onOpenChange={setChatOpen} />
+      <ChatRoomModal 
+        open={chatOpen} 
+        onOpenChange={handleChatOpenChange} 
+        targetMessageId={targetMsgId}
+      />
       <AuthGateModal open={authOpen} onOpenChange={setAuthOpen} />
     </div>
   );
