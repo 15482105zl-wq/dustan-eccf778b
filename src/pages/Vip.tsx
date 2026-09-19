@@ -172,20 +172,20 @@ const Vip = () => {
         <div className="w-full max-w-2xl">
           <div
             onClick={handleChatClick}
-            className="bg-transparent rounded-xl py-5 px-16 cursor-pointer relative overflow-hidden transition-colors duration-300 border border-glass-border/40 hover:border-primary/40 group animate-breathe-glow"
+            className="bg-transparent rounded-xl py-5 pl-20 pr-12 cursor-pointer relative overflow-hidden transition-colors duration-300 border border-glass-border/40 hover:border-primary/40 group animate-breathe-glow"
           >
             <div className="absolute left-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-xl bg-primary/10 flex items-center justify-center text-primary group-hover:scale-105 transition-transform">
               <MessageCircle className="w-6 h-6" />
             </div>
             <div className="text-center">
               <div className="flex items-center justify-center gap-2">
-                <h3 className="font-semibold text-lg text-foreground">Dustan AI助手</h3>
-                <span className="text-xs px-2.5 py-1 rounded-full bg-primary/20 text-primary font-medium">
+                <h3 className="font-semibold text-lg text-foreground whitespace-nowrap">Dustan AI助手</h3>
+                <span className="text-xs px-2.5 py-1 rounded-full bg-primary/20 text-primary font-medium shrink-0 whitespace-nowrap">
                   公共频道
                 </span>
               </div>
               <p className="text-sm text-muted-foreground mt-1">
-                实时互动 · 大家一起聊
+                点 @D助手 直接提问 · 大家一起聊
               </p>
             </div>
           </div>
