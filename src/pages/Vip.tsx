@@ -35,11 +35,9 @@ type CardProps = {
 
 const SUBTITLE_MAP: Record<string, string> = {
   "网络加速": "免费专线",
-  "VPN专线": "免费专线",
   "苹果商店": "账号服务",
   "Clash节点": "免费分享",
-  "BBS": "软件社区",
-  "BBS论坛": "软件社区",
+  "BBS论坛": "会员社区",
   "在线聊天室": "实时互动 · 大家一起聊",
 };
 
