@@ -115,8 +115,7 @@ const UserNav = () => {
 
     const withNames = await attachSenderNames((data || []) as Notification[]);
     setNotifications(withNames);
-    setUnreadCount(withNames.filter((n) => !n.is_re
-ad).length);
+    setUnreadCount(withNames.filter((n) => !n.is_read).length);
   }, [user]);
 
   const markAllAsRead = async () => {
@@ -311,8 +310,7 @@ ad).length);
             <LogOut className="w-4 h-4" />
           </button>
         </>
-      ) :
-(
+      ) : (
         <button
           type="button"
           onClick={() => navigate("/login")}
