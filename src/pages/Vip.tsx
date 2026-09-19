@@ -69,7 +69,7 @@ const Vip = () => {
 
   // 监听 URL 参数：如果包含 chat=true 则自动拉起聊天室
   useEffect(() => {
-if (searchParams.get("chat") === "true") {
+    if (searchParams.get("chat") === "true") {
       if (canInteract) {
         setChatOpen(true);
       } else {
@@ -161,16 +161,12 @@ if (searchParams.get("chat") === "true") {
           </p>
         </motion.div>
 
-        <div className="w-full max-w-2xl grid grid-cols-6 gap-3 auto-rows-fr mb-6">
+        <div className="w-full max-w-2xl grid grid-cols-2 gap-4 mb-6">
           {primary.map((c, i) => (
-            <div key={i} className="col-span-3">
-              <VipResourceCard {...c} delay={i * 0.06} />
-            </div>
+            <VipResourceCard key={i} {...c} delay={i * 0.06} />
           ))}
           {gridSecondary.map((c, i) => (
-   <div key={i} className="col-span-3">
-              <VipResourceCard {...c} delay={(i + 2) * 0.06} />
-            </div>
+            <VipResourceCard key={i} {...c} delay={(i + 2) * 0.06} />
           ))}
         </div>
 
@@ -178,7 +174,7 @@ if (searchParams.get("chat") === "true") {
         <div className="w-full max-w-2xl">
           <GlassCard
             onClick={handleChatClick}
-            className="p-4 cursor-pointer hover:border-primary/50 transition-all flex items-center justify-between group"
+            className="p-4 cursor-pointer hover:border-primary/50 transition-all flex items-center justify-between group animate-breathe-glow border-primary/30"
           >
             <div className="flex items-center gap-3.5">
               <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary group-hover:scale-105 transition-transform">
@@ -196,11 +192,29 @@ if (searchParams.get("chat") === "true") {
                 </p>
               </div>
             </div>
-            <div className="text-xs text-primary font-medium group-hover:translate-x-0.5 transition-transform">
-              进入 &rarr;
-            </div>
           </GlassCard>
         </div>
+
+        <motion.a
+          href={APP_DOWNLOAD_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="mt-10 text-sm font-bold animate-app-link"
+          style={{ color: "#a855f7" }}
+        >
+          📲 下载 Dustan Hub App
+        </motion.a>
+
+        <footer
+          className="mt-12 mb-2 text-center text-xs text-muted-foreground"
+          style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
+        >
+          © 2020 - 2026 Dustan Hub · 用心运营每一天
+          <br />
+          All Rights Reserved.
+        </footer>
       </main>
 
       <UnlockForum open={forumOpen} onOpenChange={setForumOpen} />
