@@ -18,6 +18,7 @@ type OwnerProfile = { display_name?: string | null; avatar_url?: string | null }
 interface AiChatModalProps { open: boolean; onOpenChange: (open: boolean) => void; }
 
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+const URL_RE = /(https?:\/\/[^\s，。；、）)]+)/g;
 
 let memorySession: string | null = null;
 
@@ -54,6 +55,61 @@ const formatTime = (iso?: string) => {
   const d = new Date(iso);
   if (isNaN(d.getTime())) return "";
   return d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+};
+
+// 把一段纯文字里的网址变成可点击的链接
+const renderPlain = (text: string, keyPrefix: string) =>
+  text.split(URL_RE).map((seg, i) =>
+    /^https?:\/\//.test(seg) ? (
+      <a key={`${keyPrefix}-${i}`} href={seg} target="_blank" rel="noopener noreferrer" className="underline text-primary break-all">
+        {seg}
+      </a>
+    ) : (
+      seg
+    )
+  );
+
+// 行内：**加粗** 渲染成粗体，其余按普通文字（网址可点击）
+const renderInline = (line: string) =>
+  line.split(/(\*\*[^*]+\*\*)/g).map((part, i) =>
+    part.length > 4 && part.startsWith("**") && part.endsWith("**") ? (
+      <strong key={i} className="font-semibold">
+        {renderPlain(part.slice(2, -2), `b${i}`)}
+      </strong>
+    ) : (
+      <span key={i}>{renderPlain(part, `p${i}`)}</span>
+    )
+  );
+
+// AI 回复的排版：去掉标题符号和代码符号，列表显示成圆点条目，连续空行只保留一个
+const formatAiText = (text: string) => {
+  const prepared = text
+    .replace(/\[([^\]]+)\]\((https?:[^)]+)\)/g, "$1 $2")
+    .replace(/`([^`]+)`/g, "$1")
+    .replace(/^[ \t]*#{1,6}[ \t]*/gm, "");
+  const nodes: JSX.Element[] = [];
+  let prevBlank = true;
+  prepared.split("\n").forEach((raw, i) => {
+    const isBullet = /^[ \t]*[-*][ \t]+/.test(raw);
+    const line = isBullet ? raw.replace(/^[ \t]*[-*][ \t]+/, "") : raw.trim();
+    if (!line) {
+      if (!prevBlank) nodes.push(<div key={i} className="h-2" />);
+      prevBlank = true;
+      return;
+    }
+    prevBlank = false;
+    nodes.push(
+      isBullet ? (
+        <div key={i} className="flex gap-1.5 pl-2">
+          <span className="shrink-0">·</span>
+          <span className="min-w-0 break-words">{renderInline(line)}</span>
+        </div>
+      ) : (
+        <div key={i} className="break-words">{renderInline(line)}</div>
+      )
+    );
+  });
+  return nodes;
 };
 
 const AiAvatar = () => (
@@ -180,12 +236,12 @@ const AiChatModal = ({ open, onOpenChange }: AiChatModalProps) => {
             </div>
 
             <div ref={scrollRef} className="relative z-10 flex-1 overflow-y-auto p-4 space-y-4">
-              <div className="flex items-start gap-2.5">
-                <AiAvatar />
-                <div className="flex flex-col max-w-[75%] items-start">
-                  <div className="flex items-center gap-1.5 mb-1 px-1"><span className="text-xs text-muted-foreground">D助手</span></div>
-                  <div className="rounded-2xl rounded-tl-none px-3.5 py-2 text-sm whitespace-pre-wrap break-words border bg-secondary/60 border-border/40 text-foreground">{WELCOME_TEXT}</div>
+              <div className="flex flex-col gap-1.5">
+                <div className="flex items-center gap-2 px-1">
+                  <AiAvatar />
+                  <span className="text-xs text-muted-foreground">D助手</span>
                 </div>
+                <div className="w-full rounded-2xl rounded-tl-none px-4 py-3 text-sm leading-relaxed whitespace-pre-wrap break-words border bg-secondary/60 border-border/40 text-foreground">{WELCOME_TEXT}</div>
               </div>
 
               {messages.map((m) =>
@@ -194,15 +250,13 @@ const AiChatModal = ({ open, onOpenChange }: AiChatModalProps) => {
                     <div className="max-w-[75%] rounded-2xl rounded-tr-none px-3.5 py-2 text-sm whitespace-pre-wrap break-words bg-primary text-primary-foreground">{m.content}</div>
                   </div>
                 ) : (
-                  <div key={m.id} className="flex items-start gap-2.5">
-                    {m.role === "owner" ? <OwnerAvatar url={owner?.avatar_url} name={ownerName} /> : <AiAvatar />}
-                    <div className="flex flex-col max-w-[75%] items-start">
-                      <div className="flex items-center gap-1.5 mb-1 px-1">
-                        <span className="text-xs text-muted-foreground">{m.role === "owner" ? ownerName : "D助手"}</span>
-                        <span className="text-[10px] text-muted-foreground/60">{formatTime(m.created_at)}</span>
-                      </div>
-                      <div className={`rounded-2xl rounded-tl-none px-3.5 py-2 text-sm whitespace-pre-wrap break-words border text-foreground ${m.role === "owner" ? "bg-primary/15 border-primary/40" : "bg-secondary/60 border-border/40"}`}>{m.content}</div>
+                  <div key={m.id} className="flex flex-col gap-1.5">
+                    <div className="flex items-center gap-2 px-1">
+                      {m.role === "owner" ? <OwnerAvatar url={owner?.avatar_url} name={ownerName} /> : <AiAvatar />}
+                      <span className="text-xs text-muted-foreground">{m.role === "owner" ? ownerName : "D助手"}</span>
+                      <span className="text-[10px] text-muted-foreground/60">{formatTime(m.created_at)}</span>
                     </div>
+                    <div className={`w-full rounded-2xl rounded-tl-none px-4 py-3 text-sm leading-relaxed border text-foreground space-y-1 ${m.role === "owner" ? "bg-primary/15 border-primary/40" : "bg-secondary/60 border-border/40"}`}>{formatAiText(m.content)}</div>
                   </div>
                 )
               )}
@@ -212,9 +266,9 @@ const AiChatModal = ({ open, onOpenChange }: AiChatModalProps) => {
                   <div className="flex justify-end">
                     <div className="max-w-[75%] rounded-2xl rounded-tr-none px-3.5 py-2 text-sm whitespace-pre-wrap break-words bg-primary text-primary-foreground">{pending}</div>
                   </div>
-                  <div className="flex items-start gap-2.5">
+                  <div className="flex items-center gap-2 px-1">
                     <AiAvatar />
-                    <div className="rounded-2xl rounded-tl-none px-3.5 py-2 text-sm border bg-secondary/60 border-border/40 text-muted-foreground animate-pulse">正在思考…</div>
+                    <span className="text-xs text-muted-foreground animate-pulse">D助手 正在思考…</span>
                   </div>
                 </>
               )}
