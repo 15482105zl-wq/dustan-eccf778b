@@ -163,10 +163,7 @@ const UserNav = () => {
           const newNotif = payload.new as Notification;
           const [withName] = await attachSenderNames([newNotif]);
           setNotifications((prev) => [withName, ...prev.slice(0, 9)]);
-
-          if (!withName.is_read) {
-            setUnreadCount((c) => c + 1);
-          }
+          setUnreadCount((c) => c + 1);
         }
       )
       .subscribe();
@@ -176,18 +173,18 @@ const UserNav = () => {
     };
   }, [user, fetchNotifications]);
 
-  // 点击外部收起通知面板
+  // 点击外部关闭通知浮窗
   useEffect(() => {
-    const handleOutsideClick = (e: MouseEvent) => {
+    const handleClickOutside = (e: MouseEvent) => {
       if (panelRef.current && !panelRef.current.contains(e.target as Node)) {
         setShowPanel(false);
       }
     };
     if (showPanel) {
-      document.addEventListener("mousedown", handleOutsideClick);
+      document.addEventListener("mousedown", handleClickOutside);
     }
     return () => {
-      document.removeEventListener("mousedown", handleOutsideClick);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [showPanel]);
 
@@ -197,7 +194,9 @@ const UserNav = () => {
     navigate("/");
   };
 
-  if (loading) return null;
+  if (loading) {
+    return <div className="w-8 h-8 rounded-full bg-muted/40 animate-pulse" />;
+  }
 
   return (
     <div className="flex items-center gap-2 relative">
@@ -206,34 +205,32 @@ const UserNav = () => {
           {/* 通知铃铛 */}
           <div className="relative" ref={panelRef}>
             <button
-              type="button"
               onClick={() => setShowPanel(!showPanel)}
-              className="relative p-2 rounded-full text-foreground/80 hover:text-foreground hover:bg-secondary/50 transition-colors"
+              className="relative p-2 rounded-full hover:bg-white/10 transition-colors text-foreground/80 hover:text-foreground"
               title="通知中心"
             >
               <Bell className="w-5 h-5" />
               {unreadCount > 0 && (
-                <span className="absolute top-1 right-1 flex h-4 w-4 items-center justify-center rounded-full bg-destructive text-[10px] font-bold text-destructive-foreground animate-pulse">
+                <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] px-1 bg-destructive text-destructive-foreground text-[10px] font-bold rounded-full flex items-center justify-center shadow-lg animate-pulse">
                   {unreadCount > 9 ? "9+" : unreadCount}
                 </span>
               )}
             </button>
 
-            {/* 通知浮窗 */}
+            {/* 通知浮窗 - 修复手机端居中且防止被屏幕边缘裁切 */}
             {showPanel && (
-              <div className="absolute right-0 mt-2 w-80 sm:w-96 rounded-xl border border-border/50 bg-background/95 backdrop-blur-md shadow-2xl p-4 z-50 animate-in fade-in zoom-in-95 duration-150">
+              <div className="fixed inset-x-3 top-16 sm:absolute sm:inset-auto sm:right-0 sm:top-auto sm:mt-2 sm:w-96 rounded-xl border border-border/50 bg-background/95 backdrop-blur-md shadow-2xl p-4 z-50 animate-in fade-in zoom-in-95 duration-150">
                 <div className="flex items-center justify-between pb-3 border-b border-border/40">
                   <div className="flex items-center gap-2">
                     <span className="font-semibold text-sm">通知中心</span>
                     {unreadCount > 0 && (
-                      <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full">
+                      <span className="text-[11px] px-2 py-0.5 rounded-full bg-primary/10 text-primary font-medium">
                         {unreadCount} 条未读
                       </span>
                     )}
                   </div>
                   {unreadCount > 0 && (
                     <button
-                      type="button"
                       onClick={markAllAsRead}
                       className="text-xs text-muted-foreground hover:text-foreground flex items-center gap-1 transition-colors"
                     >
@@ -245,8 +242,8 @@ const UserNav = () => {
 
                 <div className="max-h-80 overflow-y-auto divide-y divide-border/20 py-1">
                   {notifications.length === 0 ? (
-                    <div className="text-center py-8 text-xs text-muted-foreground">
-                      暂无任何通知
+                    <div className="py-8 text-center text-xs text-muted-foreground">
+                      暂无通知
                     </div>
                   ) : (
                     notifications.map((n) => (
@@ -260,17 +257,17 @@ const UserNav = () => {
                             : `/vip?chat=true`;
                           navigate(targetUrl);
                         }}
-                        className={`p-3 text-xs cursor-pointer rounded-lg my-1 transition-colors ${
+                        className={`py-2.5 px-2 rounded-lg cursor-pointer transition-colors text-xs ${
                           n.is_read
-                            ? "text-muted-foreground hover:bg-secondary/20"
-                            : "bg-secondary/40 text-foreground font-medium hover:bg-secondary/60"
+                            ? "opacity-60 hover:opacity-100 hover:bg-white/5"
+                            : "bg-primary/5 hover:bg-primary/10 font-medium"
                         }`}
                       >
                         <div className="flex items-center justify-between mb-1">
-                          <span className="text-primary font-semibold">
+                          <span className="font-semibold text-primary/90 truncate max-w-[140px]">
                             {n.sender_name || "系统消息"}
                           </span>
-                          <span className="text-[10px] text-muted-foreground">
+                          <span className="text-[10px] text-muted-foreground shrink-0">
                             {new Date(n.created_at).toLocaleTimeString([], {
                               hour: "2-digit",
                               minute: "2-digit",
@@ -286,25 +283,24 @@ const UserNav = () => {
             )}
           </div>
 
-          {/* 用户头像（已去除旁边名字，仅保留头像） */}
+          {/* 用户个人中心按钮（只显示头像） */}
           <button
-            type="button"
             onClick={() => navigate("/profile")}
-            className="rounded-full hover:ring-2 hover:ring-primary/50 transition-all shrink-0 cursor-pointer"
+            className="rounded-full hover:ring-2 hover:ring-primary/50 transition-all shrink-0"
             title={displayName || "个人中心"}
           >
-            <Avatar className="w-7 h-7 border border-border/50">
-              <AvatarImage src={myProfile?.avatar_url || ""} />
+            <Avatar className="w-7 h-7 ring-1 ring-border/50">
+              {myProfile?.avatar_url && <AvatarImage src={myProfile.avatar_url} />}
               <AvatarFallback className="text-[10px] bg-primary/20 text-primary">
                 {displayName.slice(0, 1).toUpperCase() || <User className="w-3 h-3" />}
               </AvatarFallback>
             </Avatar>
           </button>
 
+          {/* 退出登录按钮 */}
           <button
-            type="button"
             onClick={handleLogout}
-            className="p-2 rounded-full text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors"
+            className="p-1.5 rounded-full hover:bg-white/10 transition-colors text-muted-foreground hover:text-foreground shrink-0"
             title="退出登录"
           >
             <LogOut className="w-4 h-4" />
@@ -312,9 +308,8 @@ const UserNav = () => {
         </>
       ) : (
         <button
-          type="button"
           onClick={() => navigate("/auth")}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-primary text-primary-foreground hover:bg-primary/90 transition-all shadow-sm"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary/10 hover:bg-primary/20 text-primary text-xs font-medium transition-colors"
         >
           <LogIn className="w-3.5 h-3.5" />
           <span>登录</span>
