@@ -113,22 +113,32 @@ const ChatRoomModal = ({ open, onOpenChange, targetMessageId }: ChatRoomModalPro
     if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); handleSend(); }
   };
 
+  if (!open) return null;
+
   return (
     <AnimatePresence>
-      {open && (
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4">
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 20 }} transition={{ duration: 0.2 }} className="w-full h-full relative flex flex-col overflow-hidden bg-background">
-            <ParticleBackground />
-            <div className="relative z-10 flex items-center justify-between px-5 py-4 border-b border-border/40 bg-secondary/20">
-              <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary"><MessageCircle className="w-4 h-4" /></div>
-                <div><h3 className="font-semibold text-sm">Dustan AI助手</h3><p className="text-xs text-muted-foreground">点 @D助手 直接提问 · 大家一起聊</p></div>
+          <div className="relative w-full max-w-2xl h-[85vh] flex flex-col rounded-2xl border border-glass-border/60 bg-background/90 backdrop-blur-xl shadow-2xl overflow-hidden">
+            <div className="absolute inset-0 pointer-events-none opacity-40">
+              <ParticleBackground />
+            </div>
+            <div className="relative z-10 flex items-center justify-between px-4 py-3 border-b border-border/40 bg-secondary/20">
+              <div className="flex items-center gap-2">
+                <MessageCircle className="w-5 h-5 text-primary" />
+                <span className="font-semibold text-sm text-foreground">Dustan AI助手</span>
+                <span className="text-xs text-muted-foreground">点 @D助手 直接提问 · 大家一起聊</span>
               </div>
-              <button onClick={() => onOpenChange(false)} className="w-8 h-8 rounded-full hover:bg-secondary flex items-center justify-center transition-colors"><X className="w-4 h-4" /></button>
+              <button onClick={() => onOpenChange(false)} className="p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary/40 transition-colors">
+                <X className="w-5 h-5" />
+              </button>
             </div>
             <div ref={scrollRef} className="relative z-10 flex-1 overflow-y-auto p-4 space-y-4">
               {messages.length === 0 ? (
-                <div className="h-full flex items-center justify-center text-sm text-muted-foreground">暂无消息，点 @D助手 问它第一个问题吧~</div>
+                <div className="flex flex-col items-center justify-center h-full text-muted-foreground text-xs space-y-1">
+                  <span>暂无消息</span>
+                  <span>快来发表第一条消息吧</span>
+                </div>
               ) : (
                 messages.map((m) => {
                   const isMine = user && m.user_id === user.id;
@@ -139,11 +149,11 @@ const ChatRoomModal = ({ open, onOpenChange, targetMessageId }: ChatRoomModalPro
                   return (
                     <div key={m.id} id={`msg-${m.id}`} className={`flex items-start gap-2.5 transition-all duration-500 rounded-xl p-1.5 ${isHighlighted ? "bg-primary/20 ring-2 ring-primary" : ""} ${isMine ? "flex-row-reverse" : "flex-row"}`}>
                       <Avatar className="w-8 h-8 cursor-pointer shrink-0" onClick={() => !isMine && handleAtUser(displayName)}>
-                   {avatarUrl && <AvatarImage src={avatarUrl} />}
-                        <AvatarFallback className="text-xs bg-secondary">{displayName.slice(0, 1)}</AvatarFallback>
+                        {avatarUrl ? <AvatarImage src={avatarUrl} /> : null}
+                        <AvatarFallback className="text-xs">{displayName.slice(0, 1).toUpperCase()}</AvatarFallback>
                       </Avatar>
-                      <div className={`flex flex-col max-w-[75%] ${isMine ? "items-end" : "items-start"}`}>
-                        <div className="flex items-center gap-1.5 mb-1 px-1">
+                      <div className={`flex flex-col max-w-[88%] ${isMine ? "items-end" : "items-start"}`}>
+                        <div className="flex items-center gap-1.5 mb-1">
                           <span className={`text-xs text-muted-foreground ${!isMine ? "cursor-pointer hover:underline" : ""}`} onClick={() => !isMine && handleAtUser(displayName)}>{displayName}</span>
                           <span className="text-[10px] text-muted-foreground/60">{new Date(m.created_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</span>
                         </div>
@@ -175,9 +185,9 @@ const ChatRoomModal = ({ open, onOpenChange, targetMessageId }: ChatRoomModalPro
                 </button>
               </div>
             </div>
-          </motion.div>
+          </div>
         </motion.div>
-      )}
+      </div>
     </AnimatePresence>
   );
 };
