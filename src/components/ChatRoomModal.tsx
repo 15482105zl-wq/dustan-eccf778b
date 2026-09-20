@@ -57,11 +57,8 @@ const ChatRoomModal = ({ open, onOpenChange, targetMessageId }: ChatRoomModalPro
     }
 
     const list = ((data || []) as ChatMessage[]).reverse();
-
     setMessages(list);
-
     const ids = Array.from(new Set(list.map((m) => m.user_id)));
-
     fetchProfiles(ids);
   }, [fetchProfiles]);
 
@@ -118,7 +115,7 @@ const ChatRoomModal = ({ open, onOpenChange, targetMessageId }: ChatRoomModalPro
   return (
     <AnimatePresence>
       <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4">
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm">
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-background/80 backdrop-blur-sm">
           <div className="relative w-full max-w-2xl h-[85vh] flex flex-col rounded-2xl border border-glass-border/60 bg-background/90 backdrop-blur-xl shadow-2xl overflow-hidden">
             <div className="absolute inset-0 pointer-events-none opacity-40">
               <ParticleBackground />
@@ -127,13 +124,13 @@ const ChatRoomModal = ({ open, onOpenChange, targetMessageId }: ChatRoomModalPro
               <div className="flex items-center gap-2">
                 <MessageCircle className="w-5 h-5 text-primary" />
                 <span className="font-semibold text-sm text-foreground">Dustan AI助手</span>
-                <span className="text-xs text-muted-foreground">点 @D助手 直接提问 · 大家一起聊</span>
+                <span className="text-xs text-muted-foreground hidden sm:inline">点 @D助手 直接提问 · 大家一起聊</span>
               </div>
               <button onClick={() => onOpenChange(false)} className="p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary/40 transition-colors">
                 <X className="w-5 h-5" />
               </button>
             </div>
-            <div ref={scrollRef} className="relative z-10 flex-1 overflow-y-auto p-4 space-y-4">
+            <div ref={scrollRef} className="relative z-10 flex-1 overflow-y-auto overflow-x-hidden p-3 sm:p-4 space-y-3">
               {messages.length === 0 ? (
                 <div className="flex flex-col items-center justify-center h-full text-muted-foreground text-xs space-y-1">
                   <span>暂无消息</span>
@@ -147,17 +144,34 @@ const ChatRoomModal = ({ open, onOpenChange, targetMessageId }: ChatRoomModalPro
                   const avatarUrl = profile?.avatar_url || m.sender_avatar;
                   const isHighlighted = highlightedId === m.id;
                   return (
-                    <div key={m.id} id={`msg-${m.id}`} className={`flex items-start gap-2.5 transition-all duration-500 rounded-xl p-1.5 ${isHighlighted ? "bg-primary/20 ring-2 ring-primary" : ""} ${isMine ? "flex-row-reverse" : "flex-row"}`}>
-                      <Avatar className="w-8 h-8 cursor-pointer shrink-0" onClick={() => !isMine && handleAtUser(displayName)}>
-                        {avatarUrl ? <AvatarImage src={avatarUrl} /> : null}
-                        <AvatarFallback className="text-xs">{displayName.slice(0, 1).toUpperCase()}</AvatarFallback>
-                      </Avatar>
-                      <div className={`flex flex-col max-w-[88%] ${isMine ? "items-end" : "items-start"}`}>
-                        <div className="flex items-center gap-1.5 mb-1">
-                          <span className={`text-xs text-muted-foreground ${!isMine ? "cursor-pointer hover:underline" : ""}`} onClick={() => !isMine && handleAtUser(displayName)}>{displayName}</span>
-                          <span className="text-[10px] text-muted-foreground/60">{new Date(m.created_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</span>
-                        </div>
-                        <div className={`rounded-2xl px-3.5 py-2 text-sm break-words ${isMine ? "bg-primary text-primary-foreground rounded-tr-none" : "bg-secondary/60 text-foreground rounded-tl-none border border-border/40"}`}>{m.content}</div>
+                    <div
+                      key={m.id}
+                      id={`msg-${m.id}`}
+                      className={`w-full flex flex-col gap-1.5 p-3 rounded-xl border transition-all duration-300 ${
+                        isHighlighted
+                          ? "bg-primary/20 ring-2 ring-primary border-primary"
+                          : isMine
+                          ? "bg-primary/10 border-primary/25"
+                          : "bg-secondary/30 border-border/40"
+                      }`}
+                    >
+                      <div className="flex items-center gap-2 w-full">
+                        <Avatar className="w-6 h-6 cursor-pointer shrink-0" onClick={() => !isMine && handleAtUser(displayName)}>
+                          {avatarUrl ? <AvatarImage src={avatarUrl} /> : null}
+                          <AvatarFallback className="text-[10px]">{displayName.slice(0, 1).toUpperCase()}</AvatarFallback>
+                        </Avatar>
+                        <span
+                          className={`text-xs font-semibold ${isMine ? "text-primary" : "text-foreground/90"} ${!isMine ? "cursor-pointer hover:underline" : ""}`}
+                          onClick={() => !isMine && handleAtUser(displayName)}
+                        >
+                          {displayName}
+                        </span>
+                        <span className="text-[10px] text-muted-foreground/60 ml-auto">
+                          {new Date(m.created_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                        </span>
+                      </div>
+                      <div className="w-full text-sm text-foreground leading-relaxed break-words whitespace-pre-wrap pl-1">
+                        {m.content}
                       </div>
                     </div>
                   );
