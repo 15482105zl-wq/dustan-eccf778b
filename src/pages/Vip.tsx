@@ -9,7 +9,7 @@ import UserNav from "@/components/UserNav";
 import VipResourceCard from "@/components/VipResourceCard";
 import UnlockForum from "@/components/UnlockForum";
 import AuthGateModal from "@/components/AuthGateModal";
-import ChatRoomModal from "@/components/ChatRoomModal";
+import AiChatModal from "@/components/AiChatModal";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -63,20 +63,14 @@ const Vip = () => {
   const requireAuth = () => setAuthOpen(true);
   const canInteract = !!user?.email_confirmed_at;
 
-  const targetMsgId = searchParams.get("msgId") || undefined;
-
-  // 监听 URL 参数：如果包含 chat=true 则自动拉起聊天室
+  // 网址包含 chat=true 时，自动打开 AI 助手对话（不需要登录）
   useEffect(() => {
     if (searchParams.get("chat") === "true") {
-      if (canInteract) {
-        setChatOpen(true);
-      } else {
-        requireAuth();
-      }
+      setChatOpen(true);
     }
-  }, [searchParams, canInteract]);
+  }, [searchParams]);
 
-  // 关闭聊天室时清理 URL 中的 chat 和 msgId 参数
+  // 关闭对话时清理 URL 中的 chat 和 msgId 参数
   const handleChatOpenChange = (open: boolean) => {
     setChatOpen(open);
     if (!open && searchParams.get("chat")) {
@@ -113,7 +107,7 @@ const Vip = () => {
         : isVpn
           ? () => navigate("/accelerate")
           : isChatRoom
-            ? () => (canInteract ? setChatOpen(true) : requireAuth())
+            ? () => setChatOpen(true)
             : undefined,
     };
   };
@@ -122,7 +116,7 @@ const Vip = () => {
   const secondary = rows.filter((r) => r.category === "secondary").map(toCard);
   const gridSecondary = secondary.filter((c) => c.title !== "在线聊天室");
 
-  const handleChatClick = () => (canInteract ? setChatOpen(true) : requireAuth());
+  const handleChatClick = () => setChatOpen(true);
 
   return (
     <div className="min-h-screen relative">
@@ -168,24 +162,19 @@ const Vip = () => {
           ))}
         </div>
 
-    {/* 底部横向在线聊天室卡片 */}
+    {/* 底部横向 AI 助手卡片 */}
         <div className="w-full max-w-2xl">
           <div
             onClick={handleChatClick}
-            className="bg-transparent rounded-xl py-5 pl-20 pr-12 cursor-pointer relative overflow-hidden transition-colors duration-300 border border-glass-border/40 hover:border-primary/40 group animate-breathe-glow"
+            className="bg-transparent rounded-xl py-5 px-16 cursor-pointer relative overflow-hidden transition-colors duration-300 border border-glass-border/40 hover:border-primary/40 group animate-breathe-glow"
           >
             <div className="absolute left-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-xl bg-primary/10 flex items-center justify-center text-primary group-hover:scale-105 transition-transform">
               <MessageCircle className="w-6 h-6" />
             </div>
             <div className="text-center">
-              <div className="flex items-center justify-center gap-2">
-                <h3 className="font-semibold text-lg text-foreground whitespace-nowrap">Dustan AI助手</h3>
-                <span className="text-xs px-2.5 py-1 rounded-full bg-primary/20 text-primary font-medium shrink-0 whitespace-nowrap">
-                  公共频道
-                </span>
-              </div>
+              <h3 className="font-semibold text-lg text-foreground whitespace-nowrap">Dustan AI助手</h3>
               <p className="text-sm text-muted-foreground mt-1">
-                点 @D助手 直接提问
+                有问题直接问我
               </p>
             </div>
           </div>
@@ -214,11 +203,7 @@ const Vip = () => {
       </main>
 
       <UnlockForum open={forumOpen} onOpenChange={setForumOpen} />
-      <ChatRoomModal 
-        open={chatOpen} 
-        onOpenChange={handleChatOpenChange} 
-        targetMessageId={targetMsgId}
-      />
+      <AiChatModal open={chatOpen} onOpenChange={handleChatOpenChange} />
       <AuthGateModal open={authOpen} onOpenChange={setAuthOpen} />
     </div>
   );
