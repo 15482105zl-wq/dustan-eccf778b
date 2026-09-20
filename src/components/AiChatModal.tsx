@@ -235,7 +235,7 @@ const AiChatModal = ({ open, onOpenChange }: AiChatModalProps) => {
               <button onClick={() => onOpenChange(false)} className="w-8 h-8 rounded-full hover:bg-secondary flex items-center justify-center transition-colors"><X className="w-4 h-4" /></button>
             </div>
 
-            <div ref={scrollRef} className="relative z-10 flex-1 min-w-0 overflow-y-auto overflow-x-hidden px-2 py-3 space-y-4">
+            <div ref={scrollRef} className="relative z-10 flex-1 min-w-0 overflow-y-auto overflow-x-hidden px-0 py-3 space-y-4">
               <div className="flex flex-col gap-1.5 min-w-0">
                 <div className="flex items-center gap-2 px-1">
                   <AiAvatar />
