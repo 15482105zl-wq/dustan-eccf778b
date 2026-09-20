@@ -3,10 +3,10 @@ import { AnimatePresence, motion } from "framer-motion";
 import { X, Send, MessageCircle } from "lucide-react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import ParticleBackground from "@/components/ParticleBackground";
+import { supabase } from "@/integrations/supabase/client";
 
 const WORKER_URL = "https://tg-dustan.15482105zl.workers.dev";
 const AI_AVATAR_URL = "https://pxyfbbohoazbslneagix.supabase.co/storage/v1/object/public/avatars//d-avatar.png";
-const OWNER_AVATAR_URL = "https://pxyfbbohoazbslneagix.supabase.co/storage/v1/object/public/avatars/6ee6e82b-c990-4373-aa98-84f6b46baf52/avatar.png";
 const SESSION_KEY = "dustan_ai_session";
 const MAX_LENGTH = 500;
 const POLL_INTERVAL = 5000;
@@ -14,6 +14,7 @@ const WELCOME_TEXT = "你好，我是 Dustan AI助手。网络加速、苹果账
 
 type Role = "user" | "ai" | "owner";
 type ChatMessage = { id: number; role: Role; content: string; created_at: string };
+type OwnerProfile = { display_name?: string | null; avatar_url?: string | null };
 interface AiChatModalProps { open: boolean; onOpenChange: (open: boolean) => void; }
 
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -62,10 +63,10 @@ const AiAvatar = () => (
   </Avatar>
 );
 
-const OwnerAvatar = () => (
+const OwnerAvatar = ({ url, name }: { url?: string | null; name: string }) => (
   <Avatar className="w-8 h-8 shrink-0">
-    <AvatarImage src={OWNER_AVATAR_URL} />
-    <AvatarFallback className="text-xs bg-primary/20 text-primary">站</AvatarFallback>
+    {url && <AvatarImage src={url} />}
+    <AvatarFallback className="text-xs bg-primary/20 text-primary">{name.slice(0, 1)}</AvatarFallback>
   </Avatar>
 );
 
@@ -74,11 +75,13 @@ const AiChatModal = ({ open, onOpenChange }: AiChatModalProps) => {
   const [input, setInput] = useState("");
   const [pending, setPending] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
+  const [owner, setOwner] = useState<OwnerProfile | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const lastIdRef = useRef(0);
   const sendingRef = useRef(false);
   const sessionRef = useRef("");
   const sending = pending !== null;
+  const ownerName = owner?.display_name || "站长";
 
   const fetchNew = useCallback(async () => {
     const session = sessionRef.current;
@@ -99,6 +102,19 @@ const AiChatModal = ({ open, onOpenChange }: AiChatModalProps) => {
       // 网络波动，下一轮再试
     }
   }, []);
+
+  // 每次打开对话时，取一次站长账号当前的昵称和头像
+  useEffect(() => {
+    if (!open) return;
+    (async () => {
+      try {
+        const { data } = await (supabase as any).rpc("get_site_owner_profile");
+        if (data) setOwner(data as OwnerProfile);
+      } catch {
+        // 取不到就用默认的“站长”
+      }
+    })();
+  }, [open]);
 
   useEffect(() => {
     if (!open) return;
@@ -179,10 +195,10 @@ const AiChatModal = ({ open, onOpenChange }: AiChatModalProps) => {
                   </div>
                 ) : (
                   <div key={m.id} className="flex items-start gap-2.5">
-                    {m.role === "owner" ? <OwnerAvatar /> : <AiAvatar />}
+                    {m.role === "owner" ? <OwnerAvatar url={owner?.avatar_url} name={ownerName} /> : <AiAvatar />}
                     <div className="flex flex-col max-w-[75%] items-start">
                       <div className="flex items-center gap-1.5 mb-1 px-1">
-                        <span className="text-xs text-muted-foreground">{m.role === "owner" ? "站长" : "D助手"}</span>
+                        <span className="text-xs text-muted-foreground">{m.role === "owner" ? ownerName : "D助手"}</span>
                         <span className="text-[10px] text-muted-foreground/60">{formatTime(m.created_at)}</span>
                       </div>
                       <div className={`rounded-2xl rounded-tl-none px-3.5 py-2 text-sm whitespace-pre-wrap break-words border text-foreground ${m.role === "owner" ? "bg-primary/15 border-primary/40" : "bg-secondary/60 border-border/40"}`}>{m.content}</div>
