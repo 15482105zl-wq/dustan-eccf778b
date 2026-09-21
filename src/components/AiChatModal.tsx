@@ -6,7 +6,7 @@ import ParticleBackground from "@/components/ParticleBackground";
 import { supabase } from "@/integrations/supabase/client";
 
 const WORKER_URL = "https://tg-dustan.15482105zl.workers.dev";
-const AI_AVATAR_URL = "https://pxyfbbohoazbslneagix.supabase.co/storage/v1/object/public/avatars//d-avatar.png";
+const AI_AVATAR_URL = "https://pxyfbbohoazbslneagix.supabase.co/storage/v1/object/public/avatars/d-avatar.png";
 const SESSION_KEY = "dustan_ai_session";
 const MAX_LENGTH = 500;
 const POLL_INTERVAL = 5000;
