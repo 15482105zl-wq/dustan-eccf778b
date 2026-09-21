@@ -235,7 +235,7 @@ const AiChatModal = ({ open, onOpenChange }: AiChatModalProps) => {
               <button onClick={() => onOpenChange(false)} className="w-8 h-8 rounded-full hover:bg-secondary flex items-center justify-center transition-colors"><X className="w-4 h-4" /></button>
             </div>
 
-            <div ref={scrollRef} className="relative z-10 flex-1 min-w-0 overflow-y-auto overflow-x-hidden px-0 py-3 space-y-4">
+            <div ref={scrollRef} className="relative z-10 flex-1 min-w-0 overflow-y-auto overflow-x-hidden px-2 py-3 space-y-4">
               <div className="flex flex-col gap-1.5 min-w-0">
                 <div className="flex items-center gap-2 px-1">
                   <AiAvatar />
@@ -246,7 +246,7 @@ const AiChatModal = ({ open, onOpenChange }: AiChatModalProps) => {
 
               {messages.map((m) =>
                 m.role === "user" ? (
-                  <div key={m.id} className="flex justify-end min-w-0">
+                  <div key={m.id} className="flex justify-end min-w-0 pr-1">
                     <div className="max-w-[85%] min-w-0 rounded-2xl rounded-tr-none px-3.5 py-2 text-sm whitespace-pre-wrap [overflow-wrap:anywhere] bg-primary text-primary-foreground">{m.content}</div>
                   </div>
                 ) : (
@@ -263,7 +263,7 @@ const AiChatModal = ({ open, onOpenChange }: AiChatModalProps) => {
 
               {pending !== null && (
                 <>
-                  <div className="flex justify-end min-w-0">
+                  <div className="flex justify-end min-w-0 pr-1">
                     <div className="max-w-[85%] min-w-0 rounded-2xl rounded-tr-none px-3.5 py-2 text-sm whitespace-pre-wrap [overflow-wrap:anywhere] bg-primary text-primary-foreground">{pending}</div>
                   </div>
                   <div className="flex items-center gap-2 px-1">
@@ -276,7 +276,7 @@ const AiChatModal = ({ open, onOpenChange }: AiChatModalProps) => {
               {notice && <div className="text-center text-xs text-muted-foreground">{notice}</div>}
             </div>
 
-            <div className="relative z-10 px-2 pt-3 border-t border-border/40 bg-secondary/10" style={{ paddingBottom: "calc(1.25rem + env(safe-area-inset-bottom))" }}>
+            <div className="relative z-10 px-2 pt-3 border-t border-border/40 bg-secondary/10" style={{ paddingBottom: "calc(3rem + env(safe-area-inset-bottom))" }}>
               <div className="flex items-end gap-2">
                 <div className="flex-1 relative">
                   <textarea value={input} onChange={(e) => setInput(e.target.value)} onKeyDown={handleKeyDown} placeholder="问点什么... (Enter 发送)" disabled={sending} maxLength={MAX_LENGTH} rows={3} className="w-full resize-none rounded-xl bg-background/80 border border-border/50 px-4 pt-3 pb-6 text-base focus:outline-none focus:ring-1 focus:ring-primary disabled:opacity-50" />
