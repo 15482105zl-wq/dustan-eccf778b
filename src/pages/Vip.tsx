@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { ArrowLeft, Apple, Film, Globe, Lock, Rocket, Search, MessageCircle, type LucideIcon } from "lucide-react";
+import { ArrowLeft, Apple, Film, Globe, Lock, Rocket, Search, type LucideIcon } from "lucide-react";
 import ParticleBackground from "@/components/ParticleBackground";
 import GlassCard from "@/components/GlassCard";
 import SEO from "@/components/SEO";
@@ -10,10 +10,11 @@ import VipResourceCard from "@/components/VipResourceCard";
 import UnlockForum from "@/components/UnlockForum";
 import AuthGateModal from "@/components/AuthGateModal";
 import AiChatModal from "@/components/AiChatModal";
+import AiIcon from "@/components/AiIcon";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 
-const ICON_MAP: Record<string, LucideIcon> = { Rocket, Apple, Globe, Lock, Film, Search, MessageCircle };
+const ICON_MAP: Record<string, LucideIcon> = { Rocket, Apple, Globe, Lock, Film, Search };
 
 type VipResourceRow = {
   id: string;
@@ -47,7 +48,7 @@ const FALLBACK_ROWS: VipResourceRow[] = [
   { id: "f5", category: "secondary", icon: "Lock", title: "BBS", url: null, highlight: false, sort_order: 2 },
 ];
 
-const APP_DOWNLOAD_URL = "https://pxyfbbohoazbslneagix.supabase.co/storage/v1/object/public/downloads//DustanHub.apk";
+const APP_DOWNLOAD_URL = "https://pxyfbbohoazbslneagix.supabase.co/storage/v1/object/public/downloads/DustanHub.apk";
 
 const Vip = () => {
   const navigate = useNavigate();
@@ -115,8 +116,8 @@ const Vip = () => {
   return (
     <div className="min-h-screen relative">
       <SEO
-        title="全球数字服务"
-        description=""
+        title="全球��字服务"
+        description="尊享节点 · 独享账号 · 极速体验"
         path="/vip"
         noindex
       />
@@ -156,14 +157,14 @@ const Vip = () => {
           ))}
         </div>
 
-    {/* 底部横向 AI 助手卡片 */}
+        {/* 底部横向 AI 助手卡片 */}
         <div className="w-full max-w-2xl">
           <div
             onClick={handleChatClick}
             className="bg-transparent rounded-xl py-5 px-16 cursor-pointer relative overflow-hidden transition-colors duration-300 border border-glass-border/40 hover:border-primary/40 group animate-breathe-glow"
           >
-            <div className="absolute left-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-xl bg-primary/10 flex items-center justify-center text-primary group-hover:scale-105 transition-transform">
-              <MessageCircle className="w-6 h-6" />
+            <div className="absolute left-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-xl bg-primary/10 flex items-center justify-center group-hover:scale-105 transition-transform">
+              <AiIcon className="w-7 h-7" />
             </div>
             <div className="text-center">
               <h3 className="font-semibold text-lg text-foreground whitespace-nowrap">Dustan AI助手</h3>
