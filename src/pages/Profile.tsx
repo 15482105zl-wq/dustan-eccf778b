@@ -71,6 +71,17 @@ const Profile = () => {
     setUploading(true);
     try {
       const path = `${user.id}/avatar.${ext}`;
+
+      const { data: existingFiles } = await supabase.storage.from("avatars").list(user.id);
+      if (existingFiles && existingFiles.length > 0) {
+        const staleFiles = existingFiles
+          .filter((f) => f.name !== `avatar.${ext}`)
+          .map((f) => `${user.id}/${f.name}`);
+        if (staleFiles.length > 0) {
+          await supabase.storage.from("avatars").remove(staleFiles);
+        }
+      }
+
       const { error: uploadError } = await supabase.storage
         .from("avatars")
         .upload(path, file, { upsert: true, contentType: file.type });
@@ -91,7 +102,6 @@ const Profile = () => {
         toast({ title: "头像保存失败", description: upsertErr.message, variant: "destructive" });
         return;
       }
-      // Force-refresh auth user_metadata so global state picks up new avatar immediately
       await supabase.auth.updateUser({ data: { avatar_url: cacheBusted } });
       toast({ title: "头像已更新 ✨" });
     } catch (err: any) {
