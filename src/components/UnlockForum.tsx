@@ -8,13 +8,15 @@ import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Lock, Pencil, Pin, Plus, Send, Trash2, User as UserIcon, X } from "lucide-react";
+import { ImagePlus, Loader2, Lock, Pencil, Pin, Plus, Send, Trash2, User as UserIcon, X } from "lucide-react";
 import { motion } from "framer-motion";
 
 
 const MAX_TITLE = 60;
 const MAX_BODY = 500;
 const MAX_REPLY = 200;
+const MAX_IMAGES = 2;
+const MAX_IMAGE_SIZE = 2 * 1024 * 1024; // 2MB
 
 interface Thread {
   id: string;
@@ -23,6 +25,7 @@ interface Thread {
   content: string;
   created_at: string;
   pinned: boolean;
+  image_urls: string[];
 }
 interface Reply {
   id: string;
@@ -77,6 +80,11 @@ const sortThreads = (list: Thread[]) =>
     return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
   });
 
+const randomId = () =>
+  typeof crypto !== "undefined" && crypto.randomUUID
+    ? crypto.randomUUID()
+    : Math.random().toString(36).slice(2) + Date.now().toString(36);
+
 const UnlockForum = ({ open, onOpenChange }: Props) => {
   const { user, isAdmin } = useAuth();
   const { toast } = useToast();
@@ -89,6 +97,7 @@ const UnlockForum = ({ open, onOpenChange }: Props) => {
   const [composeOpen, setComposeOpen] = useState(false);
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
+  const [composeImages, setComposeImages] = useState<File[]>([]);
   const [posting, setPosting] = useState(false);
   const [replyInputs, setReplyInputs] = useState<Record<string, string>>({});
   const [replying, setReplying] = useState<string | null>(null);
@@ -159,28 +168,55 @@ const UnlockForum = ({ open, onOpenChange }: Props) => {
 
   const nameOf = (uid: string) => profiles[uid]?.display_name || "匿名用户";
 
-  const handlePostThread = async () => {
-    if (!user) return;
-    if (!isAdmin) {
-      toast({ title: "无权发布", description: "仅站长账号可发布主贴", variant: "destructive" });
+  const handlePickImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (!file) return;
+    if (composeImages.length >= MAX_IMAGES) return;
+    if (!file.type.startsWith("image/")) {
+      toast({ title: "文件类型不对", description: "只能上传图片", variant: "destructive" });
       return;
     }
+    if (file.size > MAX_IMAGE_SIZE) {
+      toast({ title: "图片太大", description: "单张图片不能超过 2MB，请压缩后重试", variant: "destructive" });
+      return;
+    }
+    setComposeImages((prev) => [...prev, file]);
+  };
+
+  const removeComposeImage = (idx: number) => {
+    setComposeImages((prev) => prev.filter((_, i) => i !== idx));
+  };
+
+  const handlePostThread = async () => {
+    if (!user) return;
     const t = title.trim().slice(0, MAX_TITLE);
     const c = body.trim().slice(0, MAX_BODY);
     if (!t || !c) return;
     setPosting(true);
     try {
-      const payload = { user_id: user.id, title: t, content: c };
+      const imageUrls: string[] = [];
+      for (const file of composeImages) {
+        const ext = (file.name.split(".").pop() || "jpg").toLowerCase();
+        const path = `${user.id}/${randomId()}.${ext}`;
+        const { error: upErr } = await supabase.storage.from("forum-images").upload(path, file);
+        if (upErr) throw upErr;
+        const { data: pub } = supabase.storage.from("forum-images").getPublicUrl(path);
+        imageUrls.push(pub.publicUrl);
+      }
+
+      const payload = { user_id: user.id, title: t, content: c, image_urls: imageUrls };
       const { data, error } = await supabase
         .from("forum_threads")
         .insert(payload)
-        .select("id, user_id, title, content, created_at, pinned")
+        .select("id, user_id, title, content, created_at, pinned, image_urls")
         .single();
       if (error) throw error;
       if (data) setThreads((prev) => sortThreads([data as Thread, ...prev]));
       await fetchProfiles([user.id]);
       setTitle("");
       setBody("");
+      setComposeImages([]);
       setComposeOpen(false);
       toast({ title: "主贴已发布 ✨" });
     } catch (e: any) {
@@ -213,11 +249,27 @@ const UnlockForum = ({ open, onOpenChange }: Props) => {
     }
   };
 
-  const handleDeleteThread = async (id: string) => {
+  const handleDeleteThread = async (t: Thread) => {
     if (!window.confirm("确定删除此主贴及其所有回帖？")) return;
-    const { error } = await supabase.from("forum_threads").delete().eq("id", id);
-    if (error) return toast({ title: "删除失败", description: error.message, variant: "destructive" });
-    setThreads((prev) => prev.filter((t) => t.id !== id));
+    try {
+      if (t.image_urls && t.image_urls.length > 0) {
+        const marker = "/forum-images/";
+        const paths = t.image_urls
+          .map((url) => {
+            const idx = url.indexOf(marker);
+            return idx >= 0 ? url.slice(idx + marker.length) : null;
+          })
+          .filter((p): p is string => !!p);
+        if (paths.length) {
+          await supabase.storage.from("forum-images").remove(paths);
+        }
+      }
+      const { error } = await supabase.from("forum_threads").delete().eq("id", t.id);
+      if (error) throw error;
+      setThreads((prev) => prev.filter((th) => th.id !== t.id));
+    } catch (e: any) {
+      toast({ title: "删除失败", description: e.message, variant: "destructive" });
+    }
   };
 
   const handleDeleteReply = async (rid: string, tid: string) => {
@@ -287,7 +339,7 @@ const UnlockForum = ({ open, onOpenChange }: Props) => {
           </DialogTitle>
         </DialogHeader>
 
-        {isOwner && (
+        {user && (
           <div className="border border-accent/40 rounded-xl p-3 bg-accent/5 shadow-[0_0_18px_hsl(var(--accent)/0.25)]">
             {!composeOpen ? (
               <Button
@@ -313,10 +365,37 @@ const UnlockForum = ({ open, onOpenChange }: Props) => {
                   maxLength={MAX_BODY}
                   className="bg-transparent border-accent/30 min-h-[100px] resize-none"
                 />
+
+                <div className="flex items-center gap-2 flex-wrap">
+                  {composeImages.map((file, i) => (
+                    <div key={i} className="relative w-16 h-16 rounded-lg overflow-hidden border border-accent/30">
+                      <img src={URL.createObjectURL(file)} alt="" className="w-full h-full object-cover" />
+                      <button
+                        type="button"
+                        onClick={() => removeComposeImage(i)}
+                        className="absolute top-0.5 right-0.5 w-4 h-4 rounded-full bg-background/80 flex items-center justify-center"
+                      >
+                        <X className="w-2.5 h-2.5" />
+                      </button>
+                    </div>
+                  ))}
+                  {composeImages.length < MAX_IMAGES && (
+                    <label className="w-16 h-16 rounded-lg border border-dashed border-accent/40 flex items-center justify-center cursor-pointer text-accent/70 hover:bg-accent/5">
+                      <ImagePlus className="w-5 h-5" />
+                      <input type="file" accept="image/*" className="hidden" onChange={handlePickImage} />
+                    </label>
+                  )}
+                </div>
+                <p className="text-[10px] text-muted-foreground">最多 {MAX_IMAGES} 张图片，单张不超过 2MB</p>
+
                 <div className="flex items-center justify-between text-xs text-muted-foreground">
                   <span>{body.length}/{MAX_BODY}</span>
                   <div className="flex gap-2">
-                    <Button size="sm" variant="ghost" onClick={() => { setComposeOpen(false); setTitle(""); setBody(""); }}>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={() => { setComposeOpen(false); setTitle(""); setBody(""); setComposeImages([]); }}
+                    >
                       取消
                     </Button>
                     <Button
@@ -352,6 +431,7 @@ const UnlockForum = ({ open, onOpenChange }: Props) => {
               const author = profiles[t.user_id];
               const list = replies[t.id] || [];
               const isEditing = editingId === t.id;
+              const canManage = isOwner || user?.id === t.user_id;
               return (
                 <AccordionItem
                   key={t.id}
@@ -416,15 +496,32 @@ const UnlockForum = ({ open, onOpenChange }: Props) => {
                         </div>
                       </div>
                     ) : (
-                      <p className="text-sm text-foreground/85 whitespace-pre-wrap break-words mb-3 border-l-2 border-accent/40 pl-3">
-                        {linkify(t.content)}
-                      </p>
+                      <>
+                        <p className="text-sm text-foreground/85 whitespace-pre-wrap break-words mb-3 border-l-2 border-accent/40 pl-3">
+                          {linkify(t.content)}
+                        </p>
+                        {t.image_urls && t.image_urls.length > 0 && (
+                          <div className="flex gap-2 mb-3">
+                            {t.image_urls.map((url, i) => (
+                              <a
+                                key={i}
+                                href={url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="block w-24 h-24 rounded-lg overflow-hidden border border-border/40"
+                              >
+                                <img src={url} alt="" className="w-full h-full object-cover" />
+                              </a>
+                            ))}
+                          </div>
+                        )}
+                      </>
                     )}
 
-                    {isOwner && !isEditing && (
+                    {!isEditing && canManage && (
                       <div className="flex items-center gap-3 mb-3">
                         <button
-                          onClick={() => handleDeleteThread(t.id)}
+                          onClick={() => handleDeleteThread(t)}
                           className="text-[11px] text-muted-foreground hover:text-destructive inline-flex items-center gap-1"
                         >
                           <Trash2 className="w-3 h-3" /> 删除主贴
@@ -435,12 +532,14 @@ const UnlockForum = ({ open, onOpenChange }: Props) => {
                         >
                           <Pencil className="w-3 h-3" /> 编辑
                         </button>
-                        <button
-                          onClick={() => handleTogglePin(t)}
-                          className="text-[11px] text-muted-foreground hover:text-accent inline-flex items-center gap-1"
-                        >
-                          <Pin className="w-3 h-3" /> {t.pinned ? "取消置顶" : "置顶"}
-                        </button>
+                        {isOwner && (
+                          <button
+                            onClick={() => handleTogglePin(t)}
+                            className="text-[11px] text-muted-foreground hover:text-accent inline-flex items-center gap-1"
+                          >
+                            <Pin className="w-3 h-3" /> {t.pinned ? "取消置顶" : "置顶"}
+                          </button>
+                        )}
                       </div>
                     )}
 
