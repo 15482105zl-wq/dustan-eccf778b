@@ -8,7 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { useToast } from "@/hooks/use-toast";
-import { ImagePlus, Loader2, Lock, Pencil, Pin, Plus, Send, Trash2, User as UserIcon, X } from "lucide-react";
+import { Bell, ImagePlus, Loader2, Lock, Pencil, Pin, Plus, Reply as ReplyIcon, Send, Trash2, User as UserIcon, X } from "lucide-react";
 import { motion } from "framer-motion";
 
 
@@ -33,6 +33,7 @@ interface Reply {
   user_id: string;
   content: string;
   created_at: string;
+  reply_to_id: string | null;
 }
 interface Profile {
   user_id: string;
@@ -101,6 +102,8 @@ const UnlockForum = ({ open, onOpenChange }: Props) => {
   const [posting, setPosting] = useState(false);
   const [replyInputs, setReplyInputs] = useState<Record<string, string>>({});
   const [replying, setReplying] = useState<string | null>(null);
+  const [replyTarget, setReplyTarget] = useState<Record<string, string | null>>({});
+  const [unreadNotice, setUnreadNotice] = useState(0);
 
   // 编辑主贴相关状态
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -161,8 +164,31 @@ const UnlockForum = ({ open, onOpenChange }: Props) => {
     }
   }, [fetchProfiles, toast]);
 
+  // 打开论坛时顺便看一眼有没有新回复通知，有的话提示一下并标记已读
+  const checkNotifications = useCallback(async () => {
+    if (!user) return;
+    const { count } = await supabase
+      .from("forum_notifications")
+      .select("id", { count: "exact", head: true })
+      .eq("recipient_id", user.id)
+      .eq("is_read", false);
+    if (count && count > 0) {
+      setUnreadNotice(count);
+      await supabase
+        .from("forum_notifications")
+        .update({ is_read: true })
+        .eq("recipient_id", user.id)
+        .eq("is_read", false);
+    } else {
+      setUnreadNotice(0);
+    }
+  }, [user]);
+
   useEffect(() => {
-    if (open) loadAll();
+    if (open) {
+      loadAll();
+      checkNotifications();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
 
@@ -235,12 +261,18 @@ const UnlockForum = ({ open, onOpenChange }: Props) => {
     try {
       const { data, error } = await supabase
         .from("forum_replies")
-        .insert({ thread_id: threadId, user_id: user.id, content: content.slice(0, MAX_REPLY) })
+        .insert({
+          thread_id: threadId,
+          user_id: user.id,
+          content: content.slice(0, MAX_REPLY),
+          reply_to_id: replyTarget[threadId] || null,
+        })
         .select("*")
         .single();
       if (error) throw error;
       setReplies((prev) => ({ ...prev, [threadId]: [...(prev[threadId] || []), data as Reply] }));
       setReplyInputs((prev) => ({ ...prev, [threadId]: "" }));
+      setReplyTarget((prev) => ({ ...prev, [threadId]: null }));
       await fetchProfiles([user.id]);
     } catch (e: any) {
       toast({ title: "回帖失败", description: e.message, variant: "destructive" });
@@ -339,6 +371,13 @@ const UnlockForum = ({ open, onOpenChange }: Props) => {
           </DialogTitle>
         </DialogHeader>
 
+        {unreadNotice > 0 && (
+          <div className="flex items-center gap-2 text-xs text-accent bg-accent/10 border border-accent/30 rounded-lg px-3 py-2">
+            <Bell className="w-3.5 h-3.5 shrink-0" />
+            你有 {unreadNotice} 条新回复，看看是谁在跟你聊～
+          </div>
+        )}
+
         {user && (
           <div className="border border-accent/40 rounded-xl p-3 bg-accent/5 shadow-[0_0_18px_hsl(var(--accent)/0.25)]">
             {!composeOpen ? (
@@ -432,6 +471,9 @@ const UnlockForum = ({ open, onOpenChange }: Props) => {
               const list = replies[t.id] || [];
               const isEditing = editingId === t.id;
               const canManage = isOwner || user?.id === t.user_id;
+              const currentTarget = replyTarget[t.id]
+                ? list.find((r) => r.id === replyTarget[t.id])
+                : null;
               return (
                 <AccordionItem
                   key={t.id}
@@ -546,6 +588,7 @@ const UnlockForum = ({ open, onOpenChange }: Props) => {
                     <div className="space-y-2 mt-2">
                       {list.map((r) => {
                         const rp = profiles[r.user_id];
+                        const target = r.reply_to_id ? list.find((x) => x.id === r.reply_to_id) : null;
                         return (
                           <motion.div
                             key={r.id}
@@ -563,12 +606,25 @@ const UnlockForum = ({ open, onOpenChange }: Props) => {
                               <div className="flex items-center gap-2 text-[11px]">
                                 <span className="font-semibold text-foreground/90">{nameOf(r.user_id)}</span>
                                 <span className="text-muted-foreground">{formatTime(r.created_at)}</span>
+                                {user && (
+                                  <button
+                                    onClick={() => setReplyTarget((prev) => ({ ...prev, [t.id]: r.id }))}
+                                    className="text-muted-foreground hover:text-accent inline-flex items-center gap-0.5"
+                                  >
+                                    <ReplyIcon className="w-3 h-3" />
+                                  </button>
+                                )}
                                 {(isOwner || user?.id === r.user_id) && (
                                   <button onClick={() => handleDeleteReply(r.id, t.id)} className="ml-auto text-muted-foreground hover:text-destructive">
                                     <X className="w-3 h-3" />
                                   </button>
                                 )}
                               </div>
+                              {target && (
+                                <div className="text-[10px] text-accent/70 mt-0.5">
+                                  回复 {nameOf(target.user_id)}：{target.content.slice(0, 20)}
+                                </div>
+                              )}
                               <p className="text-sm text-foreground/85 mt-0.5 whitespace-pre-wrap break-words">{linkify(r.content)}</p>
                             </div>
                           </motion.div>
@@ -577,23 +633,33 @@ const UnlockForum = ({ open, onOpenChange }: Props) => {
                     </div>
 
                     {user ? (
-                      <div className="mt-3 flex gap-2">
-                        <Input
-                          value={replyInputs[t.id] || ""}
-                          onChange={(e) => setReplyInputs((prev) => ({ ...prev, [t.id]: e.target.value.slice(0, MAX_REPLY) }))}
-                          placeholder="纯文字回帖…"
-                          maxLength={MAX_REPLY}
-                          className="bg-transparent border-glass-border/50 h-9 text-sm"
-                          onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); handleReply(t.id); } }}
-                        />
-                        <Button
-                          size="sm"
-                          disabled={replying === t.id || !(replyInputs[t.id] || "").trim()}
-                          onClick={() => handleReply(t.id)}
-                          className="bg-primary/20 text-primary border border-primary/40 hover:bg-primary/30"
-                        >
-                          {replying === t.id ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Send className="w-3.5 h-3.5" />}
-                        </Button>
+                      <div className="mt-3">
+                        {currentTarget && (
+                          <div className="flex items-center justify-between text-[11px] text-muted-foreground bg-accent/5 border border-accent/20 rounded-lg px-2 py-1 mb-1.5">
+                            <span className="truncate">回复 {nameOf(currentTarget.user_id)}：{currentTarget.content.slice(0, 20)}</span>
+                            <button onClick={() => setReplyTarget((prev) => ({ ...prev, [t.id]: null }))}>
+                              <X className="w-3 h-3" />
+                            </button>
+                          </div>
+                        )}
+                        <div className="flex gap-2">
+                          <Input
+                            value={replyInputs[t.id] || ""}
+                            onChange={(e) => setReplyInputs((prev) => ({ ...prev, [t.id]: e.target.value.slice(0, MAX_REPLY) }))}
+                            placeholder="纯文字回帖…"
+                            maxLength={MAX_REPLY}
+                            className="bg-transparent border-glass-border/50 h-9 text-sm"
+                            onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); handleReply(t.id); } }}
+                          />
+                          <Button
+                            size="sm"
+                            disabled={replying === t.id || !(replyInputs[t.id] || "").trim()}
+                            onClick={() => handleReply(t.id)}
+                            className="bg-primary/20 text-primary border border-primary/40 hover:bg-primary/30"
+                          >
+                            {replying === t.id ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Send className="w-3.5 h-3.5" />}
+                          </Button>
+                        </div>
                       </div>
                     ) : (
                       <div className="mt-3 text-xs text-muted-foreground">请登录后回帖</div>
