@@ -32,6 +32,7 @@ type CardProps = {
   subtitle: string;
   url?: string;
   onClick?: () => void;
+  badge?: boolean;
 };
 
 const SUBTITLE_MAP: Record<string, string> = {
@@ -58,6 +59,7 @@ const Vip = () => {
   const [chatOpen, setChatOpen] = useState(false);
   const [authOpen, setAuthOpen] = useState(false);
   const [rows, setRows] = useState<VipResourceRow[]>(FALLBACK_ROWS);
+  const [hasUnread, setHasUnread] = useState(false);
 
   const requireAuth = () => setAuthOpen(true);
   const canInteract = !!user?.email_confirmed_at;
@@ -91,6 +93,22 @@ const Vip = () => {
     })();
   }, []);
 
+  // BBS 未读通知红点：打开/关闭论坛时都重新查一次
+  useEffect(() => {
+    if (!user) {
+      setHasUnread(false);
+      return;
+    }
+    (async () => {
+      const { count } = await supabase
+        .from("forum_notifications")
+        .select("id", { count: "exact", head: true })
+        .eq("recipient_id", user.id)
+        .eq("is_read", false);
+      setHasUnread(!!count && count > 0);
+    })();
+  }, [user, forumOpen]);
+
   const toCard = (r: VipResourceRow): CardProps => {
     const isBBS = r.title === "BBS" || r.title === "BBS论坛";
     const isVpn = r.title.includes("VPN") || r.title.includes("V2PN") || r.title.includes("网络加速");
@@ -100,6 +118,7 @@ const Vip = () => {
       title,
       subtitle: SUBTITLE_MAP[title] ?? "精选服务",
       url: isBBS || isVpn ? undefined : r.url ?? undefined,
+      badge: isBBS ? hasUnread : undefined,
       onClick: isBBS
         ? () => (canInteract ? setForumOpen(true) : requireAuth())
         : isVpn
@@ -116,7 +135,7 @@ const Vip = () => {
   return (
     <div className="min-h-screen relative">
       <SEO
-        title="全球��字服务"
+        title="全球数字服务"
         description="尊享节点 · 独享账号 · 极速体验"
         path="/vip"
         noindex
