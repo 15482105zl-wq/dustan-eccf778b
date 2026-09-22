@@ -97,6 +97,9 @@ const Index = () => {
         </motion.div>
 
         <h2 className="sr-only">资源通道</h2>
+        <p className="text-center text-xs text-muted-foreground mb-4">
+          一个资源库 · 多种下载方式
+        </p>
         <div className="w-full max-w-2xl grid grid-cols-2 gap-3 sm:gap-4 mb-6">
           {resourceLinks.map((item, i) => (
             <GlassCard
@@ -111,8 +114,8 @@ const Index = () => {
           ))}
         </div>
 
-        <p className="text-center text-xs text-muted-foreground -mt-1 mb-6">
-          一个资源库 · 多种下载方式
+        <p className="text-center text-xs text-muted-foreground mb-6">
+          网络加速 · 海外账号 · 会员专属
         </p>
 
         <h2 className="sr-only">增值服务</h2>
@@ -128,7 +131,7 @@ const Index = () => {
               </div>
               <div>
                 <p className="font-heading font-bold text-foreground text-xl sm:text-2xl leading-tight">
-                  全球数字服务入口
+                  全球���字服务入口
                 </p>
                 <p className="text-xs text-muted-foreground mt-1.5">
                   Global Services
