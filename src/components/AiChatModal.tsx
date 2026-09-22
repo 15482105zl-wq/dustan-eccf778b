@@ -10,7 +10,7 @@ const AI_AVATAR_URL = "https://pxyfbbohoazbslneagix.supabase.co/storage/v1/objec
 const SESSION_KEY = "dustan_ai_session";
 const MAX_LENGTH = 500;
 const POLL_INTERVAL = 5000;
-const WELCOME_TEXT = "你好，我是 Dustan AI助手，网络加速VPN、海外成品账号、海外应用与开源软件、国内解锁软件，有问题直接问我就行😊。\nhttps://dustan.lovable.app";
+const WELCOME_TEXT = "你好，我是 Dustan AI助手，网络加速VPN、海外成品账号、海外应用与开源软件、国内解锁软件，有问题直接问我就行。\nhttps://dustan.lovable.app";
 
 type Role = "user" | "ai" | "owner";
 type ChatMessage = { id: number; role: Role; content: string; created_at: string };
