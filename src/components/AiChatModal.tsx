@@ -10,7 +10,7 @@ const AI_AVATAR_URL = "https://pxyfbbohoazbslneagix.supabase.co/storage/v1/objec
 const SESSION_KEY = "dustan_ai_session";
 const MAX_LENGTH = 500;
 const POLL_INTERVAL = 5000;
-const WELCOME_TEXT = "你好，我是 Dustan AI助手。网络加速、苹果账号、软件资源、使用上的问题，直接问我就行。";
+const WELCOME_TEXT = "你好，我是 Dustan AI助手，网络加速VPN、海外成品账号、海外应用与开源软件、国内解锁软件，有问题直接问我就行😊。\nhttps://dustan.lovable.app";
 
 type Role = "user" | "ai" | "owner";
 type ChatMessage = { id: number; role: Role; content: string; created_at: string };
@@ -171,7 +171,6 @@ const AiChatModal = ({ open, onOpenChange }: AiChatModalProps) => {
       }
     })();
   }, [open]);
-
   useEffect(() => {
     if (!open) return;
     sessionRef.current = getSessionId();
@@ -241,7 +240,7 @@ const AiChatModal = ({ open, onOpenChange }: AiChatModalProps) => {
                   <AiAvatar />
                   <span className="text-xs text-muted-foreground">D助手</span>
                 </div>
-                <div className="w-full min-w-0 rounded-2xl rounded-tl-none px-4 py-3 text-sm leading-relaxed whitespace-pre-wrap [overflow-wrap:anywhere] border bg-secondary/60 border-border/40 text-foreground">{WELCOME_TEXT}</div>
+                <div className="w-full min-w-0 rounded-2xl rounded-tl-none px-4 py-3 text-sm leading-relaxed whitespace-pre-wrap [overflow-wrap:anywhere] border bg-secondary/60 border-border/40 text-foreground">{renderPlain(WELCOME_TEXT, "welcome")}</div>
               </div>
 
               {messages.map((m) =>
