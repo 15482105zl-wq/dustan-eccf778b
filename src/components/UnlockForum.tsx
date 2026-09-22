@@ -55,7 +55,6 @@ const formatTime = (iso: string) => {
   return d.toLocaleDateString("zh-CN");
 };
 
-// 把文本里的网址转成可点击链接
 const linkify = (text: string) => {
   const parts = text.split(/(https?:\/\/[^\s]+)/g);
   return parts.map((part, i) =>
@@ -105,7 +104,6 @@ const UnlockForum = ({ open, onOpenChange }: Props) => {
   const [replyTarget, setReplyTarget] = useState<Record<string, string | null>>({});
   const [unreadNotice, setUnreadNotice] = useState(0);
 
-  // 编辑主贴相关状态
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editTitle, setEditTitle] = useState("");
   const [editBody, setEditBody] = useState("");
@@ -164,7 +162,6 @@ const UnlockForum = ({ open, onOpenChange }: Props) => {
     }
   }, [fetchProfiles, toast]);
 
-  // 打开论坛时顺便看一眼有没有新回复通知，有的话提示一下并标记已读
   const checkNotifications = useCallback(async () => {
     if (!user) return;
     const { count } = await supabase
@@ -609,9 +606,9 @@ const UnlockForum = ({ open, onOpenChange }: Props) => {
                                 {user && (
                                   <button
                                     onClick={() => setReplyTarget((prev) => ({ ...prev, [t.id]: r.id }))}
-                                    className="text-muted-foreground hover:text-accent inline-flex items-center gap-0.5"
+                                    className="text-accent hover:text-accent/80 inline-flex items-center gap-1 font-medium bg-accent/10 px-1.5 py-0.5 rounded-full border border-accent/30"
                                   >
-                                    <ReplyIcon className="w-3 h-3" />
+                                    <ReplyIcon className="w-3 h-3" /> 回复
                                   </button>
                                 )}
                                 {(isOwner || user?.id === r.user_id) && (
