@@ -13,7 +13,7 @@ const resourceLinks = [
   { icon: Globe, label: "夸克网盘", color: "text-primary", url: "https://pan.quark.cn/s/29e2744b31f1" },
   { icon: Shield, label: "UC网盘", color: "text-primary", url: "https://drive.uc.cn/s/b2243269454c4" },
 ];
-const APP_DOWNLOAD_URL = "https://pxyfbbohoazbslneagix.supabase.co/storage/v1/object/public/downloads//DustanHub.apk";
+const APP_DOWNLOAD_URL = "https://pxyfbbohoazbslneagix.supabase.co/storage/v1/object/public/downloads/DustanHub.apk";
 const Index = () => {
   const navigate = useNavigate();
   const [shared, setShared] = useState(false);
@@ -131,7 +131,7 @@ const Index = () => {
               </div>
               <div>
                 <p className="font-heading font-bold text-foreground text-xl sm:text-2xl leading-tight">
-                  全球���字服务入口
+                  全球数字服务入口
                 </p>
                 <p className="text-xs text-muted-foreground mt-1.5">
                   Global Services
