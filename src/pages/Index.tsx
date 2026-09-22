@@ -86,7 +86,7 @@ const Index = () => {
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-12"
+          className="text-center mb-4"
         >
           <h1 className="font-heading text-3xl sm:text-4xl font-bold mb-3">
             <span className="gradient-text glow-text">Dustan Hub</span>
@@ -97,7 +97,7 @@ const Index = () => {
         </motion.div>
 
         <h2 className="sr-only">资源通道</h2>
-        <p className="text-center text-xs text-muted-foreground mb-4">
+        <p className="text-center text-xs gradient-text font-medium mb-4">
           一个资源库 · 多种下载方式
         </p>
         <div className="w-full max-w-2xl grid grid-cols-2 gap-3 sm:gap-4 mb-6">
