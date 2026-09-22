@@ -14,40 +14,44 @@ export type Database = {
   }
   public: {
     Tables: {
-      comments: {
+      ai_chat_messages: {
         Row: {
           content: string
           created_at: string
-          id: string
-          parent_id: string | null
-          updated_at: string
-          user_id: string
+          id: number
+          role: string
+          session_id: string
         }
         Insert: {
           content: string
           created_at?: string
-          id?: string
-          parent_id?: string | null
-          updated_at?: string
-          user_id: string
+          id?: never
+          role: string
+          session_id: string
         }
         Update: {
           content?: string
           created_at?: string
-          id?: string
-          parent_id?: string | null
-          updated_at?: string
-          user_id?: string
+          id?: never
+          role?: string
+          session_id?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "comments_parent_id_fkey"
-            columns: ["parent_id"]
-            isOneToOne: false
-            referencedRelation: "comments"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
+      }
+      app_config: {
+        Row: {
+          key: string
+          value: string
+        }
+        Insert: {
+          key: string
+          value: string
+        }
+        Update: {
+          key?: string
+          value?: string
+        }
+        Relationships: []
       }
       forum_replies: {
         Row: {
@@ -86,6 +90,8 @@ export type Database = {
           content: string
           created_at: string
           id: string
+          image_urls: string[]
+          pinned: boolean
           title: string
           updated_at: string
           user_id: string
@@ -94,6 +100,8 @@ export type Database = {
           content: string
           created_at?: string
           id?: string
+          image_urls?: string[]
+          pinned?: boolean
           title: string
           updated_at?: string
           user_id: string
@@ -102,6 +110,8 @@ export type Database = {
           content?: string
           created_at?: string
           id?: string
+          image_urls?: string[]
+          pinned?: boolean
           title?: string
           updated_at?: string
           user_id?: string
@@ -206,6 +216,30 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      ai_chat_check_secret: { Args: { p_secret: string }; Returns: undefined }
+      ai_chat_poll: {
+        Args: { p_after?: number; p_secret: string; p_session: string }
+        Returns: Json
+      }
+      ai_chat_send: {
+        Args: {
+          p_content: string
+          p_role: string
+          p_secret: string
+          p_session: string
+        }
+        Returns: number
+      }
+      ai_chat_state: {
+        Args: {
+          p_limit?: number
+          p_pause_minutes?: number
+          p_secret: string
+          p_session: string
+        }
+        Returns: Json
+      }
+      get_site_owner_profile: { Args: never; Returns: Json }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
