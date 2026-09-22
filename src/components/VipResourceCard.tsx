@@ -8,9 +8,10 @@ interface Props {
   url?: string;
   onClick?: () => void;
   delay?: number;
+  badge?: boolean;
 }
 
-const VipResourceCard = ({ icon: Icon, title, subtitle, url, onClick, delay = 0 }: Props) => {
+const VipResourceCard = ({ icon: Icon, title, subtitle, url, onClick, delay = 0, badge = false }: Props) => {
   const handleClick = () => {
     if (onClick) return onClick();
     if (url) window.open(url, "_blank", "noopener,noreferrer");
@@ -26,6 +27,9 @@ const VipResourceCard = ({ icon: Icon, title, subtitle, url, onClick, delay = 0 
       onClick={handleClick}
       className="bg-transparent rounded-xl p-3 cursor-pointer relative overflow-hidden group transition-colors duration-300 min-h-[108px] flex flex-col items-center justify-center text-center border border-glass-border/40 hover:border-primary/40"
     >
+      {badge && (
+        <span className="absolute top-2.5 right-2.5 w-2.5 h-2.5 rounded-full bg-destructive shadow-[0_0_6px_hsl(var(--destructive)/0.7)]" />
+      )}
       <div className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0 mb-2 bg-primary/15 text-primary">
         <Icon className="w-5 h-5" />
       </div>
