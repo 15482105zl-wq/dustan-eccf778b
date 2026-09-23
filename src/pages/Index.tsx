@@ -60,8 +60,8 @@ const Index = () => {
         path="/"
       />
       <ParticleBackground />
-      <main className="relative z-10 flex flex-col items-center px-4 py-12">
-        <div className="w-full max-w-2xl flex items-center justify-between mb-4">
+      <main className="relative z-10 flex flex-col items-center px-4 pt-3 pb-10 sm:pt-10 sm:pb-12">
+        <div className="w-full max-w-2xl flex items-center justify-between mb-3">
           <motion.img
             src="/logo.png"
             alt="Dustan Hub"
@@ -74,7 +74,8 @@ const Index = () => {
             <button
               onClick={handleShare}
               className="flex items-center gap-1.5 h-9 px-3 rounded-full bg-accent/15 border border-accent/40 text-accent text-xs transition-transform hover:scale-105"
-              aria-label="分享"
+              aria-label=
+"分享"
             >
               {shared ? <Check className="w-3.5 h-3.5" /> : <Share2 className="w-3.5 h-3.5" />}
               {shared ? "已复制" : "分享"}
@@ -86,9 +87,9 @@ const Index = () => {
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-4"
+          className="text-center mb-3"
         >
-          <h1 className="font-heading text-3xl sm:text-4xl font-bold mb-3">
+          <h1 className="font-heading text-3xl sm:text-4xl font-bold mb-2">
             <span className="gradient-text glow-text">Dustan Hub</span>
           </h1>
           <p className="text-muted-foreground text-sm max-w-md mx-auto">
@@ -97,10 +98,10 @@ const Index = () => {
         </motion.div>
 
         <h2 className="sr-only">资源通道</h2>
-        <p className="text-center text-xs gradient-text font-medium mb-4">
+        <p className="text-center text-xs gradient-text font-medium mb-3">
           一个资源库 · 多种下载方式
         </p>
-        <div className="w-full max-w-2xl grid grid-cols-2 gap-3 sm:gap-4 mb-6">
+        <div className="w-full max-w-2xl grid grid-cols-2 gap-3 sm:gap-4 mb-5">
           {resourceLinks.map((item, i) => (
             <GlassCard
               key={item.label}
@@ -114,7 +115,7 @@ const Index = () => {
           ))}
         </div>
 
-        <p className="text-center text-xs text-muted-foreground mb-6">
+        <p className="text-center text-xs text-muted-foreground mb-5">
           网络加速 · 海外账号 · 会员专属
         </p>
 
@@ -146,23 +147,24 @@ const Index = () => {
             </div>
           </GlassCard>
         </div>
-<motion.a
+        <motion.a
           href={APP_DOWNLOAD_URL}
           target="_blank"
           rel="noopener noreferrer"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.65 }}
-          className="mt-10 text-sm font-bold animate-app-link"
+          className="mt-8 text-sm font-bold animate-app-link"
           style={{ color: "#a855f7" }}
         >
           📲 下载 Dustan Hub App
         </motion.a>
         <motion.footer
-          initial={{ opacity: 0 }}
+          initial={{ opacity:
+0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.7 }}
-          className="mt-12 mb-2 text-center text-xs text-muted-foreground"
+          className="mt-10 mb-2 text-center text-xs text-muted-foreground"
           style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
         >
           © 2020 - 2026 Dustan Hub · 用心运营每一天
