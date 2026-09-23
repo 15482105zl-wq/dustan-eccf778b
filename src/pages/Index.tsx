@@ -77,8 +77,7 @@ const Index = () => {
               className="flex items-center gap-1.5 h-9 px-3 rounded-full bg-accent/15 border border-accent/40 text-accent text-xs transition-transform hover:scale-105"
               aria-label="分享"
             >
-              {shared ? <Check className="w-3.5 h-3.5" /> :
-<Share2 className="w-3.5 h-3.5" />}
+              {shared ? <Check className="w-3.5 h-3.5" /> : <Share2 className="w-3.5 h-3.5" />}
               {shared ? "已复制" : "分享"}
             </button>
             <UserNav />
@@ -162,18 +161,14 @@ const Index = () => {
           📲 下载 Dustan Hub App
         </motion.a>
 
-        <motion.footer
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.7 }}
-          className="mt-1
-0 mb-2 text-center text-xs text-muted-foreground"
+        <footer
+          className="mt-12 mb-2 text-center text-xs text-muted-foreground"
           style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
         >
           © 2020 - 2026 Dustan Hub · 用心运营每一天
           <br />
           All Rights Reserved.
-        </motion.footer>
+        </footer>
       </main>
     </div>
   );
