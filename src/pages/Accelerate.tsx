@@ -8,7 +8,8 @@ import UserNav from "@/components/UserNav";
 
 const NICE_URL = "https://dustan.mmmoyou.com/#/register?code=0lc8ncSH";
 const LVCHA_URL = "https://pan.quark.cn/s/1d9113e678f3";
-const APP_DOWNLOAD_URL = "https://pxyfbbohoazbslneagix.supabase.co/storage/v1/object/public/downloads//DustanHub.apk";
+const APP_DOWNLOAD_URL = "https://pxyfbbohoazbslneagix.supabase.co/storage/v1/object/public/downloads/DustanHub.apk";
+
 const Accelerate = () => {
   const navigate = useNavigate();
   const [couponCopied, setCouponCopied] = useState(false);
@@ -30,8 +31,9 @@ const Accelerate = () => {
     <div className="min-h-screen relative">
       <SEO title="网络加速" description="" path="/accelerate" noindex />
       <ParticleBackground />
-      <main className="relative z-10 flex flex-col items-center px-4 py-10">
-        <div className="w-full max-w-4xl flex items-center justify-between mb-6">
+      <main className="relative z-10 flex flex-col items-center px-4 pt-3 pb-10 sm:py-10">
+        <div className="w-full max-w-4xl flex
+items-center justify-between mb-6">
           <button
             onClick={() => navigate("/vip")}
             className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-primary transition-colors"
@@ -109,7 +111,7 @@ const Accelerate = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.45, delay: 0.05 }}
             className="glass rounded-2xl p-6 flex flex-col border-primary/30"
-          >
+       >
             <div className="flex items-center gap-3 mb-3">
               <div className="w-11 h-11 rounded-xl bg-primary/15 text-primary flex items-center justify-center">
                 <Leaf className="w-5 h-5" />
@@ -131,7 +133,8 @@ const Accelerate = () => {
             </button>
           </motion.div>
         </div>
-<motion.a
+
+        <motion.a
           href={APP_DOWNLOAD_URL}
           target="_blank"
           rel="noopener noreferrer"
@@ -142,6 +145,7 @@ const Accelerate = () => {
         >
           📲 下载 Dustan Hub App
         </motion.a>
+
         <footer
           className="mt-12 mb-2 text-center text-xs text-muted-foreground"
           style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
