@@ -31,9 +31,8 @@ const Accelerate = () => {
     <div className="min-h-screen relative">
       <SEO title="网络加速" description="" path="/accelerate" noindex />
       <ParticleBackground />
-      <main className="relative z-10 flex flex-col items-center px-4 pt-3 pb-10 sm:py-10">
-        <div className="w-full max-w-4xl flex
-items-center justify-between mb-6">
+      <main className="relative z-10 flex flex-col items-center px-4 pt-5 pb-10 sm:py-10">
+        <div className="w-full max-w-4xl flex items-center justify-between mb-6">
           <button
             onClick={() => navigate("/vip")}
             className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-primary transition-colors"
@@ -111,7 +110,7 @@ items-center justify-between mb-6">
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.45, delay: 0.05 }}
             className="glass rounded-2xl p-6 flex flex-col border-primary/30"
-       >
+          >
             <div className="flex items-center gap-3 mb-3">
               <div className="w-11 h-11 rounded-xl bg-primary/15 text-primary flex items-center justify-center">
                 <Leaf className="w-5 h-5" />
