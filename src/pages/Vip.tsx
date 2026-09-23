@@ -142,7 +142,7 @@ const Vip = () => {
       />
       <ParticleBackground />
 
-      <main className="relative z-10 px-4 pt-3 pb-8 sm:py-8 flex flex-col items-center min-h-screen">
+      <main className="relative z-10 px-4 pt-5 pb-8 sm:py-8 flex flex-col items-center min-h-screen">
         <div className="w-full max-w-2xl flex items-center justify-between mb-6">
           <button
             onClick={() => navigate("/")}
