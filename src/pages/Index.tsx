@@ -14,6 +14,7 @@ const resourceLinks = [
   { icon: Shield, label: "UC网盘", color: "text-primary", url: "https://drive.uc.cn/s/b2243269454c4" },
 ];
 const APP_DOWNLOAD_URL = "https://pxyfbbohoazbslneagix.supabase.co/storage/v1/object/public/downloads/DustanHub.apk";
+
 const Index = () => {
   const navigate = useNavigate();
   const [shared, setShared] = useState(false);
@@ -60,7 +61,7 @@ const Index = () => {
         path="/"
       />
       <ParticleBackground />
-      <main className="relative z-10 flex flex-col items-center px-4 pt-3 pb-10 sm:pt-10 sm:pb-12">
+      <main className="relative z-10 flex flex-col items-center px-4 pt-6 pb-10 sm:pt-10 sm:pb-12">
         <div className="w-full max-w-2xl flex items-center justify-between mb-3">
           <motion.img
             src="/logo.png"
@@ -74,10 +75,10 @@ const Index = () => {
             <button
               onClick={handleShare}
               className="flex items-center gap-1.5 h-9 px-3 rounded-full bg-accent/15 border border-accent/40 text-accent text-xs transition-transform hover:scale-105"
-              aria-label=
-"分享"
+              aria-label="分享"
             >
-              {shared ? <Check className="w-3.5 h-3.5" /> : <Share2 className="w-3.5 h-3.5" />}
+              {shared ? <Check className="w-3.5 h-3.5" /> :
+<Share2 className="w-3.5 h-3.5" />}
               {shared ? "已复制" : "分享"}
             </button>
             <UserNav />
@@ -147,6 +148,7 @@ const Index = () => {
             </div>
           </GlassCard>
         </div>
+
         <motion.a
           href={APP_DOWNLOAD_URL}
           target="_blank"
@@ -159,12 +161,13 @@ const Index = () => {
         >
           📲 下载 Dustan Hub App
         </motion.a>
+
         <motion.footer
-          initial={{ opacity:
-0 }}
+          initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.7 }}
-          className="mt-10 mb-2 text-center text-xs text-muted-foreground"
+          className="mt-1
+0 mb-2 text-center text-xs text-muted-foreground"
           style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
         >
           © 2020 - 2026 Dustan Hub · 用心运营每一天
