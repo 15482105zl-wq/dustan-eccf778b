@@ -25,7 +25,7 @@ const VipResourceCard = ({ icon: Icon, title, subtitle, url, onClick, delay = 0,
       whileHover={{ scale: 1.02, y: -2 }}
       whileTap={{ scale: 0.98 }}
       onClick={handleClick}
-      className="bg-transparent rounded-xl p-3 cursor-pointer relative overflow-hidden group transition-colors duration-300 min-h-[108px] flex flex-col items-center justify-center text-center border border-glass-border/40 hover:border-primary/40 animate-breathe-glow"
+      className="bg-transparent rounded-xl p-3 cursor-pointer relative overflow-hidden group transition-colors duration-300 min-h-[108px] flex flex-col items-center justify-center text-center border-0 animate-breathe-glow"
     >
       {badge && (
         <span className="absolute top-2.5 right-2.5 w-2.5 h-2.5 rounded-full bg-destructive shadow-[0_0_6px_hsl(var(--destructive)/0.7)]" />
