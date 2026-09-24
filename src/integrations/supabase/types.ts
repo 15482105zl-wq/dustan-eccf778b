@@ -53,11 +53,54 @@ export type Database = {
         }
         Relationships: []
       }
+      forum_notifications: {
+        Row: {
+          created_at: string
+          id: string
+          is_read: boolean
+          recipient_id: string
+          reply_id: string
+          thread_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_read?: boolean
+          recipient_id: string
+          reply_id: string
+          thread_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_read?: boolean
+          recipient_id?: string
+          reply_id?: string
+          thread_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "forum_notifications_reply_id_fkey"
+            columns: ["reply_id"]
+            isOneToOne: false
+            referencedRelation: "forum_replies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "forum_notifications_thread_id_fkey"
+            columns: ["thread_id"]
+            isOneToOne: false
+            referencedRelation: "forum_threads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       forum_replies: {
         Row: {
           content: string
           created_at: string
           id: string
+          reply_to_id: string | null
           thread_id: string
           user_id: string
         }
@@ -65,6 +108,7 @@ export type Database = {
           content: string
           created_at?: string
           id?: string
+          reply_to_id?: string | null
           thread_id: string
           user_id: string
         }
@@ -72,10 +116,18 @@ export type Database = {
           content?: string
           created_at?: string
           id?: string
+          reply_to_id?: string | null
           thread_id?: string
           user_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "forum_replies_reply_to_id_fkey"
+            columns: ["reply_to_id"]
+            isOneToOne: false
+            referencedRelation: "forum_replies"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "forum_replies_thread_id_fkey"
             columns: ["thread_id"]
