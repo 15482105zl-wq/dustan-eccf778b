@@ -30,7 +30,10 @@ jobs:
         run: npx cap add android || npx cap sync android
 
       - name: Generate app icons
-        run: npx @capacitor/assets generate --android --assetPath resources --iconBackgroundColor '#000000'
+        run: npx @capacitor/assets generate --android --assetPath resources --iconBackgroundColor '#00000000' --iconBackgroundColorDark '#00000000'
+
+      - name: Sync icons to native project
+        run: npx cap sync android
 
       - name: Generate signing key
         run: |
