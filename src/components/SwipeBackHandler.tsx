@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Capacitor } from "@capacitor/core";
+import { App as CapacitorApp } from "@capacitor/app";
 
 const EDGE_WIDTH = 24;
 const SWIPE_THRESHOLD = 80;
@@ -37,6 +38,8 @@ const SwipeBackHandler = () => {
       if (deltaX > SWIPE_THRESHOLD && deltaY < MAX_VERTICAL) {
         if (window.history.length > 1) {
           navigate(-1);
+        } else {
+          CapacitorApp.exitApp();
         }
       }
     };
