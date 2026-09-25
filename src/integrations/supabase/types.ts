@@ -200,6 +200,42 @@ export type Database = {
         }
         Relationships: []
       }
+      site_announcements: {
+        Row: {
+          button_text: string
+          content: Json
+          download_url: string
+          id: string
+          is_active: boolean
+          tag: string
+          title: string
+          updated_at: string
+          version: string
+        }
+        Insert: {
+          button_text?: string
+          content?: Json
+          download_url?: string
+          id?: string
+          is_active?: boolean
+          tag?: string
+          title?: string
+          updated_at?: string
+          version?: string
+        }
+        Update: {
+          button_text?: string
+          content?: Json
+          download_url?: string
+          id?: string
+          is_active?: boolean
+          tag?: string
+          title?: string
+          updated_at?: string
+          version?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           id: string
