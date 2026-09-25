@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Download, X, Edit3, Check, Sparkles, RefreshCw } from "lucide-react";
+import { Download, X, Edit3, Check, Sparkles, RefreshCw, Eye } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
@@ -41,6 +41,7 @@ export default function AnnouncementModal() {
   const [data, setData] = useState(DEFAULT_ANNOUNCEMENT);
   const [isOpen, setIsOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const [editTab, setEditTab] = useState<"form" | "preview">("form");
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [editForm, setEditForm] = useState<EditForm>({
@@ -99,12 +100,12 @@ export default function AnnouncementModal() {
 
   const startEdit = () => {
     setEditForm({ ...data, contentRaw: data.content.join("\n") });
+    setEditTab("form");
     setIsOpen(true);
     setIsEditing(true);
   };
 
-  const save = async (event: React.FormEvent) => {
-    event.preventDefault();
+  const executeSave = async () => {
     setSaving(true);
     const content = editForm.contentRaw.split("\n").map((line) => line.trim()).filter(Boolean);
     const payload = { ...editForm, content, updated_at: new Date().toISOString() };
@@ -138,9 +139,14 @@ export default function AnnouncementModal() {
     }
   };
 
+  const handleFormSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    void executeSave();
+  };
+
   if (loading) return null;
 
-  // 当弹窗处于关闭状态时：如果当前登录了管理员，在右下角常驻展示悬浮管理入口
+  // 当弹窗关闭且未在编辑时，管理员在右下角常驻显示「📢 公告管理」入口
   if (!isOpen && !isEditing) {
     if (!isAdmin) return null;
     return (
@@ -156,6 +162,11 @@ export default function AnnouncementModal() {
     );
   }
 
+  const previewContent = editForm.contentRaw
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean);
+
   return (
     <AnimatePresence>
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
@@ -168,6 +179,7 @@ export default function AnnouncementModal() {
           <div className="absolute -top-20 -left-20 w-48 h-48 bg-primary/20 rounded-full blur-3xl pointer-events-none" />
           <div className="absolute -bottom-20 -right-20 w-48 h-48 bg-purple-500/10 rounded-full blur-3xl pointer-events-none" />
 
+          {/* 右上角按钮 */}
           <div className="absolute top-4 right-4 flex items-center gap-2">
             {isAdmin && !isEditing && (
               <button
@@ -190,97 +202,191 @@ export default function AnnouncementModal() {
           </div>
 
           {isEditing ? (
-            <form onSubmit={save} className="space-y-3 pt-2 text-xs">
+            <div className="space-y-3 pt-1 text-xs">
+              {/* 顶部 Tab 切换与启用开关 */}
               <div className="flex items-center justify-between pb-2 border-b border-zinc-800">
-                <span className="font-bold text-white text-sm">🛠️ 管理员编辑公告</span>
-                <label className="flex items-center gap-1.5 text-zinc-300 cursor-pointer">
+                <div className="flex items-center gap-1 bg-zinc-900 p-1 rounded-xl border border-zinc-800">
+                  <button
+                    type="button"
+                    onClick={() => setEditTab("form")}
+                    className={`flex items-center gap-1 px-3 py-1 rounded-lg text-xs font-medium transition-all ${
+                      editTab === "form"
+                        ? "bg-primary text-primary-foreground shadow-sm"
+                        : "text-zinc-400 hover:text-white"
+                    }`}
+                  >
+                    <Edit3 className="w-3.5 h-3.5" />
+                    <span>编辑内容</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setEditTab("preview")}
+                    className={`flex items-center gap-1 px-3 py-1 rounded-lg text-xs font-medium transition-all ${
+                      editTab === "preview"
+                        ? "bg-primary text-primary-foreground shadow-sm"
+                        : "text-zinc-400 hover:text-white"
+                    }`}
+                  >
+                    <Eye className="w-3.5 h-3.5" />
+                    <span>实时预览</span>
+                  </button>
+                </div>
+
+                <label className="flex items-center gap-1.5 text-zinc-300 cursor-pointer select-none">
                   <input
                     type="checkbox"
                     checked={editForm.is_active}
                     onChange={(e) => setEditForm({ ...editForm, is_active: e.target.checked })}
-                    className="rounded border-zinc-700 bg-zinc-900"
+                    className="rounded border-zinc-700 bg-zinc-900 accent-primary"
                   />
-                  启用弹窗
+                  <span>启用弹窗</span>
                 </label>
               </div>
 
-              <label className="text-zinc-400 block">
-                标签徽章
-                <input
-                  value={editForm.tag}
-                  onChange={(e) => setEditForm({ ...editForm, tag: e.target.value })}
-                  className={INPUT_CLASS}
-                />
-              </label>
+              {/* Tab 1: 编辑表单 */}
+              {editTab === "form" ? (
+                <form onSubmit={handleFormSubmit} className="space-y-3">
+                  <label className="text-zinc-400 block">
+                    标签徽章
+                    <input
+                      value={editForm.tag}
+                      onChange={(e) => setEditForm({ ...editForm, tag: e.target.value })}
+                      className={INPUT_CLASS}
+                    />
+                  </label>
 
-              <label className="text-zinc-400 block">
-                公告主标题
-                <input
-                  required
-                  value={editForm.title}
-                  onChange={(e) => setEditForm({ ...editForm, title: e.target.value })}
-                  className={INPUT_CLASS}
-                />
-              </label>
+                  <label className="text-zinc-400 block">
+                    公告主标题
+                    <input
+                      required
+                      value={editForm.title}
+                      onChange={(e) => setEditForm({ ...editForm, title: e.target.value })}
+                      className={INPUT_CLASS}
+                    />
+                  </label>
 
-              <label className="text-zinc-400 block">
-                更新日志内容（每行一条）
-                <textarea
-                  rows={3}
-                  value={editForm.contentRaw}
-                  onChange={(e) => setEditForm({ ...editForm, contentRaw: e.target.value })}
-                  className={`${INPUT_CLASS} resize-none`}
-                />
-              </label>
+                  <label className="text-zinc-400 block">
+                    更新日志内容（每行一条）
+                    <textarea
+                      rows={3}
+                      value={editForm.contentRaw}
+                      onChange={(e) => setEditForm({ ...editForm, contentRaw: e.target.value })}
+                      className={`${INPUT_CLASS} resize-none`}
+                    />
+                  </label>
 
-              <label className="text-zinc-400 block">
-                APP 下载链接
-                <input
-                  required
-                  value={editForm.download_url}
-                  onChange={(e) => setEditForm({ ...editForm, download_url: e.target.value })}
-                  className={INPUT_CLASS}
-                />
-              </label>
+                  <label className="text-zinc-400 block">
+                    APP 下载链接
+                    <input
+                      required
+                      value={editForm.download_url}
+                      onChange={(e) => setEditForm({ ...editForm, download_url: e.target.value })}
+                      className={INPUT_CLASS}
+                    />
+                  </label>
 
-              <div className="grid grid-cols-2 gap-2">
-                <label className="text-zinc-400">
-                  按钮文字
-                  <input
-                    value={editForm.button_text}
-                    onChange={(e) => setEditForm({ ...editForm, button_text: e.target.value })}
-                    className={INPUT_CLASS}
-                  />
-                </label>
-                <label className="text-zinc-400">
-                  版本号
-                  <input
-                    value={editForm.version}
-                    onChange={(e) => setEditForm({ ...editForm, version: e.target.value })}
-                    className={INPUT_CLASS}
-                  />
-                </label>
-              </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <label className="text-zinc-400">
+                      按钮文字
+                      <input
+                        value={editForm.button_text}
+                        onChange={(e) => setEditForm({ ...editForm, button_text: e.target.value })}
+                        className={INPUT_CLASS}
+                      />
+                    </label>
+                    <label className="text-zinc-400">
+                      版本号
+                      <input
+                        value={editForm.version}
+                        onChange={(e) => setEditForm({ ...editForm, version: e.target.value })}
+                        className={INPUT_CLASS}
+                      />
+                    </label>
+                  </div>
 
-              <div className="flex gap-2 pt-2">
-                <button
-                  type="button"
-                  onClick={() => setIsEditing(false)}
-                  className="flex-1 py-2 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-300 transition-colors"
-                >
-                  取消
-                </button>
-                <button
-                  type="submit"
-                  disabled={saving}
-                  className="flex-1 py-2 rounded-xl bg-primary text-primary-foreground font-semibold flex items-center justify-center gap-1.5 hover:opacity-90 transition-opacity"
-                >
-                  {saving ? <RefreshCw className="w-3.5 h-3.5 animate-spin" /> : <Check className="w-3.5 h-3.5" />}
-                  保存生效
-                </button>
-              </div>
-            </form>
+                  <div className="flex gap-2 pt-2">
+                    <button
+                      type="button"
+                      onClick={() => setEditTab("preview")}
+                      className="flex-1 py-2 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-300 flex items-center justify-center gap-1.5 transition-colors"
+                    >
+                      <Eye className="w-3.5 h-3.5" />
+                      预览效果
+                    </button>
+                    <button
+                      type="submit"
+                      disabled={saving}
+                      className="flex-1 py-2 rounded-xl bg-primary text-primary-foreground font-semibold flex items-center justify-center gap-1.5 hover:opacity-90 transition-opacity"
+                    >
+                      {saving ? <RefreshCw className="w-3.5 h-3.5 animate-spin" /> : <Check className="w-3.5 h-3.5" />}
+                      保存生效
+                    </button>
+                  </div>
+                </form>
+              ) : (
+                /* Tab 2: 实时预览 */
+                <div className="space-y-4 pt-1">
+                  <div className="flex items-center justify-between">
+                    <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-primary/10 border border-primary/30 text-primary text-xs font-medium">
+                      <Sparkles className="w-3.5 h-3.5" />
+                      {editForm.tag || "官方重磅更新"}
+                    </div>
+                    <span className="text-[10px] text-amber-400/90 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">
+                      👁️ 实时预览 (未保存)
+                    </span>
+                  </div>
+
+                  <h3 className="text-lg sm:text-xl font-bold text-white tracking-wide">
+                    {editForm.title || "公告标题"}
+                  </h3>
+
+                  <div className="space-y-2.5 py-2">
+                    {previewContent.length > 0 ? (
+                      previewContent.map((item, index) => (
+                        <div key={`${item}-${index}`} className="flex items-start gap-2.5 text-zinc-300 text-xs sm:text-sm">
+                          <span className="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 shrink-0" />
+                          <span className="leading-relaxed">{item}</span>
+                        </div>
+                      ))
+                    ) : (
+                      <div className="text-xs text-zinc-500 italic">暂无更新日志内容</div>
+                    )}
+                  </div>
+
+                  <div className="space-y-2 pt-1">
+                    <button
+                      type="button"
+                      className="w-full py-3 rounded-xl bg-gradient-to-r from-primary via-amber-400 to-yellow-500 text-black font-bold flex items-center justify-center gap-2 shadow-lg opacity-90 cursor-default"
+                    >
+                      <Download className="w-4 h-4" />
+                      {editForm.button_text || "立即下载官方 APP"}
+                    </button>
+                  </div>
+
+                  <div className="flex gap-2 pt-2 border-t border-zinc-800">
+                    <button
+                      type="button"
+                      onClick={() => setEditTab("form")}
+                      className="flex-1 py-2 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-300 flex items-center justify-center gap-1.5 transition-colors"
+                    >
+                      <Edit3 className="w-3.5 h-3.5" />
+                      返回修改
+                    </button>
+                    <button
+                      type="button"
+                      onClick={executeSave}
+                      disabled={saving}
+                      className="flex-1 py-2 rounded-xl bg-primary text-primary-foreground font-semibold flex items-center justify-center gap-1.5 hover:opacity-90 transition-opacity"
+                    >
+                      {saving ? <RefreshCw className="w-3.5 h-3.5 animate-spin" /> : <Check className="w-3.5 h-3.5" />}
+                      确认保存生效
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
           ) : (
+            /* 普通展示模式（访客看到的视图） */
             <div className="space-y-4 pt-1">
               <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-primary/10 border border-primary/30 text-primary text-xs font-medium">
                 <Sparkles className="w-3.5 h-3.5" />
