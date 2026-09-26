@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Leaf, Zap, Copy, Check } from "lucide-react";
+import { ArrowLeft, Leaf, Copy, Check } from "lucide-react";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import ParticleBackground from "@/components/ParticleBackground";
@@ -54,27 +54,42 @@ const Accelerate = () => {
         </motion.div>
 
         <div className="w-full max-w-4xl flex flex-col gap-4">
-          {/* Nice云 - 主力推荐 */}
+          {/* Nice·云 - 主力推荐（云朵配色） */}
           <motion.div
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.45 }}
-            className="glass rounded-2xl p-6 flex flex-col relative border-accent/30 animate-breathe-glow"
+            className="rounded-[38px] p-6 flex flex-col relative"
+            style={{
+              background: "#eaf5ff",
+              border: "1px solid #bfe0ff",
+            }}
           >
-            <div className="absolute -top-3 right-5 text-[10px] font-bold px-3 py-1 rounded-full bg-accent text-accent-foreground">
-              🔥 主力推荐
-            </div>
             <div className="flex items-center gap-3 mb-3 mt-1">
-              <div className="w-11 h-11 rounded-xl bg-accent/20 flex items-center justify-center">
-                <Zap className="w-5 h-5 text-accent" />
+              <div
+                className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0"
+                style={{ background: "#1d9bf0" }}
+              >
+                <svg width="30" height="30" viewBox="0 0 64 64" aria-hidden="true">
+                  <ellipse cx="24" cy="40" rx="14" ry="11" fill="#ffffff" />
+                  <ellipse cx="40" cy="40" rx="16" ry="13" fill="#ffffff" />
+                  <ellipse cx="32" cy="30" rx="13" ry="11" fill="#ffffff" />
+                  <ellipse cx="20" cy="34" rx="9" ry="8" fill="#ffffff" />
+                  <ellipse cx="46" cy="35" rx="8" ry="7" fill="#ffffff" />
+                  <rect x="14" y="38" width="36" height="10" rx="5" fill="#ffffff" />
+                </svg>
               </div>
               <div>
-                <h2 className="font-heading text-lg font-semibold text-foreground">Nice云</h2>
-                <p className="text-[11px] text-accent">老牌机场 · 线路稳定速度快</p>
+                <h2 className="font-heading text-lg font-semibold" style={{ color: "#0c447c" }}>
+                  Nice·云
+                </h2>
+                <p className="text-[11px]" style={{ color: "#185fa5" }}>
+                  老牌机场 · 线路稳定速度快
+                </p>
               </div>
             </div>
-            <p className="text-[13px] leading-relaxed text-muted-foreground flex-1">
-              老牌机场，线路稳定速度快，全线路走中转、内置防失联节点，就算主线路波动也能快速切换。订单流量按日重置，SS/Hy2/Vmess多协议可选，最大10Gbps峰值带宽，多种流媒体一键解锁。
+            <p className="text-[13px] leading-relaxed flex-1" style={{ color: "#185fa5" }}>
+              全线路走中转、内置防失联节点，就算主线路波动也能快速切换。订单流量按日重置，SS/Hy2/Vmess多协议可选，最大10Gbps峰值带宽，多种流媒体一键解锁。
             </p>
 
             <button
@@ -83,22 +98,24 @@ const Accelerate = () => {
                 setCouponCopied(true);
                 setTimeout(() => setCouponCopied(false), 2000);
               }}
-              className="mt-4 w-full rounded-xl bg-accent/15 px-3 py-2 text-center text-xs font-semibold text-accent inline-flex items-center justify-center gap-1.5 transition-opacity hover:opacity-80"
+              className="mt-4 w-full rounded-full px-3 py-3 text-center text-xs font-semibold inline-flex items-center justify-center gap-1.5 transition-opacity hover:opacity-80"
+              style={{ background: "#d3ecff", color: "#0c447c" }}
             >
               {couponCopied ? (
                 <>
-                  <Check className="w-3.5 h-3.5" /> 已复制 nice888
+                  已复制 nice888 <Check className="w-3.5 h-3.5" />
                 </>
               ) : (
                 <>
-                  <Copy className="w-3.5 h-3.5" /> 7折优惠券：nice888
+                  7折优惠券：nice888 <Copy className="w-3.5 h-3.5" />
                 </>
               )}
             </button>
 
             <button
               onClick={() => window.open(NICE_URL, "_blank", "noopener,noreferrer")}
-              className="mt-3 w-full rounded-full bg-accent py-3 text-sm font-bold text-accent-foreground shadow-[0_0_24px_hsl(var(--accent)/0.45)] transition-transform hover:scale-[1.02]"
+              className="mt-3 w-full rounded-full py-3 text-sm font-bold text-white transition-transform hover:scale-[1.02]"
+              style={{ background: "#1d9bf0" }}
             >
               立即开始
             </button>
