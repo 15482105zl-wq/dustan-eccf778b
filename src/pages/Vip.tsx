@@ -182,7 +182,9 @@ const Vip = () => {
               <AiIcon className="w-10 h-10" />
             </div>
             <div className="text-center">
-              <h3 className="font-semibold text-lg text-foreground whitespace-nowrap">AI·客服</h3>
+              <h3 className="font-semibold text-lg whitespace-nowrap">
+                <span className="gradient-text glow-text">AI·客服</span>
+              </h3>
               <p className="text-sm text-muted-foreground mt-1">
                 有问题直接问我
               </p>
