@@ -61,8 +61,8 @@ const Accelerate = () => {
             transition={{ duration: 0.45 }}
             className="rounded-[38px] p-6 flex flex-col relative"
             style={{
-              background: "#eaf5ff",
-              border: "1px solid #bfe0ff",
+              background: "#141225",
+              border: "1px solid #2a2648",
             }}
           >
             <div className="flex items-center gap-3 mb-3 mt-1">
@@ -80,15 +80,15 @@ const Accelerate = () => {
                 </svg>
               </div>
               <div>
-                <h2 className="font-heading text-lg font-semibold" style={{ color: "#0c447c" }}>
+                <h2 className="font-heading text-lg font-semibold" style={{ color: "#f2f3fa" }}>
                   Nice·云
                 </h2>
-                <p className="text-[11px]" style={{ color: "#185fa5" }}>
+                <p className="text-[11px]" style={{ color: "#7bc4f5" }}>
                   老牌机场 · 线路稳定速度快
                 </p>
               </div>
             </div>
-            <p className="text-[13px] leading-relaxed flex-1" style={{ color: "#185fa5" }}>
+            <p className="text-[13px] leading-relaxed flex-1" style={{ color: "#7bc4f5" }}>
               全线路走中转、内置防失联节点，就算主线路波动也能快速切换。订单流量按日重置，SS/Hy2/Vmess多协议可选，最大10Gbps峰值带宽，多种流媒体一键解锁。
             </p>
 
@@ -99,7 +99,7 @@ const Accelerate = () => {
                 setTimeout(() => setCouponCopied(false), 2000);
               }}
               className="mt-4 w-full rounded-full px-3 py-3 text-center text-xs font-semibold inline-flex items-center justify-center gap-1.5 transition-opacity hover:opacity-80"
-              style={{ background: "#d3ecff", color: "#0c447c" }}
+              style={{ background: "#1c2b45", color: "#9cd4f7" }}
             >
               {couponCopied ? (
                 <>
