@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { ArrowLeft, Apple, Film, Globe, Lock, Rocket, Search, type LucideIcon } from "lucide-react";
+import { ArrowLeft, Apple, ChevronRight, Film, Globe, Lock, Rocket, Search, type LucideIcon } from "lucide-react";
 import ParticleBackground from "@/components/ParticleBackground";
 import GlassCard from "@/components/GlassCard";
 import SEO from "@/components/SEO";
@@ -64,14 +64,12 @@ const Vip = () => {
   const requireAuth = () => setAuthOpen(true);
   const canInteract = !!user?.email_confirmed_at;
 
-  // 网址包含 chat=true 时，自动打开 AI 助手对话（不需要登录）
   useEffect(() => {
     if (searchParams.get("chat") === "true") {
       setChatOpen(true);
     }
   }, [searchParams]);
 
-  // 关闭对话时清理 URL 中的 chat 和 msgId 参数
   const handleChatOpenChange = (open: boolean) => {
     setChatOpen(open);
     if (!open && searchParams.get("chat")) {
@@ -93,7 +91,6 @@ const Vip = () => {
     })();
   }, []);
 
-  // BBS 未读通知红点：打开/关闭论坛时都重新查一次
   useEffect(() => {
     if (!user) {
       setHasUnread(false);
@@ -176,21 +173,21 @@ const Vip = () => {
           ))}
         </div>
 
-        {/* 底部横向 AI 助手卡片 */}
         <div className="w-full max-w-2xl">
           <div
             onClick={handleChatClick}
-            className="bg-transparent rounded-xl py-5 px-16 cursor-pointer relative overflow-hidden transition-colors duration-300 border border-glass-border/40 hover:border-primary/40 group"
+            className="bg-transparent rounded-xl py-5 px-20 cursor-pointer relative overflow-hidden transition-colors duration-300 border border-glass-border/40 hover:border-primary/40 group"
           >
-            <div className="absolute left-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-xl bg-primary/10 flex items-center justify-center group-hover:scale-105 transition-transform">
-              <AiIcon className="w-7 h-7" />
+            <div className="absolute left-4 top-1/2 -translate-y-1/2 w-16 h-16 rounded-xl bg-primary/10 flex items-center justify-center group-hover:scale-105 transition-transform">
+              <AiIcon className="w-10 h-10" />
             </div>
             <div className="text-center">
-              <h3 className="font-semibold text-lg text-foreground whitespace-nowrap">Dustan AI助手</h3>
+              <h3 className="font-semibold text-lg text-foreground whitespace-nowrap">AI·客服</h3>
               <p className="text-sm text-muted-foreground mt-1">
                 有问题直接问我
               </p>
             </div>
+            <ChevronRight className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
           </div>
         </div>
 
