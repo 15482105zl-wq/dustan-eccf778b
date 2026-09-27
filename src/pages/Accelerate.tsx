@@ -166,7 +166,7 @@ const Accelerate = () => {
               </div>
             </div>
             <p className="text-[13px] leading-relaxed flex-1 text-muted-foreground">
-              主打一个"稳"字——全线路走中转、内置防失联节点，主线路波动快速切换。SS/Hy2/Vmess协议随便选，峰值10Gbps，流媒体一键解锁，适合追求速度和稳定的重度用户。
+              主打一个"稳"字——内置防失联节点，主线路波动快速切换。SS/Hy2/Vmess协议，峰值10Gbps，流媒体一键解锁，适合追求速度和稳定的重度用户。
             </p>
 
             <button
