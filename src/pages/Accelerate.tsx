@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Leaf, Copy, Check } from "lucide-react";
+import { ArrowLeft, Copy, Check } from "lucide-react";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import ParticleBackground from "@/components/ParticleBackground";
@@ -9,6 +9,111 @@ import UserNav from "@/components/UserNav";
 const NICE_URL = "https://dustan.mmmoyou.com/#/register?code=0lc8ncSH";
 const LVCHA_URL = "https://pan.quark.cn/s/1d9113e678f3";
 const APP_DOWNLOAD_URL = "https://pxyfbbohoazbslneagix.supabase.co/storage/v1/object/public/downloads/DustanHub.apk";
+
+// 3D 玻璃质感发光 - Nice·云 图标
+const NiceCloudIcon = () => (
+  <div
+    className="w-14 h-14 rounded-2xl relative flex items-center justify-center flex-shrink-0 overflow-hidden"
+    style={{
+      background: "radial-gradient(100% 100% at 30% 20%, #2bd2ff 0%, #0077ff 55%, #052a6b 100%)",
+      boxShadow: "0 0 22px rgba(0, 140, 255, 0.5), inset 0 1.5px 2px rgba(255, 255, 255, 0.7), inset 0 -3px 6px rgba(0, 0, 0, 0.4)",
+      border: "1px solid rgba(255, 255, 255, 0.35)",
+    }}
+  >
+    {/* 玻璃折射光弧与经纬星网 */}
+    <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 56 56">
+      <defs>
+        <radialGradient id="cloudGlow" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stopColor="#ffffff" stopOpacity="0.9" />
+          <stop offset="60%" stopColor="#d5f2ff" stopOpacity="0.6" />
+          <stop offset="100%" stopColor="#70c5ff" stopOpacity="0.2" />
+        </radialGradient>
+        <linearGradient id="cloudShine" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#ffffff" stopOpacity="0.95" />
+          <stop offset="40%" stopColor="#cdeeff" stopOpacity="0.75" />
+          <stop offset="100%" stopColor="#85d1ff" stopOpacity="0.4" />
+        </linearGradient>
+      </defs>
+
+      {/* 环球星轨线与光点 */}
+      <circle cx="28" cy="27" r="18" fill="none" stroke="rgba(255,255,255,0.22)" strokeWidth="0.8" strokeDasharray="3 3" />
+      <ellipse cx="28" cy="27" rx="20" ry="11" fill="none" stroke="rgba(255,255,255,0.3)" strokeWidth="0.8" transform="rotate(-20 28 27)" />
+      <circle cx="12" cy="22" r="1.3" fill="#ffffff" filter="drop-shadow(0 0 2px #fff)" />
+      <circle cx="39" cy="17" r="1.5" fill="#ffffff" filter="drop-shadow(0 0 2px #fff)" />
+      <circle cx="43" cy="33" r="1.2" fill="#ffffff" filter="drop-shadow(0 0 2px #fff)" />
+
+      {/* 3D 晶莹云朵底光与主体 */}
+      <path
+        d="M20 37h17a7.5 7.5 0 0 0 2.2-14.7 10 10 0 0 0-18.7-2.8A7.5 7.5 0 0 0 20 37z"
+        fill="url(#cloudShine)"
+        filter="drop-shadow(0 4px 8px rgba(0, 30, 90, 0.45))"
+      />
+      {/* 云朵内部高光凸显立体感 */}
+      <ellipse cx="29" cy="25" rx="5.5" ry="4.5" fill="#ffffff
+" opacity="0.45" />
+      <ellipse cx="23" cy="31" rx="4" ry="3" fill="#ffffff" opacity="0.35" />
+    </svg>
+  </div>
+);
+
+// 3D 玻璃质感发光 - 绿叶机场 图标
+const LeafAirportIcon = () => (
+  <div
+    className="w-14 h-14 rounded-2xl relative flex items-center justify-center flex-shrink-0 overflow-hidden"
+    style={{
+      background: "radial-gradient(100% 100% at 30% 20%, #3bf087 0%, #00b84c 55%, #03481f 100%)",
+      boxShadow: "0 0 22px rgba(0, 230, 118, 0.5), inset 0 1.5px 2px rgba(255, 255, 255, 0.7), inset 0 -3px 6px rgba(0, 0, 0, 0.4)",
+      border: "1px solid rgba(255, 255, 255, 0.35)",
+    }}
+  >
+    <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 56 56">
+      <defs>
+        <linearGradient id="leafGrad" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stopColor="#ffffff" stopOpacity="0.95" />
+          <stop offset="45%" stopColor="#d2ffe3" stopOpacity="0.8" />
+          <stop offset="100%" stopColor="#67fab0" stopOpacity="0.45" />
+        </linearGradient>
+      </defs>
+
+      {/* 环绕叶子的发光星轨光圈 */}
+      <ellipse
+        cx="28"
+        cy="28"
+        rx="21"
+        ry="8"
+        fill="none"
+        stroke="rgba(255,255,255,0.7)"
+        strokeWidth="1.2"
+        transform="rotate(-25 28 28)"
+        filter="drop-shadow(0 0 3px rgba(255,255,255,0.9))"
+      />
+
+      {/* 3D 晶亮绿叶主体 */}
+      <path
+        d="M37 15c-1 8-7 18-18 23 1-8 6-18 18-23z"
+        fill="url(#leafGrad)"
+        filter="drop-shadow(0 4px 6px rgba(0, 50, 20, 0.4))"
+      />
+      <path
+        d="M37 15c-8 6-13 13-18 23"
+        fill="none"
+        stroke="#ffffff"
+        strokeWidth="1.2"
+        strokeLinecap="round"
+        opacity="0.9"
+      />
+      {/* 叶柄 */}
+      <path
+        d="M19 38c-2 2-3 4-3 5"
+        fill="none"
+        stroke="#ffffff"
+        strokeWidth="1.4"
+        strokeLinecap="round"
+        opacity="0.85"
+      />
+    </svg>
+  </div>
+);
 
 const Accelerate = () => {
   const navigate = useNavigate();
@@ -48,33 +153,22 @@ const Accelerate = () => {
           className="text-center mb-8"
         >
           <h1 className="font-heading text-3xl sm:text-4xl font-bold mb-2">
-            <span className="gradient-text glow-text">网络加速</span>
+            <span className="gradient-t
+ext glow-text">网络加速</span>
           </h1>
           <p className="text-muted-foreground text-sm">免费专线 · 全球直连</p>
         </motion.div>
 
         <div className="w-full max-w-4xl flex flex-col gap-4">
-          {/* Nice·云 - 主力推荐（云朵配色） */}
+          {/* Nice·云 - 主力推荐 */}
           <motion.div
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.45 }}
             className="rounded-[38px] p-6 flex flex-col relative bg-transparent border border-glass-border/40"
           >
-            <div className="flex items-center gap-3 mb-3 mt-1">
-              <div
-                className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0"
-                style={{ background: "#1d9bf0" }}
-              >
-                <svg width="30" height="30" viewBox="0 0 64 64" aria-hidden="true">
-                  <ellipse cx="24" cy="40" rx="14" ry="11" fill="#ffffff" />
-                  <ellipse cx="40" cy="40" rx="16" ry="13" fill="#ffffff" />
-                  <ellipse cx="32" cy="30" rx="13" ry="11" fill="#ffffff" />
-                  <ellipse cx="20" cy="34" rx="9" ry="8" fill="#ffffff" />
-                  <ellipse cx="46" cy="35" rx="8" ry="7" fill="#ffffff" />
-                  <rect x="14" y="38" width="36" height="10" rx="5" fill="#ffffff" />
-                </svg>
-              </div>
+            <div className="flex items-center gap-3.5 mb-3 mt-1">
+              <NiceCloudIcon />
               <div>
                 <h2 className="font-heading text-lg font-semibold" style={{ color: "#f2f3fa" }}>
                   Nice·云
@@ -129,20 +223,15 @@ const Accelerate = () => {
             transition={{ duration: 0.45, delay: 0.05 }}
             className="bg-transparent rounded-2xl p-6 flex flex-col border border-glass-border/40"
           >
-            <div className="flex items-center gap-3 mb-3">
-              <div
-                className="w-11 h-11 rounded-full flex items-center justify-center"
-                style={{ background: "#14532d" }}
-              >
-                <Leaf className="w-5 h-5" style={{ color: "#22c55e" }} />
-              </div>
+            <div className="flex items-center gap-3.5 mb-3">
+              <LeafAirportIcon />
               <div>
                 <h2 className="font-heading text-lg font-semibold text-foreground">绿叶机场</h2>
                 <p className="text-[11px] text-muted-foreground">永久免费 · 无广告 · 全自研</p>
               </div>
             </div>
             <p className="text-[13px] leading-relaxed text-muted-foreground flex-1">
-              主打一个"零门槛"——永久免费，不收费不弹广告。连接速度快，全球节点覆盖广，日常刷剧、玩游戏都能应付，适合不想折腾的轻度用户。
+    主打一个"零门槛"——永久免费，不收费不弹广告。连接速度快，全球节点覆盖广，日常刷剧、玩游戏都能应付，适合不想折腾的轻度用户。
             </p>
 
             <button
