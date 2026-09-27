@@ -59,11 +59,7 @@ const Accelerate = () => {
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.45 }}
-            className="rounded-[38px] p-6 flex flex-col relative"
-            style={{
-              background: "#141225",
-              border: "1px solid #2a2648",
-            }}
+            className="rounded-[38px] p-6 flex flex-col relative bg-transparent border border-glass-border/40"
           >
             <div className="flex items-center gap-3 mb-3 mt-1">
               <div
@@ -83,13 +79,13 @@ const Accelerate = () => {
                 <h2 className="font-heading text-lg font-semibold" style={{ color: "#f2f3fa" }}>
                   Nice·云
                 </h2>
-                <p className="text-[11px]" style={{ color: "#7bc4f5" }}>
-                  老牌机场 · 线路稳定速度快
+                <p className="text-[11px] text-muted-foreground">
+                  老牌机场 · 线路稳定 · 全球直连
                 </p>
               </div>
             </div>
-            <p className="text-[13px] leading-relaxed flex-1" style={{ color: "#7bc4f5" }}>
-              全线路走中转、内置防失联节点，就算主线路波动也能快速切换。订单流量按日重置，SS/Hy2/Vmess多协议可选，最大10Gbps峰值带宽，多种流媒体一键解锁。
+            <p className="text-[13px] leading-relaxed flex-1 text-muted-foreground">
+              主打一个"稳"字——全线路走中转、内置防失联节点，主线路波动也能快速切换。流量按日重置，SS/Hy2/Vmess协议随便选，峰值10Gbps，主流流媒体一键解锁，适合追求速度和稳定的重度用户。
             </p>
 
             <button
@@ -98,24 +94,29 @@ const Accelerate = () => {
                 setCouponCopied(true);
                 setTimeout(() => setCouponCopied(false), 2000);
               }}
-              className="mt-4 w-full rounded-full px-3 py-3 text-center text-xs font-semibold inline-flex items-center justify-center gap-1.5 transition-opacity hover:opacity-80"
-              style={{ background: "#1c2b45", color: "#9cd4f7" }}
+              className="mt-4 w-full rounded-full px-3 py-3 text-center text-xs font-bold inline-flex items-center justify-center gap-1.5 border border-white/10 bg-transparent transition-opacity hover:opacity-80"
             >
               {couponCopied ? (
                 <>
-                  已复制 nice888 <Check className="w-3.5 h-3.5" />
+                  <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                    已复制 nice888
+                  </span>
+                  <Check className="w-3.5 h-3.5 text-accent" />
                 </>
               ) : (
                 <>
-                  7折优惠券：nice888 <Copy className="w-3.5 h-3.5" />
+                  <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                    7折优惠券：nice888
+                  </span>
+                  <Copy className="w-3.5 h-3.5 text-accent" />
                 </>
               )}
             </button>
 
             <button
               onClick={() => window.open(NICE_URL, "_blank", "noopener,noreferrer")}
-              className="mt-3 w-full rounded-full py-3 text-sm font-bold text-white transition-transform hover:scale-[1.02]"
-              style={{ background: "#1d9bf0" }}
+              className="mt-3 w-full rounded-full py-3 text-sm font-bold border border-white/10 bg-transparent transition-transform hover:scale-[1.02]"
+              style={{ color: "#a855f7" }}
             >
               立即开始
             </button>
@@ -126,11 +127,14 @@ const Accelerate = () => {
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.45, delay: 0.05 }}
-            className="glass rounded-2xl p-6 flex flex-col border-primary/30"
+            className="bg-transparent rounded-2xl p-6 flex flex-col border border-glass-border/40"
           >
             <div className="flex items-center gap-3 mb-3">
-              <div className="w-11 h-11 rounded-xl bg-primary/15 text-primary flex items-center justify-center">
-                <Leaf className="w-5 h-5" />
+              <div
+                className="w-11 h-11 rounded-full flex items-center justify-center"
+                style={{ background: "#14532d" }}
+              >
+                <Leaf className="w-5 h-5" style={{ color: "#22c55e" }} />
               </div>
               <div>
                 <h2 className="font-heading text-lg font-semibold text-foreground">绿叶机场</h2>
@@ -143,7 +147,8 @@ const Accelerate = () => {
 
             <button
               onClick={() => window.open(LVCHA_URL, "_blank", "noopener,noreferrer")}
-              className="mt-4 w-full rounded-full bg-primary py-3 text-sm font-semibold text-primary-foreground shadow-[0_0_24px_hsl(var(--primary)/0.45)] transition-transform hover:scale-[1.02]"
+              className="mt-4 w-full rounded-full py-3 text-sm font-bold border border-white/10 bg-transparent transition-transform hover:scale-[1.02]"
+              style={{ color: "#a855f7" }}
             >
               免费下载
             </button>
