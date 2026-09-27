@@ -13,14 +13,13 @@ const APP_DOWNLOAD_URL = "https://pxyfbbohoazbslneagix.supabase.co/storage/v1/ob
 // 3D 玻璃质感发光 - Nice·云 圆形图标
 const NiceCloudIcon = () => (
   <div
-    className="w-13 h-13 sm:w-14 sm:h-14 rounded-full relative flex items-center justify-center flex-shrink-0 overflow-hidden"
+    className="w-14 h-14 rounded-full relative flex items-center justify-center flex-shrink-0 overflow-hidden"
     style={{
       background: "radial-gradient(100% 100% at 30% 25%, #2bd2ff 0%, #0077ff 55%, #052a6b 100%)",
       boxShadow: "0 0 20px rgba(0, 140, 255, 0.55), inset 0 1.5px 2px rgba(255, 255, 255, 0.75), inset 0 -3px 6px rgba(0, 0, 0, 0.45)",
       border: "1px solid rgba(255, 255, 255, 0.4)",
     }}
   >
-    {/* 玻璃折射光弧与经纬星网 */}
     <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 56 56">
       <defs>
         <linearGradient id="cloudShineRound" x1="0" y1="0" x2="0" y2="1">
@@ -30,20 +29,17 @@ const NiceCloudIcon = () => (
         </linearGradient>
       </defs>
 
-      {/* 环球星轨线与光点 */}
       <circle cx="28" cy="28" r="20" fill="none" stroke="rgba(255,255,255,0.22)" strokeWidth="0.8" strokeDasharray="3 3" />
       <ellipse cx="28" cy="28" rx="22" ry="11" fill="none" stroke="rgba(255,255,255,0.3)" strokeWidth="0.8" transform="rotate(-20 28 28)" />
       <circle cx="10" cy="24" r="1.3" fill="#ffffff" filter="drop-shadow(0 0 2px #fff)" />
       <circle cx="41" cy="18" r="1.5" fill="#ffffff" filter="drop-shadow(0 0 2px #fff)" />
       <circle cx="44" cy="35" r="1.2" fill="#ffffff" filter="drop-shadow(0 0 2px #fff)" />
 
-      {/* 3D 晶莹云朵底光与主体 */}
       <path
         d="M20 37h17a7.5 7.5 0 0 0 2.2-14.7 10 10 0 0 0-18.7-2.8A7.5 7.5 0 0 0 20 37z"
         fill="url(#cloudShineRound)"
         filter="drop-shadow(0 4px 8px rgba(0, 30, 90, 0.45))"
       />
-      {/* 云朵内部高光凸显立体感 */}
       <ellipse cx="29" cy="25" rx="5.5" ry="4.5" fill="#ffffff" opacity="0.45" />
       <ellipse cx="23" cy="31" rx="4" ry="3" fill="#ffffff" opacity="0.35" />
     </svg>
@@ -53,15 +49,14 @@ const NiceCloudIcon = () => (
 // 3D 玻璃质感发光 - 绿叶机场 圆形图标
 const LeafAirportIcon = () => (
   <div
-    className="w-13
- h-13 sm:w-14 sm:h-14 rounded-full relative flex items-center justify-center flex-shrink-0 overflow-hidden"
+    className="w-14 h-14 rounded-full relative flex items-center justify-center flex-shrink-0 overflow-hidden"
     style={{
       background: "radial-gradient(100% 100% at 30% 25%, #3bf087 0%, #00b84c 55%, #03481f 100%)",
       boxShadow: "0 0 20px rgba(0, 230, 118, 0.55), inset 0 1.5px 2px rgba(255, 255, 255, 0.75), inset 0 -3px 6px rgba(0, 0, 0, 0.45)",
       border: "1px solid rgba(255, 255, 255, 0.4)",
     }}
   >
-    <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 56 56">
+ <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 56 56">
       <defs>
         <linearGradient id="leafGradRound" x1="0" y1="0" x2="1" y2="1">
           <stop offset="0%" stopColor="#ffffff" stopOpacity="0.95" />
@@ -70,7 +65,6 @@ const LeafAirportIcon = () => (
         </linearGradient>
       </defs>
 
-      {/* 环绕叶子的发光星轨光圈 */}
       <ellipse
         cx="28"
         cy="28"
@@ -83,7 +77,6 @@ const LeafAirportIcon = () => (
         filter="drop-shadow(0 0 3px rgba(255,255,255,0.9))"
       />
 
-      {/* 3D 晶亮绿叶主体 */}
       <path
         d="M37 15c-1 8-7 18-18 23 1-8 6-18 18-23z"
         fill="url(#leafGradRound)"
@@ -97,7 +90,6 @@ const LeafAirportIcon = () => (
         strokeLinecap="round"
         opacity="0.9"
       />
-      {/* 叶柄 */}
       <path
         d="M19 38c-2 2-3 4-3 5"
         fill="none"
@@ -154,7 +146,7 @@ const Accelerate = () => {
         </motion.div>
 
         <div className="w-full max-w-4xl flex flex-col gap-4">
-       {/* Nice·云 - 主力推荐 */}
+          {/* Nice·云 - 主力推荐 */}
           <motion.div
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
@@ -164,7 +156,8 @@ const Accelerate = () => {
             <div className="flex items-center gap-3.5 mb-3 mt-1">
               <NiceCloudIcon />
               <div>
-                <h2 className="font-heading text-lg font-semibold" style={{ color: "#f2f3fa" }}>
+                <h2 className="font-heading text-lg font-semibold" style
+={{ color: "#f2f3fa" }}>
                   Nice·云
                 </h2>
                 <p className="text-[11px] text-muted-foreground">
@@ -229,8 +222,7 @@ const Accelerate = () => {
             </p>
 
             <button
-              onClick={() => window.ope
-n(LVCHA_URL, "_blank", "noopener,noreferrer")}
+              onClick={() => window.open(LVCHA_URL, "_blank", "noopener,noreferrer")}
               className="mt-4 w-full rounded-full py-3 text-sm font-bold border border-white/10 bg-transparent transition-transform hover:scale-[1.02]"
               style={{ color: "#a855f7" }}
             >
@@ -243,7 +235,8 @@ n(LVCHA_URL, "_blank", "noopener,noreferrer")}
           href={APP_DOWNLOAD_URL}
           target="_blank"
           rel="noopener noreferrer"
-          initial={{ opacity: 0 }}
+          initial={{
+opacity: 0 }}
           animate={{ opacity: 1 }}
           className="mt-10 text-sm font-bold animate-app-link"
           style={{ color: "#a855f7" }}
