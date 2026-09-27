@@ -10,25 +10,20 @@ const NICE_URL = "https://dustan.mmmoyou.com/#/register?code=0lc8ncSH";
 const LVCHA_URL = "https://pan.quark.cn/s/1d9113e678f3";
 const APP_DOWNLOAD_URL = "https://pxyfbbohoazbslneagix.supabase.co/storage/v1/object/public/downloads/DustanHub.apk";
 
-// 3D 玻璃质感发光 - Nice·云 图标
+// 3D 玻璃质感发光 - Nice·云 圆形图标
 const NiceCloudIcon = () => (
   <div
-    className="w-14 h-14 rounded-2xl relative flex items-center justify-center flex-shrink-0 overflow-hidden"
+    className="w-13 h-13 sm:w-14 sm:h-14 rounded-full relative flex items-center justify-center flex-shrink-0 overflow-hidden"
     style={{
-      background: "radial-gradient(100% 100% at 30% 20%, #2bd2ff 0%, #0077ff 55%, #052a6b 100%)",
-      boxShadow: "0 0 22px rgba(0, 140, 255, 0.5), inset 0 1.5px 2px rgba(255, 255, 255, 0.7), inset 0 -3px 6px rgba(0, 0, 0, 0.4)",
-      border: "1px solid rgba(255, 255, 255, 0.35)",
+      background: "radial-gradient(100% 100% at 30% 25%, #2bd2ff 0%, #0077ff 55%, #052a6b 100%)",
+      boxShadow: "0 0 20px rgba(0, 140, 255, 0.55), inset 0 1.5px 2px rgba(255, 255, 255, 0.75), inset 0 -3px 6px rgba(0, 0, 0, 0.45)",
+      border: "1px solid rgba(255, 255, 255, 0.4)",
     }}
   >
     {/* 玻璃折射光弧与经纬星网 */}
     <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 56 56">
       <defs>
-        <radialGradient id="cloudGlow" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stopColor="#ffffff" stopOpacity="0.9" />
-          <stop offset="60%" stopColor="#d5f2ff" stopOpacity="0.6" />
-          <stop offset="100%" stopColor="#70c5ff" stopOpacity="0.2" />
-        </radialGradient>
-        <linearGradient id="cloudShine" x1="0" y1="0" x2="0" y2="1">
+        <linearGradient id="cloudShineRound" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stopColor="#ffffff" stopOpacity="0.95" />
           <stop offset="40%" stopColor="#cdeeff" stopOpacity="0.75" />
           <stop offset="100%" stopColor="#85d1ff" stopOpacity="0.4" />
@@ -36,39 +31,39 @@ const NiceCloudIcon = () => (
       </defs>
 
       {/* 环球星轨线与光点 */}
-      <circle cx="28" cy="27" r="18" fill="none" stroke="rgba(255,255,255,0.22)" strokeWidth="0.8" strokeDasharray="3 3" />
-      <ellipse cx="28" cy="27" rx="20" ry="11" fill="none" stroke="rgba(255,255,255,0.3)" strokeWidth="0.8" transform="rotate(-20 28 27)" />
-      <circle cx="12" cy="22" r="1.3" fill="#ffffff" filter="drop-shadow(0 0 2px #fff)" />
-      <circle cx="39" cy="17" r="1.5" fill="#ffffff" filter="drop-shadow(0 0 2px #fff)" />
-      <circle cx="43" cy="33" r="1.2" fill="#ffffff" filter="drop-shadow(0 0 2px #fff)" />
+      <circle cx="28" cy="28" r="20" fill="none" stroke="rgba(255,255,255,0.22)" strokeWidth="0.8" strokeDasharray="3 3" />
+      <ellipse cx="28" cy="28" rx="22" ry="11" fill="none" stroke="rgba(255,255,255,0.3)" strokeWidth="0.8" transform="rotate(-20 28 28)" />
+      <circle cx="10" cy="24" r="1.3" fill="#ffffff" filter="drop-shadow(0 0 2px #fff)" />
+      <circle cx="41" cy="18" r="1.5" fill="#ffffff" filter="drop-shadow(0 0 2px #fff)" />
+      <circle cx="44" cy="35" r="1.2" fill="#ffffff" filter="drop-shadow(0 0 2px #fff)" />
 
       {/* 3D 晶莹云朵底光与主体 */}
       <path
         d="M20 37h17a7.5 7.5 0 0 0 2.2-14.7 10 10 0 0 0-18.7-2.8A7.5 7.5 0 0 0 20 37z"
-        fill="url(#cloudShine)"
+        fill="url(#cloudShineRound)"
         filter="drop-shadow(0 4px 8px rgba(0, 30, 90, 0.45))"
       />
       {/* 云朵内部高光凸显立体感 */}
-      <ellipse cx="29" cy="25" rx="5.5" ry="4.5" fill="#ffffff
-" opacity="0.45" />
+      <ellipse cx="29" cy="25" rx="5.5" ry="4.5" fill="#ffffff" opacity="0.45" />
       <ellipse cx="23" cy="31" rx="4" ry="3" fill="#ffffff" opacity="0.35" />
     </svg>
   </div>
 );
 
-// 3D 玻璃质感发光 - 绿叶机场 图标
+// 3D 玻璃质感发光 - 绿叶机场 圆形图标
 const LeafAirportIcon = () => (
   <div
-    className="w-14 h-14 rounded-2xl relative flex items-center justify-center flex-shrink-0 overflow-hidden"
+    className="w-13
+ h-13 sm:w-14 sm:h-14 rounded-full relative flex items-center justify-center flex-shrink-0 overflow-hidden"
     style={{
-      background: "radial-gradient(100% 100% at 30% 20%, #3bf087 0%, #00b84c 55%, #03481f 100%)",
-      boxShadow: "0 0 22px rgba(0, 230, 118, 0.5), inset 0 1.5px 2px rgba(255, 255, 255, 0.7), inset 0 -3px 6px rgba(0, 0, 0, 0.4)",
-      border: "1px solid rgba(255, 255, 255, 0.35)",
+      background: "radial-gradient(100% 100% at 30% 25%, #3bf087 0%, #00b84c 55%, #03481f 100%)",
+      boxShadow: "0 0 20px rgba(0, 230, 118, 0.55), inset 0 1.5px 2px rgba(255, 255, 255, 0.75), inset 0 -3px 6px rgba(0, 0, 0, 0.45)",
+      border: "1px solid rgba(255, 255, 255, 0.4)",
     }}
   >
     <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 56 56">
       <defs>
-        <linearGradient id="leafGrad" x1="0" y1="0" x2="1" y2="1">
+        <linearGradient id="leafGradRound" x1="0" y1="0" x2="1" y2="1">
           <stop offset="0%" stopColor="#ffffff" stopOpacity="0.95" />
           <stop offset="45%" stopColor="#d2ffe3" stopOpacity="0.8" />
           <stop offset="100%" stopColor="#67fab0" stopOpacity="0.45" />
@@ -79,8 +74,8 @@ const LeafAirportIcon = () => (
       <ellipse
         cx="28"
         cy="28"
-        rx="21"
-        ry="8"
+        rx="22"
+        ry="8.5"
         fill="none"
         stroke="rgba(255,255,255,0.7)"
         strokeWidth="1.2"
@@ -91,7 +86,7 @@ const LeafAirportIcon = () => (
       {/* 3D 晶亮绿叶主体 */}
       <path
         d="M37 15c-1 8-7 18-18 23 1-8 6-18 18-23z"
-        fill="url(#leafGrad)"
+        fill="url(#leafGradRound)"
         filter="drop-shadow(0 4px 6px rgba(0, 50, 20, 0.4))"
       />
       <path
@@ -153,14 +148,13 @@ const Accelerate = () => {
           className="text-center mb-8"
         >
           <h1 className="font-heading text-3xl sm:text-4xl font-bold mb-2">
-            <span className="gradient-t
-ext glow-text">网络加速</span>
+            <span className="gradient-text glow-text">网络加速</span>
           </h1>
           <p className="text-muted-foreground text-sm">免费专线 · 全球直连</p>
         </motion.div>
 
         <div className="w-full max-w-4xl flex flex-col gap-4">
-          {/* Nice·云 - 主力推荐 */}
+       {/* Nice·云 - 主力推荐 */}
           <motion.div
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
@@ -231,11 +225,12 @@ ext glow-text">网络加速</span>
               </div>
             </div>
             <p className="text-[13px] leading-relaxed text-muted-foreground flex-1">
-    主打一个"零门槛"——永久免费，不收费不弹广告。连接速度快，全球节点覆盖广，日常刷剧、玩游戏都能应付，适合不想折腾的轻度用户。
+              主打一个"零门槛"——永久免费，不收费不弹广告。连接速度快，全球节点覆盖广，日常刷剧、玩游戏都能应付，适合不想折腾的轻度用户。
             </p>
 
             <button
-              onClick={() => window.open(LVCHA_URL, "_blank", "noopener,noreferrer")}
+              onClick={() => window.ope
+n(LVCHA_URL, "_blank", "noopener,noreferrer")}
               className="mt-4 w-full rounded-full py-3 text-sm font-bold border border-white/10 bg-transparent transition-transform hover:scale-[1.02]"
               style={{ color: "#a855f7" }}
             >
