@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Download, X, Edit3, Check, Sparkles, RefreshCw, Eye } from "lucide-react";
+import { Download, X, Edit3, Check, RefreshCw, Eye } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
@@ -17,21 +17,25 @@ interface AnnouncementData {
 }
 
 const DEFAULT_ANNOUNCEMENT: AnnouncementData = {
-  title: "官方客户端全新上线",
-  tag: "官方重磅发布",
+  title: "国内手机装不了谷歌？我帮你搞定了",
+  tag: "安卓用户必看",
   content: [
-    "官方安卓客户端正式上架，安装包仅 1.9 MB，秒下秒装不占内存",
-    "桌面一键直达，收藏级防失联，以后访问再也不会迷路",
-    "聚合网络加速专线与全站精选资源，打开就能直接用",
+    "Google服务包（Android 12–17）已整理完成，四大组件按版本归档",
+    "安装顺序：框架 → 账号管理器 → Play服务 → 商店，装完重启即用",
+    "文件来自 APKMirror（Google LLC），20+ 官方正版应用，完全免费",
+    "装上官方 APP，谷歌全家桶一键直达，收藏级防失联",
   ],
   download_url: "https://pxyfbbohoazbslneagix.supabase.co/storage/v1/object/public/downloads/DustanHub.apk",
-  button_text: "立即下载官方 APP (约 1.9 MB)",
-  version: "1.0.1",
+  button_text: "立即下载官方 APP",
+  version: "2.0.0",
   is_active: true,
 };
 
 const STORAGE_KEY = "dustan_seen_announcement_version";
 const INPUT_CLASS = "w-full mt-1 px-3 py-2 rounded-lg bg-zinc-900 border border-zinc-700 text-white text-xs outline-none focus:border-accent transition-colors";
+
+// 谷歌四色：蓝 / 红 / 黄 / 绿
+const GOOGLE_COLORS = ["#4285F4", "#EA4335", "#FBBC05", "#34A853"];
 
 type EditForm = Omit<AnnouncementData, "id" | "content"> & { contentRaw: string };
 
@@ -202,10 +206,17 @@ export default function AnnouncementModal() {
           initial={{ opacity: 0, scale: 0.9, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0 }}
-          className="relative w-full max-w-md rounded-2xl bg-[#090c15]/95 border border-accent/40 animate-breathe-glow shadow-2xl p-6 sm:p-7 overflow-hidden text-left"
+          className="relative w-full max-w-md rounded-2xl bg-[#090c15]/95 border border-[#4285F4]/30 shadow-[0_25px_60px_rgba(0,0,0,0.6),0_0_44px_rgba(66,133,244,0.14)] p-6 sm:p-7 overflow-hidden text-left"
         >
-          <div className="absolute -top-24 -left-24 w-52 h-52 bg-primary/20 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute -bottom-24 -right-24 w-52 h-52 bg-accent/25 rounded-full blur-3xl pointer-events-none" />
+          {/* 谷歌四色顶栏 */}
+          <div className="absolute top-0 left-0 right-0 h-1.5 flex">
+            <span className="flex-1 bg-[#4285F4]" />
+            <span className="flex-1 bg-[#EA4335]" />
+            <span className="flex-1 bg-[#FBBC05]" />
+            <span className="flex-1 bg-[#34A853]" />
+          </div>
+          <div className="absolute -top-24 -left-24 w-52 h-52 bg-[#4285F4]/20 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute -bottom-24 -right-24 w-52 h-52 bg-[#34A853]/20 rounded-full blur-3xl pointer-events-none" />
 
           <div className="absolute top-4 right-4 flex items-center gap-2 z-10">
             {isAdmin && !isEditing && (
@@ -363,15 +374,20 @@ export default function AnnouncementModal() {
                       className="w-10 h-10 rounded-full object-cover ring-2 ring-primary/40 shadow-md shadow-primary/20"
                     />
                     <div>
-                      <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-accent/15 border border-accent/40 text-accent text-xs font-medium">
-                        <Sparkles className="w-3 h-3" />
+                      <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#4285F4]/15 border border-[#4285F4]/40 text-[#8ab4f8] text-xs font-medium">
+                        <span className="inline-flex items-center gap-[3px]">
+                          <i className="block w-[7px] h-[7px] rounded-full bg-[#4285F4]" />
+                          <i className="block w-[7px] h-[7px] rounded-full bg-[#EA4335]" />
+                          <i className="block w-[7px] h-[7px] rounded-full bg-[#FBBC05]" />
+                          <i className="block w-[7px] h-[7px] rounded-full bg-[#34A853]" />
+                        </span>
                         {editForm.tag}
                       </div>
                     </div>
                   </div>
 
                   <h3 className="font-heading text-xl sm:text-2xl font-bold tracking-tight">
-                    <span className="gradient-text glow-text">{editForm.title}</span>
+                    <span className="[background:linear-gradient(90deg,#4285F4,#EA4335,#FBBC05,#34A853)] bg-clip-text text-transparent">{editForm.title}</span>
                   </h3>
 
                   <div className="space-y-2 py-1">
@@ -381,7 +397,13 @@ export default function AnnouncementModal() {
                           key={`${item}-${index}`}
                           className="flex items-start gap-3 p-2.5 rounded-xl bg-secondary/30 border border-border/50 text-foreground/90 text-xs sm:text-sm"
                         >
-                          <div className="w-1.5 h-1.5 rounded-full bg-accent mt-1.5 shrink-0 shadow-[0_0_8px_hsl(var(--accent))]" />
+                          <div
+                            className="w-1.5 h-1.5 rounded-full mt-1.5 shrink-0"
+                            style={{
+                              backgroundColor: GOOGLE_COLORS[index % GOOGLE_COLORS.length],
+                              boxShadow: `0 0 8px ${GOOGLE_COLORS[index % GOOGLE_COLORS.length]}`,
+                            }}
+                          />
                           <span className="leading-relaxed">{item}</span>
                         </div>
                       ))
@@ -393,10 +415,10 @@ export default function AnnouncementModal() {
                   <div className="space-y-2 pt-1">
                     <button
                       type="button"
-                      className="w-full py-3.5 rounded-xl bg-gradient-to-r from-primary via-accent to-accent text-white font-heading font-bold text-sm flex items-center justify-center gap-2 shadow-lg shadow-accent/25 opacity-90 cursor-default"
+                      className="w-full py-3.5 rounded-xl bg-[#4285F4] text-white font-heading font-bold text-sm flex items-center justify-center gap-2 shadow-[0_8px_24px_rgba(66,133,244,0.35)] opacity-90 cursor-default"
                     >
                       <Download className="w-4 h-4" />
-                      {editForm.button_text || "立即下载官方 APP (约 1.9 MB)"}
+                      {editForm.button_text || "立即下载官方 APP"}
                     </button>
                   </div>
 
@@ -431,15 +453,20 @@ export default function AnnouncementModal() {
                   className="w-10 h-10 rounded-full object-cover ring-2 ring-primary/40 shadow-md shadow-primary/20"
                 />
                 <div>
-                  <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-accent/15 border border-accent/40 text-accent text-xs font-medium">
-                    <Sparkles className="w-3 h-3" />
+                  <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#4285F4]/15 border border-[#4285F4]/40 text-[#8ab4f8] text-xs font-medium">
+                    <span className="inline-flex items-center gap-[3px]">
+                      <i className="block w-[7px] h-[7px] rounded-full bg-[#4285F4]" />
+                      <i className="block w-[7px] h-[7px] rounded-full bg-[#EA4335]" />
+                      <i className="block w-[7px] h-[7px] rounded-full bg-[#FBBC05]" />
+                      <i className="block w-[7px] h-[7px] rounded-full bg-[#34A853]" />
+                    </span>
                     {data.tag}
                   </div>
                 </div>
               </div>
 
               <h3 className="font-heading text-xl sm:text-2xl font-bold tracking-tight">
-                <span className="gradient-text glow-text">{data.title}</span>
+                <span className="[background:linear-gradient(90deg,#4285F4,#EA4335,#FBBC05,#34A853)] bg-clip-text text-transparent">{data.title}</span>
               </h3>
 
               <div className="space-y-2 py-1">
@@ -448,7 +475,13 @@ export default function AnnouncementModal() {
                     key={`${item}-${index}`}
                     className="flex items-start gap-3 p-2.5 rounded-xl bg-secondary/30 border border-border/50 text-foreground/90 text-xs sm:text-sm"
                   >
-                    <div className="w-1.5 h-1.5 rounded-full bg-accent mt-1.5 shrink-0 shadow-[0_0_8px_hsl(var(--accent))]" />
+                    <div
+                      className="w-1.5 h-1.5 rounded-full mt-1.5 shrink-0"
+                      style={{
+                        backgroundColor: GOOGLE_COLORS[index % GOOGLE_COLORS.length],
+                        boxShadow: `0 0 8px ${GOOGLE_COLORS[index % GOOGLE_COLORS.length]}`,
+                      }}
+                    />
                     <span className="leading-relaxed">{item}</span>
                   </div>
                 ))}
@@ -458,7 +491,7 @@ export default function AnnouncementModal() {
                 <button
                   type="button"
                   onClick={() => window.open(data.download_url, "_blank", "noopener,noreferrer")}
-                  className="w-full py-3.5 rounded-xl bg-gradient-to-r from-primary via-accent to-accent hover:opacity-95 text-white font-heading font-bold text-sm flex items-center justify-center gap-2 shadow-lg shadow-accent/25 hover:shadow-accent/40 transition-all hover:scale-[1.01]"
+                  className="w-full py-3.5 rounded-xl bg-[#4285F4] hover:bg-[#3367d6] text-white font-heading font-bold text-sm flex items-center justify-center gap-2 shadow-[0_8px_24px_rgba(66,133,244,0.35)] transition-all hover:scale-[1.01]"
                 >
                   <Download className="w-4 h-4" />
                   {data.button_text}
