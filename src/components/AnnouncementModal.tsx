@@ -25,7 +25,7 @@ const DEFAULT_ANNOUNCEMENT: AnnouncementData = {
     "文件来自 APKMirror（Google LLC），20+ 官方正版应用，完全免费",
     "装上官方 APP，谷歌全家桶一键直达，收藏级防失联",
     "⚠️目录路径⚠️：首页4大网盘→高价值资源包→海外应用→主流应用→谷歌全家桶",
-    "如有问题请前往【BBS论坛】反馈。",
+    "如有问题请前往反馈。",
   ],
   download_url: "https://pxyfbbohoazbslneagix.supabase.co/storage/v1/object/public/downloads/DustanHub.apk",
   button_text: "立即下载官方 APP",
