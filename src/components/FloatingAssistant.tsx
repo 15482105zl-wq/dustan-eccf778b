@@ -1,8 +1,12 @@
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { MessageCircle } from "lucide-react";
 import AiChatModal from "@/components/AiChatModal";
 
-// 全站悬浮 D助手：完全透明晶透底座 + 定制青紫科技流光「D·智能光核」图标。
+// 全站悬浮 AI 助手：挂在 App 路由外面，所有页面右下角常驻。
+// 点开的是同一个 AiChatModal、同一个会话（localStorage dustan_ai_session），
+// 和副页里直接点的 AI 助手效果完全一致，换页面聊天不中断。
+// 按钮：渐变底色 + 半透明磨砂，白色聊天气泡图标。
 const FloatingAssistant = () => {
   const [open, setOpen] = useState(false);
 
@@ -14,69 +18,18 @@ const FloatingAssistant = () => {
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.8 }}
-            whileHover={{ scale: 1.08 }}
-            whileTap={{ scale: 0.94 }}
-            transition={{ type: "spring", stiffness: 400, damping: 25 }}
+            transition={{ duration: 0.2 }}
             onClick={() => setOpen(true)}
             aria-label="打开 D助手"
-            className="fixed z-40 outline-none group"
-            style={{ right: "1.25rem", bottom: "calc(5.5rem + env(safe-area-inset-bottom))" }}
+            className="fixed z-40 flex flex-col items-center gap-1 outline-none"
+            style={{ right: "1rem", bottom: "calc(6rem + env(safe-area-inset-bottom))" }}
           >
-            <div className="relative flex h-[52px] w-[52px] items-center justify-center rounded-full bg-black/15 hover:bg-black/30 backdrop-blur-md border border-white/15 hover:border-cyan-400/50 shadow-[0_0_20px_rgba(168,85,247,0.3)] hover:shadow-[0_0_28px_rgba(34,211,238,0.55)] transition-all duration-300">
-              <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-cyan-500/20 to-purple-500/20 blur-sm opacity-60 group-hover:opacity-100 transition-opacity" />
-
-              <svg
-                viewBox="0 0 48 48"
-                className="relative z-10 h-7 w-7 transition-transform duration-300 group-hover:rotate-6"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <defs>
-                  <linearGradient id="d-assist-grad" x1="8" y1="8" x2="40" y2="40" gradientUnits="userSpaceOnUse">
-                    <stop offset="0%" stopColor="#22d3ee" />
-                    <stop offset="50%" stopColor="#818cf8" />
-                    <stop offset="100%" stopColor="#c084fc" />
-                  </linearGradient>
-                  <linearGradient id="d-pulse-grad" x1="18" y1="18" x2="30" y2="30" gradientUnits="userSpaceOnUse">
-                    <stop offset="0%" stopColor="#22d3ee" />
-                    <stop offset="100%" stopColor="#a855f7" />
-                  </linearGradient>
-                </defs>
-
-                <circle
-                  cx="24"
-                  cy="24"
-                  r="21"
-                  stroke="url(#d-assist-grad)"
-                  strokeWidth="1.2"
-                  strokeDasharray="3 4"
-                  opacity="0.35"
-                />
-
-                <path
-                  d="M37 9L38.2 12.8L42 14L38.2 15.2L37 19L35.8 15.2L32 14L35.8 12.8Z"
-                  fill="#22d3ee"
-                  className="animate-pulse"
-                />
-                <circle cx="11" cy="35" r="1.5" fill="#c084fc" opacity="0.8" />
-
-                <path
-                  d="M17 12C17 11.4477 17.4477 11 18 11H26C33.1797 11 39 16.8203 39 24C39 31.1797 33.1797 37 26 37H18C17.4477 37 17 36.5523 17 36V12Z"
-                  stroke="url(#d-assist-grad)"
-                  strokeWidth="3"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-
-                <path
-                  d="M23 17H26C29.866 17 33 20.134 33 24C33 27.866 29.866 31 26 31H23V17Z"
-                  fill="url(#d-pulse-grad)"
-                  opacity="0.25"
-                />
-
-                <circle cx="23" cy="24" r="2.5" fill="#22d3ee" />
-              </svg>
-            </div>
+            <span className="relative flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-cyan-400/70 via-indigo-500/70 to-fuchsia-500/70 shadow-lg shadow-indigo-500/30 ring-1 ring-white/30 backdrop-blur-md">
+              <MessageCircle className="h-6 w-6 text-white" strokeWidth={2.2} />
+            </span>
+            <span className="text-[11px] font-medium text-foreground/80 bg-background/70 backdrop-blur px-2 py-0.5 rounded-full border border-border/40">
+              D助手
+            </span>
           </motion.button>
         )}
       </AnimatePresence>
