@@ -22,7 +22,7 @@ const FloatingAssistant = () => {
             className="fixed z-40 outline-none group"
             style={{ right: "1.25rem", bottom: "calc(5.5rem + env(safe-area-inset-bottom))" }}
           >
-            <div className="relative flex h-13 w-13 items-center justify-center rounded-full bg-black/15 hover:bg-black/30 backdrop-blur-md border border-white/15 hover:border-cyan-400/50 shadow-[0_0_20px_rgba(168,85,247,0.3)] hover:shadow-[0_0_28px_rgba(34,211,238,0.55)] transition-all duration-300">
+            <div className="relative flex h-[52px] w-[52px] items-center justify-center rounded-full bg-black/15 hover:bg-black/30 backdrop-blur-md border border-white/15 hover:border-cyan-400/50 shadow-[0_0_20px_rgba(168,85,247,0.3)] hover:shadow-[0_0_28px_rgba(34,211,238,0.55)] transition-all duration-300">
               <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-cyan-500/20 to-purple-500/20 blur-sm opacity-60 group-hover:opacity-100 transition-opacity" />
 
               <svg
