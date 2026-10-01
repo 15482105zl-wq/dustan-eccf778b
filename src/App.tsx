@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/hooks/useAuth";
 import SwipeBackHandler from "@/components/SwipeBackHandler";
+import FloatingAssistant from "@/components/FloatingAssistant";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import Profile from "./pages/Profile";
@@ -33,6 +34,7 @@ const App = () => (
             <Route path="/accelerate" element={<Accelerate />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
+          <FloatingAssistant />
         </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>
