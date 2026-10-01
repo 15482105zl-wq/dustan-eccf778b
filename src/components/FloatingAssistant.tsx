@@ -6,6 +6,7 @@ import AiIcon from "@/components/AiIcon";
 // 全站悬浮 AI 助手：挂在 App 路由外面，所有页面右下角常驻。
 // 点开的是同一个 AiChatModal、同一个会话（localStorage dustan_ai_session），
 // 和副页里直接点的 AI 助手效果完全一致，换页面聊天不中断。
+// 按钮用白色实心圆 + 品牌渐变 D 标，在深色背景上对比最明显。
 const FloatingAssistant = () => {
   const [open, setOpen] = useState(false);
 
@@ -23,8 +24,7 @@ const FloatingAssistant = () => {
             className="fixed z-40 flex flex-col items-center gap-1 outline-none"
             style={{ right: "1rem", bottom: "calc(1.25rem + env(safe-area-inset-bottom))" }}
           >
-            <span className="relative flex w-14 h-14 rounded-full items-center justify-center shadow-lg shadow-primary/30 bg-gradient-to-br from-cyan-400 via-indigo-500 to-fuchsia-500">
-              <span className="absolute inset-0 rounded-full bg-gradient-to-br from-cyan-400 via-indigo-500 to-fuchsia-500 animate-ping opacity-20" />
+            <span className="relative flex w-14 h-14 rounded-full items-center justify-center bg-white ring-2 ring-white/90 shadow-[0_0_28px_rgba(109,123,255,0.55)]">
               <AiIcon className="relative w-8 h-8" />
             </span>
             <span className="text-[11px] font-medium text-foreground/80 bg-background/70 backdrop-blur px-2 py-0.5 rounded-full border border-border/40">
