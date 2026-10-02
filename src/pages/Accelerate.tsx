@@ -146,6 +146,21 @@ const Accelerate = () => {
         </motion.div>
 
         <div className="w-full max-w-4xl flex flex-col gap-4">
+          {/* 滚动公告：Nice 云 IPv4 阻断通知 */}
+          <div className="overflow-hidden rounded-2xl border border-amber-300/25 bg-amber-400/[0.07] py-2.5">
+            <style>{`@keyframes dustanNoticeScroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }`}</style>
+            <div
+              className="flex whitespace-nowrap"
+              style={{ width: "max-content", animation: "dustanNoticeScroll 24s linear infinite" }}
+            >
+              <span className="pr-16 text-xs text-amber-100/90">
+                📢 公告：Nice 云近期 IPv4 阻断较严重，WiFi 用户请开启路由器 IPv6 支持，或切换手机流量使用；流量也无法使用请重启手机。
+              </span>
+              <span className="pr-16 text-xs text-amber-100/90" aria-hidden="true">
+                📢 公告：Nice 云近期 IPv4 阻断较严重，WiFi 用户请开启路由器 IPv6 支持，或切换手机流量使用；流量也无法使用请重启手机。
+              </span>
+            </div>
+          </div>
           {/* Nice·云 - 主力推荐 */}
           <motion.div
             initial={{ opacity: 0, y: 18 }}
