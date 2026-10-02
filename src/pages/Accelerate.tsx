@@ -154,10 +154,10 @@ const Accelerate = () => {
               style={{ width: "max-content", animation: "dustanNoticeScroll 24s linear infinite" }}
             >
               <span className="pr-16 text-xs text-amber-100/90">
-                📢 公告：Nice 云近期 IPv4 阻断较严重，WiFi 用户请开启路由器 IPv6 支持，或切换手机流量使用；流量也无法使用请重启手机。
+                📢 公告：近期 IPv4 阻断较严重，WiFi 用户请开启路由器 IPv6 支持，或切换手机流量使用；流量也无法使用请重启手机。
               </span>
               <span className="pr-16 text-xs text-amber-100/90" aria-hidden="true">
-                📢 公告：Nice 云近期 IPv4 阻断较严重，WiFi 用户请开启路由器 IPv6 支持，或切换手机流量使用；流量也无法使用请重启手机。
+                📢 公告：近期 IPv4 阻断较严重，WiFi 用户请开启路由器 IPv6 支持，或切换手机流量使用；流量也无法使用请重启手机。
               </span>
             </div>
           </div>
