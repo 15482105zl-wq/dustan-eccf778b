@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { MessageCircle } from "lucide-react";
 import AiChatModal from "@/components/AiChatModal";
-import AiIcon from "@/components/AiIcon";
 
 // 全站悬浮 AI 助手：挂在 App 路由外面，所有页面右下角常驻。
 // 点开的是同一个 AiChatModal、同一个会话（localStorage dustan_ai_session），
 // 和副页里直接点的 AI 助手效果完全一致，换页面聊天不中断。
-// 按钮：渐变底色 + 半透明磨砂，卡片同款 D 图标（深色 D）。
+// 按钮：渐变底色 + 半透明磨砂，白色聊天气泡图标。
 const FloatingAssistant = () => {
   const [open, setOpen] = useState(false);
 
@@ -25,7 +25,7 @@ const FloatingAssistant = () => {
             style={{ right: "1rem", bottom: "calc(5.5rem + env(safe-area-inset-bottom))" }}
           >
             <span className="relative flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-cyan-400/70 via-indigo-500/70 to-fuchsia-500/70 shadow-lg shadow-indigo-500/30 ring-1 ring-white/30 backdrop-blur-md animate-breathe-glow-strong">
-              <AiIcon className="h-7 w-7 translate-y-[2px]" dFill="#0c1424" />
+              <MessageCircle className="h-6 w-6 text-white" strokeWidth={2.2} />
             </span>
             <span className="text-[11px] font-medium text-foreground/80 bg-background/70 backdrop-blur px-2 py-0.5 rounded-full border border-border/40">
               D助手
