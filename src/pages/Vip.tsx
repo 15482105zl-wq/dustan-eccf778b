@@ -200,7 +200,7 @@ const Vip = () => {
           rel="noopener noreferrer"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="mt-10 text-sm font-bold animate-app-link"
+          className="mt-8 text-sm font-bold animate-app-link"
           style={{ color: "#a855f7" }}
         >
           📲 下载 Dustan Hub App
