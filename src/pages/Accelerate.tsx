@@ -7,7 +7,7 @@ import SEO from "@/components/SEO";
 import UserNav from "@/components/UserNav";
 
 const NICE_URL = "https://dustan.mmmoyou.com/#/register?code=0lc8ncSH";
-const LVCHA_URL = "https://pan.quark.cn/s/1d9113e678f3";
+const DUOBAO_URL = "https://dalichuqiji.mmmoyou.com/#/register?code=8FQPMcPJ";
 const APP_DOWNLOAD_URL = "https://pxyfbbohoazbslneagix.supabase.co/storage/v1/object/public/downloads/DustanHub.apk";
 
 // 3D 玻璃质感发光 - Nice·云 圆形图标
@@ -46,57 +46,29 @@ const NiceCloudIcon = () => (
   </div>
 );
 
-// 3D 玻璃质感发光 - 绿叶机场 圆形图标
-const LeafAirportIcon = () => (
+// 3D 玻璃质感发光 - 多宝极速网络 圆形图标（紫色闪电）
+const DuobaoIcon = () => (
   <div
     className="w-14 h-14 rounded-full relative flex items-center justify-center flex-shrink-0 overflow-hidden"
     style={{
-      background: "radial-gradient(100% 100% at 30% 25%, #3bf087 0%, #00b84c 55%, #03481f 100%)",
-      boxShadow: "0 0 20px rgba(0, 230, 118, 0.55), inset 0 1.5px 2px rgba(255, 255, 255, 0.75), inset 0 -3px 6px rgba(0, 0, 0, 0.45)",
+      background: "radial-gradient(100% 100% at 30% 25%, #c084fc 0%, #7c3aed 55%, #2e1065 100%)",
+      boxShadow: "0 0 20px rgba(139, 92, 246, 0.55), inset 0 1.5px 2px rgba(255, 255, 255, 0.75), inset 0 -3px 6px rgba(0, 0, 0, 0.45)",
       border: "1px solid rgba(255, 255, 255, 0.4)",
     }}
   >
- <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 56 56">
+    <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 56 56">
       <defs>
-        <linearGradient id="leafGradRound" x1="0" y1="0" x2="1" y2="1">
+        <linearGradient id="boltGradRound" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stopColor="#ffffff" stopOpacity="0.95" />
-          <stop offset="45%" stopColor="#d2ffe3" stopOpacity="0.8" />
-          <stop offset="100%" stopColor="#67fab0" stopOpacity="0.45" />
+          <stop offset="45%" stopColor="#ede9fe" stopOpacity="0.8" />
+          <stop offset="100%" stopColor="#c4b5fd" stopOpacity="0.45" />
         </linearGradient>
       </defs>
-
-      <ellipse
-        cx="28"
-        cy="28"
-        rx="22"
-        ry="8.5"
-        fill="none"
-        stroke="rgba(255,255,255,0.7)"
-        strokeWidth="1.2"
-        transform="rotate(-25 28 28)"
-        filter="drop-shadow(0 0 3px rgba(255,255,255,0.9))"
-      />
-
+      <circle cx="28" cy="28" r="20" fill="none" stroke="rgba(255,255,255,0.22)" strokeWidth="0.8" strokeDasharray="3 3" />
       <path
-        d="M37 15c-1 8-7 18-18 23 1-8 6-18 18-23z"
-        fill="url(#leafGradRound)"
-        filter="drop-shadow(0 4px 6px rgba(0, 50, 20, 0.4))"
-      />
-      <path
-        d="M37 15c-8 6-13 13-18 23"
-        fill="none"
-        stroke="#ffffff"
-        strokeWidth="1.2"
-        strokeLinecap="round"
-        opacity="0.9"
-      />
-      <path
-        d="M19 38c-2 2-3 4-3 5"
-        fill="none"
-        stroke="#ffffff"
-        strokeWidth="1.4"
-        strokeLinecap="round"
-        opacity="0.85"
+        d="M31 12 L20 30 h7 L25 44 L37 25 h-8 Z"
+        fill="url(#boltGradRound)"
+        filter="drop-shadow(0 4px 6px rgba(40, 10, 90, 0.45))"
       />
     </svg>
   </div>
@@ -105,6 +77,7 @@ const LeafAirportIcon = () => (
 const Accelerate = () => {
   const navigate = useNavigate();
   const [couponCopied, setCouponCopied] = useState(false);
+  const [duobaoCopied, setDuobaoCopied] = useState(false);
 
   const copyText = async (text: string) => {
     try {
@@ -218,7 +191,7 @@ const Accelerate = () => {
             </button>
           </motion.div>
 
-          {/* 绿叶机场 */}
+          {/* 多宝极速网络 */}
           <motion.div
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
@@ -226,22 +199,47 @@ const Accelerate = () => {
             className="bg-transparent rounded-2xl p-6 flex flex-col border border-glass-border/40"
           >
             <div className="flex items-center gap-3.5 mb-3">
-              <LeafAirportIcon />
+              <DuobaoIcon />
               <div>
-                <h2 className="font-heading text-lg font-semibold text-foreground">绿叶机场</h2>
-                <p className="text-[11px] text-muted-foreground">永久免费 · 无广告 · 全自研</p>
+                <h2 className="font-heading text-lg font-semibold text-foreground">多宝极速网络</h2>
+                <p className="text-[11px] text-muted-foreground">低价包月 · 全中转线路 · HY2 高速下载</p>
               </div>
             </div>
             <p className="text-[13px] leading-relaxed text-muted-foreground flex-1">
-              主打一个"零门槛"——永久免费，不收费不弹广告。连接速度快，全球节点覆盖广，日常刷剧、玩游戏都能应付，适合不想折腾的轻度用户。
+              主打一个"省"字——8 元包月 500G，全中转线路稳定不断流，HY2 高速下载，chatGPT 一键解锁，适合想花小钱办大事的用户。
             </p>
 
             <button
-              onClick={() => window.open(LVCHA_URL, "_blank", "noopener,noreferrer")}
-              className="mt-4 w-full rounded-full py-3 text-sm font-bold border border-white/10 bg-transparent transition-transform hover:scale-[1.02]"
+              onClick={async () => {
+                await copyText("duobao88");
+                setDuobaoCopied(true);
+                setTimeout(() => setDuobaoCopied(false), 2000);
+              }}
+              className="mt-4 w-full rounded-full px-3 py-3 text-center text-xs font-bold inline-flex items-center justify-center gap-1.5 border border-white/10 bg-transparent transition-opacity hover:opacity-80"
+            >
+              {duobaoCopied ? (
+                <>
+                  <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                    已复制 duobao88
+                  </span>
+                  <Check className="w-3.5 h-3.5 text-accent" />
+                </>
+              ) : (
+                <>
+                  <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                    优惠券：duobao88
+                  </span>
+                  <Copy className="w-3.5 h-3.5 text-accent" />
+                </>
+              )}
+            </button>
+
+            <button
+              onClick={() => window.open(DUOBAO_URL, "_blank", "noopener,noreferrer")}
+              className="mt-3 w-full rounded-full py-3 text-sm font-bold border border-white/10 bg-transparent transition-transform hover:scale-[1.02]"
               style={{ color: "#a855f7" }}
             >
-              免费下载
+              立即开始
             </button>
           </motion.div>
         </div>
