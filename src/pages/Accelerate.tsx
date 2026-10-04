@@ -161,11 +161,11 @@ const Accelerate = () => {
               <DuobaoIcon />
               <div>
                 <h2 className="font-heading text-lg font-semibold text-foreground">极速网络</h2>
-                <p className="text-[11px] text-muted-foreground">全中转线路 · HY2 高速下载 · chatGPT 解锁</p>
+                <p className="text-[11px] text-muted-foreground">全中转 · 高速下载 · GPT解锁</p>
               </div>
             </div>
             <p className="text-[13px] leading-relaxed text-muted-foreground flex-1">
-              主打一个"快"字——全中转线路稳定不断流，HY2 高速下载，chatGPT 一键解锁，全球节点覆盖广，适合对速度和稳定有要求的用户。
+              主打一个"快"字——全中转高速优质线路稳定不断流，HY2 疾速下载体验好，chatGPT 一键解锁，全球多国节点广泛覆盖，适合对速度和稳定有高要求的用户。
             </p>
 
             <button
