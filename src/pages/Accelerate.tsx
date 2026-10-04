@@ -1,7 +1,6 @@
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Copy, Check } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { motion } from "framer-motion";
-import { useState } from "react";
 import ParticleBackground from "@/components/ParticleBackground";
 import SEO from "@/components/SEO";
 import UserNav from "@/components/UserNav";
@@ -46,7 +45,7 @@ const NiceCloudIcon = () => (
   </div>
 );
 
-// 3D 玻璃质感发光 - 多宝极速网络 圆形图标（紫色闪电）
+// 3D 玻璃质感发光 - 极速网络 圆形图标（紫色闪电）
 const DuobaoIcon = () => (
   <div
     className="w-14 h-14 rounded-full relative flex items-center justify-center flex-shrink-0 overflow-hidden"
@@ -76,21 +75,6 @@ const DuobaoIcon = () => (
 
 const Accelerate = () => {
   const navigate = useNavigate();
-  const [couponCopied, setCouponCopied] = useState(false);
-  const [duobaoCopied, setDuobaoCopied] = useState(false);
-
-  const copyText = async (text: string) => {
-    try {
-      await navigator.clipboard.writeText(text);
-    } catch {
-      const ta = document.createElement("textarea");
-      ta.value = text;
-      document.body.appendChild(ta);
-      ta.select();
-      document.execCommand("copy");
-      document.body.removeChild(ta);
-    }
-  };
 
   return (
     <div className="min-h-screen relative">
@@ -158,40 +142,15 @@ const Accelerate = () => {
             </p>
 
             <button
-              onClick={async () => {
-                await copyText("nice888");
-                setCouponCopied(true);
-                setTimeout(() => setCouponCopied(false), 2000);
-              }}
-              className="mt-4 w-full rounded-full px-3 py-3 text-center text-xs font-bold inline-flex items-center justify-center gap-1.5 border border-white/10 bg-transparent transition-opacity hover:opacity-80"
-            >
-              {couponCopied ? (
-                <>
-                  <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                    已复制 nice888
-                  </span>
-                  <Check className="w-3.5 h-3.5 text-accent" />
-                </>
-              ) : (
-                <>
-                  <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                    7折优惠券：nice888
-                  </span>
-                  <Copy className="w-3.5 h-3.5 text-accent" />
-                </>
-              )}
-            </button>
-
-            <button
               onClick={() => window.open(NICE_URL, "_blank", "noopener,noreferrer")}
-              className="mt-3 w-full rounded-full py-3 text-sm font-bold border border-white/10 bg-transparent transition-transform hover:scale-[1.02]"
+              className="mt-4 w-full rounded-full py-3 text-sm font-bold border border-white/10 bg-transparent transition-transform hover:scale-[1.02]"
               style={{ color: "#a855f7" }}
             >
               立即开始
             </button>
           </motion.div>
 
-          {/* 多宝极速网络 */}
+          {/* 极速网络 */}
           <motion.div
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
@@ -201,42 +160,17 @@ const Accelerate = () => {
             <div className="flex items-center gap-3.5 mb-3">
               <DuobaoIcon />
               <div>
-                <h2 className="font-heading text-lg font-semibold text-foreground">多宝极速网络</h2>
-                <p className="text-[11px] text-muted-foreground">低价包月 · 全中转线路 · HY2 高速下载</p>
+                <h2 className="font-heading text-lg font-semibold text-foreground">极速网络</h2>
+                <p className="text-[11px] text-muted-foreground">全中转线路 · HY2 高速下载 · chatGPT 解锁</p>
               </div>
             </div>
             <p className="text-[13px] leading-relaxed text-muted-foreground flex-1">
-              主打一个"省"字——8 元包月 500G，全中转线路稳定不断流，HY2 高速下载，chatGPT 一键解锁，适合想花小钱办大事的用户。
+              主打一个"快"字——全中转线路稳定不断流，HY2 高速下载，chatGPT 一键解锁，全球节点覆盖广，适合对速度和稳定有要求的用户。
             </p>
 
             <button
-              onClick={async () => {
-                await copyText("duobao88");
-                setDuobaoCopied(true);
-                setTimeout(() => setDuobaoCopied(false), 2000);
-              }}
-              className="mt-4 w-full rounded-full px-3 py-3 text-center text-xs font-bold inline-flex items-center justify-center gap-1.5 border border-white/10 bg-transparent transition-opacity hover:opacity-80"
-            >
-              {duobaoCopied ? (
-                <>
-                  <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                    已复制 duobao88
-                  </span>
-                  <Check className="w-3.5 h-3.5 text-accent" />
-                </>
-              ) : (
-                <>
-                  <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                    优惠券：duobao88
-                  </span>
-                  <Copy className="w-3.5 h-3.5 text-accent" />
-                </>
-              )}
-            </button>
-
-            <button
               onClick={() => window.open(DUOBAO_URL, "_blank", "noopener,noreferrer")}
-              className="mt-3 w-full rounded-full py-3 text-sm font-bold border border-white/10 bg-transparent transition-transform hover:scale-[1.02]"
+              className="mt-4 w-full rounded-full py-3 text-sm font-bold border border-white/10 bg-transparent transition-transform hover:scale-[1.02]"
               style={{ color: "#a855f7" }}
             >
               立即开始
