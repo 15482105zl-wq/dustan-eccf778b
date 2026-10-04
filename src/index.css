@@ -111,6 +111,19 @@
 .animate-breathe-glow {
   animation: breathe-glow 3s ease-in-out infinite;
 }
+@keyframes breathe-glow-strong {
+  0%, 100% {
+    box-shadow: 0 0 16px hsl(270 85% 65% / 0.5), 0 0 42px hsl(285 90% 60% / 0.28);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 34px hsl(270 85% 65% / 0.9), 0 0 90px hsl(285 90% 60% / 0.5);
+    transform: scale(1.08);
+  }
+}
+.animate-breathe-glow-strong {
+  animation: breathe-glow-strong 2.2s ease-in-out infinite;
+}
 @keyframes app-link-glow {
   0%, 100% {
     opacity: 1;
