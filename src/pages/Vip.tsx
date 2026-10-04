@@ -184,7 +184,7 @@ const Vip = () => {
             </div>
             <div className="text-center">
               <h3 className="font-semibold text-lg whitespace-nowrap">
-                <span className="gradient-text glow-text">AI·客服</span>
+                <span className="gradient-text glow-text">D·助手</span>
               </h3>
               <p className="text-sm text-muted-foreground mt-1">
                 有问题直接问我
