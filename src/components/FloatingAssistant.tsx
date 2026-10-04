@@ -25,7 +25,7 @@ const FloatingAssistant = () => {
             style={{ right: "1rem", bottom: "calc(5.5rem + env(safe-area-inset-bottom))" }}
           >
             <span className="relative flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-cyan-400/70 via-indigo-500/70 to-fuchsia-500/70 shadow-lg shadow-indigo-500/30 ring-1 ring-white/30 backdrop-blur-md animate-breathe-glow-strong">
-              <AiIcon className="h-6 w-6" dFill="#0c1424" />
+              <AiIcon className="h-7 w-7 translate-y-[2px]" dFill="#0c1424" />
             </span>
             <span className="text-[11px] font-medium text-foreground/80 bg-background/70 backdrop-blur px-2 py-0.5 rounded-full border border-border/40">
               D助手
