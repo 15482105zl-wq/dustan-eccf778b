@@ -282,7 +282,7 @@ opacity: 0 }}
         </motion.a>
 
         <footer
-          className="mt-12 mb-2 text-center text-xs text-muted-foreground"
+          className="mt-6 mb-2 text-center text-xs text-muted-foreground"
           style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
         >
           © 2020 - 2026 Dustan Hub · 用心运营每一天

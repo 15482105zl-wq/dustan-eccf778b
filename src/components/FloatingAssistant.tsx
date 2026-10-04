@@ -22,7 +22,7 @@ const FloatingAssistant = () => {
             onClick={() => setOpen(true)}
             aria-label="打开 D助手"
             className="fixed z-40 flex flex-col items-center gap-1 outline-none"
-            style={{ right: "1rem", bottom: "calc(6rem + env(safe-area-inset-bottom))" }}
+            style={{ right: "1rem", bottom: "calc(4.5rem + env(safe-area-inset-bottom))" }}
           >
             <span className="relative flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-cyan-400/70 via-indigo-500/70 to-fuchsia-500/70 shadow-lg shadow-indigo-500/30 ring-1 ring-white/30 backdrop-blur-md">
               <MessageCircle className="h-6 w-6 text-white" strokeWidth={2.2} />
