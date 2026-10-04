@@ -236,6 +236,30 @@ export type Database = {
         }
         Relationships: []
       }
+      site_notices: {
+        Row: {
+          id: string
+          is_active: boolean
+          slot: string
+          text: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          is_active?: boolean
+          slot: string
+          text: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          is_active?: boolean
+          slot?: string
+          text?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           id: string
