@@ -17,7 +17,15 @@ const UserNav = () => {
 
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
-  const [myProfile, setMyProfile] = useState<MyProfile | null>(null);
+  const PROFILE_CACHE_KEY = "dustan_my_profile";
+  const [myProfile, setMyProfile] = useState<MyProfile | null>(() => {
+    try {
+      const raw = localStorage.getItem(PROFILE_CACHE_KEY);
+      return raw ? (JSON.parse(raw) as MyProfile) : null;
+    } catch {
+      return null;
+    }
+  });
 
   const user: SupabaseUser | null = session?.user ?? null;
   const isAuthenticated = !!user;
@@ -57,11 +65,23 @@ const UserNav = () => {
       .eq("user_id", user.id)
       .maybeSingle()
       .then(({ data }) => {
-        if (data) setMyProfile(data);
+        if (data) {
+          setMyProfile(data);
+          try {
+            localStorage.setItem(PROFILE_CACHE_KEY, JSON.stringify(data));
+          } catch {
+            /* 忽略缓存失败 */
+          }
+        }
       });
   }, [user]);
 
   const handleLogout = async () => {
+    try {
+      localStorage.removeItem(PROFILE_CACHE_KEY);
+    } catch {
+      /* 忽略 */
+    }
     await supabase.auth.signOut();
     toast({ title: "已退出登录" });
     navigate("/");
