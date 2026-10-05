@@ -236,6 +236,30 @@ export type Database = {
         }
         Relationships: []
       }
+      site_counters: {
+        Row: {
+          category: string
+          count: number
+          key: string
+          label: string
+          updated_at: string
+        }
+        Insert: {
+          category?: string
+          count?: number
+          key: string
+          label?: string
+          updated_at?: string
+        }
+        Update: {
+          category?: string
+          count?: number
+          key?: string
+          label?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       site_notices: {
         Row: {
           id: string
@@ -358,6 +382,10 @@ export type Database = {
           _user_id: string
         }
         Returns: boolean
+      }
+      increment_counter: {
+        Args: { p_category: string; p_key: string; p_label: string }
+        Returns: undefined
       }
       is_email_confirmed: { Args: never; Returns: boolean }
     }
