@@ -179,7 +179,7 @@ const Vip = () => {
             onClick={handleChatClick}
             className="bg-transparent rounded-xl py-5 px-20 cursor-pointer relative overflow-hidden transition-colors duration-300 border border-glass-border/40 hover:border-primary/40 group"
           >
-            <div className="absolute left-4 top-1/2 -translate-y-1/2 w-16 h-16 rounded-xl bg-primary/10 flex items-center justify-center group-hover:scale-105 transition-transform">
+            <div className="absolute left-4 top-1/2 -translate-y-1/2 w-16 h-16 rounded-xl flex items-center justify-center group-hover:scale-105 transition-transform">
               <AiIcon className="w-10 h-10" />
             </div>
             <div className="text-center">
