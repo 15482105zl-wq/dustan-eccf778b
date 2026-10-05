@@ -13,6 +13,7 @@ import AiChatModal from "@/components/AiChatModal";
 import AiIcon from "@/components/AiIcon";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
+import { track } from "@/lib/track";
 
 const ICON_MAP: Record<string, LucideIcon> = { Rocket, Apple, Globe, Lock, Film, Search };
 
@@ -65,6 +66,8 @@ const Vip = () => {
   const requireAuth = () => setAuthOpen(true);
   const canInteract = !!user?.email_confirmed_at;
 
+  useEffect(() => { track("visit_vip", "VIP页访问", "visit"); }, []);
+
   useEffect(() => {
     if (searchParams.get("chat") === "true") {
       setChatOpen(true);
@@ -111,24 +114,29 @@ const Vip = () => {
     const isBBS = r.title === "BBS" || r.title === "BBS论坛";
     const isVpn = r.title.includes("VPN") || r.title.includes("V2PN") || r.title.includes("网络加速");
     const title = isBBS ? "BBS论坛" : isVpn ? "网络加速" : r.title;
+    const href = isBBS || isVpn ? undefined : r.url ?? undefined;
+    const base = isBBS
+      ? () => (canInteract ? setForumOpen(true) : requireAuth())
+      : isVpn
+        ? () => navigate("/accelerate")
+        : href
+          ? () => window.open(href, "_blank", "noopener,noreferrer")
+          : undefined;
+    const ckey = "vip_" + (isBBS ? "bbs" : isVpn ? "accelerate" : (r.icon || "card").toLowerCase());
     return {
       icon: ICON_MAP[r.icon] ?? Rocket,
       title,
       subtitle: SUBTITLE_MAP[title] ?? "精选服务",
-      url: isBBS || isVpn ? undefined : r.url ?? undefined,
+      url: href,
       badge: isBBS ? hasUnread : undefined,
-      onClick: isBBS
-        ? () => (canInteract ? setForumOpen(true) : requireAuth())
-        : isVpn
-          ? () => navigate("/accelerate")
-          : undefined,
+      onClick: () => { track(ckey, title, "service"); base?.(); },
     };
   };
 
   const primary = rows.filter((r) => r.category === "primary").map(toCard);
   const secondary = rows.filter((r) => r.category === "secondary").map(toCard);
 
-  const handleChatClick = () => setChatOpen(true);
+  const handleChatClick = () => { track("vip_ai_assistant", "D·助手", "service"); setChatOpen(true); };
 
   return (
     <div className="min-h-screen relative">
@@ -196,6 +204,7 @@ const Vip = () => {
 
         <motion.a
           href={APP_DOWNLOAD_URL}
+          onClick={() => track("app_download_vip", "APP下载（VIP页）", "app")}
           target="_blank"
           rel="noopener noreferrer"
           initial={{ opacity: 0 }}

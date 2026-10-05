@@ -10,10 +10,11 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { useToast } from "@/hooks/use-toast";
 import ParticleBackground from "@/components/ParticleBackground";
 import SEO from "@/components/SEO";
+import SiteStatsPanel from "@/components/SiteStatsPanel";
 import { ArrowLeft, Camera, Save, Loader2 } from "lucide-react";
 
 const Profile = () => {
-  const { user, loading: authLoading } = useAuth();
+  const { user, isAdmin, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
   const [displayName, setDisplayName] = useState("");
@@ -259,6 +260,8 @@ const Profile = () => {
             {saving ? "保存中..." : "保存资料"}
           </Button>
         </motion.div>
+
+        {isAdmin && <SiteStatsPanel />}
       </main>
     </div>
   );
