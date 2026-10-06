@@ -33,7 +33,7 @@ const Index = () => {
       <ParticleBackground />
       <main className="relative z-10 flex flex-col items-center px-4 pt-6 pb-10 sm:pt-10 sm:pb-12">
         <div className="w-full max-w-2xl grid grid-cols-3 items-center mb-3">
-          <motion.img src="/logo.png" alt="Dustan Hub" initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.5 }} className="w-12 h-12 rounded-full object-cover ring-2 ring-primary/30 shadow-lg shadow-primary/20 justify-self-start" />
+          <img src="/logo.png" alt="Dustan Hub" className="w-12 h-12 rounded-full object-cover ring-2 ring-primary/30 shadow-lg shadow-primary/20 justify-self-start" />
           <button onClick={handleShare} className="flex items-center gap-1.5 h-9 px-3 rounded-full bg-accent/15 border border-accent/40 text-accent text-xs transition-transform hover:scale-105 justify-self-center" aria-label="分享好友">
             {shared ? <Check className="w-3.5 h-3.5" /> : <Share2 className="w-3.5 h-3.5" />}
             {shared ? "已复制" : "分享好友"}
