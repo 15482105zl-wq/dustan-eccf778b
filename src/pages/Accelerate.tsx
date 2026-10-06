@@ -13,23 +13,35 @@ const YUETONG_URL = "https://app.xn--jdu596h.com/#/register?code=OkGae8Qp";
 const APP_DOWNLOAD_URL = "https://pxyfbbohoazbslneagix.supabase.co/storage/v1/object/public/downloads/DustanHub.apk";
 
 const NOTICE_SLOT = "accelerate_marquee";
-// 公告文案只从 site_notices 表读取：查到之前不渲染，避免旧文案闪一下
+// 公告文案写死在代码里，打开即显示；数据库里有新文案时查到后自动覆盖
+const DEFAULT_NOTICE = "🧧 悦享中秋：悦通全场7折+下单博饼赢最高¥100现金红包，10月7日23:59结束";
 
-// 悦通官方图标（boss 提供）
+// 悦通官方图标（手绘还原，内联 SVG 打开即显示，无需网络加载）
 const YuetongIcon = () => (
-  <img
-    src="/yuetong-icon.png"
-    alt="悦通"
+  <svg
+    viewBox="0 0 56 56"
     className="w-14 h-14 rounded-full flex-shrink-0"
-    style={{ boxShadow: "0 0 20px rgba(91, 91, 214, 0.55)" }}
-  />
+    style={{ boxShadow: "0 0 20px rgba(88, 86, 237, 0.55)" }}
+  >
+    <circle cx="28" cy="28" r="28" fill="#5856ED" />
+    <path
+      d="M26.3 15.5 L28 24.5 L29.7 15.5"
+      fill="none"
+      stroke="#ffffff"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <circle cx="19.7" cy="28.5" r="11" fill="none" stroke="#ffffff" strokeWidth="3" />
+    <circle cx="36.3" cy="28.5" r="11" fill="none" stroke="#ffffff" strokeWidth="3" />
+  </svg>
 );
 
 const Accelerate = () => {
   const navigate = useNavigate();
   const { isAdmin } = useAuth();
   const { toast } = useToast();
-  const [noticeText, setNoticeText] = useState("");
+  const [noticeText, setNoticeText] = useState(DEFAULT_NOTICE);
   const [editingNotice, setEditingNotice] = useState(false);
   const [noticeDraft, setNoticeDraft] = useState("");
   const [savingNotice, setSavingNotice] = useState(false);
@@ -100,11 +112,8 @@ const Accelerate = () => {
         </motion.div>
 
         <div className="w-full max-w-4xl flex flex-col gap-4">
-          {/* 滚动公告：文案来自 site_notices 表，查到之前透明占位、淡入，避免闪动 */}
-          <div
-            className="overflow-hidden rounded-2xl border border-amber-300/25 bg-amber-400/[0.07] py-2.5 -mt-3 transition-opacity duration-500"
-            style={{ opacity: noticeText ? 1 : 0 }}
-          >
+          {/* 滚动公告：文案写死在代码里即时显示，数据库有更新时自动覆盖 */}
+          <div className="overflow-hidden rounded-2xl border border-amber-300/25 bg-amber-400/[0.07] py-2.5 -mt-3">
             <style>{`@keyframes dustanNoticeScroll { to { transform: translateX(-100%); } }`}</style>
             <div
               className="whitespace-nowrap"
