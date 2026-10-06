@@ -15,33 +15,14 @@ const APP_DOWNLOAD_URL = "https://pxyfbbohoazbslneagix.supabase.co/storage/v1/ob
 const NOTICE_SLOT = "accelerate_marquee";
 // 公告文案只从 site_notices 表读取：查到之前不渲染，避免旧文案闪一下
 
-// 3D 玻璃质感发光 - 悦通 圆形图标（青色疾行箭头）
+// 悦通官方图标（boss 提供）
 const YuetongIcon = () => (
-  <div
-    className="w-14 h-14 rounded-full relative flex items-center justify-center flex-shrink-0 overflow-hidden"
-    style={{
-      background: "radial-gradient(100% 100% at 30% 25%, #5eead4 0%, #0d9488 55%, #042f2e 100%)",
-      boxShadow: "0 0 20px rgba(45, 212, 191, 0.55), inset 0 1.5px 2px rgba(255, 255, 255, 0.75), inset 0 -3px 6px rgba(0, 0, 0, 0.45)",
-      border: "1px solid rgba(255, 255, 255, 0.4)",
-    }}
-  >
-    <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 56 56">
-      <defs>
-        <linearGradient id="yueArrowGrad" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stopColor="#ffffff" stopOpacity="0.95" />
-          <stop offset="45%" stopColor="#ccfbf1" stopOpacity="0.8" />
-          <stop offset="100%" stopColor="#5eead4" stopOpacity="0.45" />
-        </linearGradient>
-      </defs>
-      <circle cx="28" cy="28" r="20" fill="none" stroke="rgba(255,255,255,0.22)" strokeWidth="0.8" strokeDasharray="3 3" />
-      <path
-        d="M14 34 L30 20 l-6 1 12-2 -2 12 1-6 L20 40 Z"
-        fill="url(#yueArrowGrad)"
-        filter="drop-shadow(0 4px 6px rgba(4, 47, 46, 0.45))"
-      />
-      <path d="M18 40 L34 24" stroke="#ffffff" strokeOpacity="0.5" strokeWidth="2" strokeLinecap="round" strokeDasharray="4 4" />
-    </svg>
-  </div>
+  <img
+    src="/yuetong-icon.png"
+    alt="悦通"
+    className="w-14 h-14 rounded-full flex-shrink-0"
+    style={{ boxShadow: "0 0 20px rgba(91, 91, 214, 0.55)" }}
+  />
 );
 
 const Accelerate = () => {
@@ -119,9 +100,11 @@ const Accelerate = () => {
         </motion.div>
 
         <div className="w-full max-w-4xl flex flex-col gap-4">
-          {/* 滚动公告：文案来自 site_notices 表，查到之前不渲染，避免旧文案闪一下 */}
-          {noticeText ? (
-          <div className="overflow-hidden rounded-2xl border border-amber-300/25 bg-amber-400/[0.07] py-2.5 -mt-3">
+          {/* 滚动公告：文案来自 site_notices 表，查到之前透明占位、淡入，避免闪动 */}
+          <div
+            className="overflow-hidden rounded-2xl border border-amber-300/25 bg-amber-400/[0.07] py-2.5 -mt-3 transition-opacity duration-500"
+            style={{ opacity: noticeText ? 1 : 0 }}
+          >
             <style>{`@keyframes dustanNoticeScroll { to { transform: translateX(-100%); } }`}</style>
             <div
               className="whitespace-nowrap"
@@ -130,7 +113,6 @@ const Accelerate = () => {
               <span className="text-xs text-amber-100/90">{noticeText}</span>
             </div>
           </div>
-          ) : null}
           {isAdmin && !editingNotice && (
             <div className="flex justify-end -mt-2">
               <button
