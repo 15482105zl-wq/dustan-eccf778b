@@ -88,7 +88,7 @@ const UserNav = () => {
   };
 
   if (loading) {
-    return <div className="w-8 h-8 rounded-full bg-muted/40 animate-pulse" />;
+    return <div className="w-8 h-8 rounded-full" aria-hidden="true" />;
   }
 
   return (
