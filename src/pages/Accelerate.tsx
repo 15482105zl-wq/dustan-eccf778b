@@ -13,8 +13,7 @@ const YUETONG_URL = "https://app.xn--jdu596h.com/#/register?code=OkGae8Qp";
 const APP_DOWNLOAD_URL = "https://pxyfbbohoazbslneagix.supabase.co/storage/v1/object/public/downloads/DustanHub.apk";
 
 const NOTICE_SLOT = "accelerate_marquee";
-const DEFAULT_NOTICE =
-  "📢 公告：近期 IPv4 阻断较严重，WiFi 用户请开启路由器 IPv6 支持，或切换手机流量使用；流量也无法使用请重启手机。";
+// 公告文案只从 site_notices 表读取：查到之前不渲染，避免旧文案闪一下
 
 // 3D 玻璃质感发光 - 悦通 圆形图标（青色疾行箭头）
 const YuetongIcon = () => (
@@ -49,7 +48,7 @@ const Accelerate = () => {
   const navigate = useNavigate();
   const { isAdmin } = useAuth();
   const { toast } = useToast();
-  const [noticeText, setNoticeText] = useState(DEFAULT_NOTICE);
+  const [noticeText, setNoticeText] = useState("");
   const [editingNotice, setEditingNotice] = useState(false);
   const [noticeDraft, setNoticeDraft] = useState("");
   const [savingNotice, setSavingNotice] = useState(false);
@@ -120,7 +119,8 @@ const Accelerate = () => {
         </motion.div>
 
         <div className="w-full max-w-4xl flex flex-col gap-4">
-          {/* 滚动公告：文案来自 site_notices 表，管理员可在页面上直接编辑 */}
+          {/* 滚动公告：文案来自 site_notices 表，查到之前不渲染，避免旧文案闪一下 */}
+          {noticeText ? (
           <div className="overflow-hidden rounded-2xl border border-amber-300/25 bg-amber-400/[0.07] py-2.5 -mt-3">
             <style>{`@keyframes dustanNoticeScroll { to { transform: translateX(-100%); } }`}</style>
             <div
@@ -130,6 +130,7 @@ const Accelerate = () => {
               <span className="text-xs text-amber-100/90">{noticeText}</span>
             </div>
           </div>
+          ) : null}
           {isAdmin && !editingNotice && (
             <div className="flex justify-end -mt-2">
               <button
