@@ -53,12 +53,9 @@ const UserNav = () => {
     return () => subscription.unsubscribe();
   }, []);
 
-  // 查自己的 profile，拿真实头像和昵称
+  // 查自己的 profile，拿真实头像和昵称（登录态未回来前不清空缓存，避免每次打开头像闪烁）
   useEffect(() => {
-    if (!user) {
-      setMyProfile(null);
-      return;
-    }
+    if (!user) return;
     supabase
       .from("profiles")
       .select("avatar_url, display_name")
@@ -82,6 +79,7 @@ const UserNav = () => {
     } catch {
       /* 忽略 */
     }
+    setMyProfile(null);
     await supabase.auth.signOut();
     toast({ title: "已退出登录" });
     navigate("/");
