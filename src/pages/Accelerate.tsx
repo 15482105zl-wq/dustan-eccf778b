@@ -13,8 +13,9 @@ const YUETONG_URL = "https://app.xn--jdu596h.com/#/register?code=OkGae8Qp";
 const APP_DOWNLOAD_URL = "https://pxyfbbohoazbslneagix.supabase.co/storage/v1/object/public/downloads/DustanHub.apk";
 
 const NOTICE_SLOT = "accelerate_marquee";
-// 公告文案写死在代码里，打开即显示；数据库里有新文案时查到后自动覆盖
-const DEFAULT_NOTICE = "🧧 悦享中秋：悦通全场7折+下单博饼赢最高¥100现金红包，10月7日23:59结束";
+// 公告图标固定写在代码里（换图标跟助手说）；文字走数据库，编辑按钮可改；默认文案保证打开即显示
+const NOTICE_ICON = "📢";
+const DEFAULT_NOTICE = "悦享中秋：悦通全场7折+下单博饼赢最高¥100现金红包，10月7日23:59结束";
 
 // 悦通官方图标（手绘还原，内联 SVG 打开即显示，无需网络加载）
 const YuetongIcon = () => (
@@ -119,7 +120,7 @@ const Accelerate = () => {
               className="whitespace-nowrap"
               style={{ display: "inline-block", paddingLeft: "100%", animation: "dustanNoticeScroll 26s linear infinite" }}
             >
-              <span className="text-xs text-amber-100/90">{noticeText}</span>
+              <span className="text-xs text-amber-100/90">{NOTICE_ICON} {noticeText}</span>
             </div>
           </div>
           {isAdmin && !editingNotice && (
