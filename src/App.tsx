@@ -12,6 +12,7 @@ import Profile from "./pages/Profile";
 import ResetPassword from "./pages/ResetPassword";
 import Vip from "./pages/Vip";
 import Accelerate from "./pages/Accelerate";
+import Ai from "./pages/Ai";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -32,6 +33,7 @@ const App = () => (
             <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/vip" element={<Vip />} />
             <Route path="/accelerate" element={<Accelerate />} />
+            <Route path="/ai" element={<Ai />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
           <FloatingAssistant />
