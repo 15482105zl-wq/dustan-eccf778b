@@ -8,6 +8,7 @@ import UserNav from "@/components/UserNav";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
+import AuthGateModal from "@/components/AuthGateModal";
 
 const YUETONG_URL = "https://app.xn--jdu596h.com/#/register?code=OkGae8Qp";
 const APP_DOWNLOAD_URL = "https://pxyfbbohoazbslneagix.supabase.co/storage/v1/object/public/downloads/DustanHub.apk";
@@ -40,7 +41,7 @@ const YuetongIcon = () => (
 
 const Accelerate = () => {
   const navigate = useNavigate();
-  const { isAdmin } = useAuth();
+  const { isAdmin, user } = useAuth();
   const { toast } = useToast();
   const [noticeText, setNoticeText] = useState(DEFAULT_NOTICE);
   const [editingNotice, setEditingNotice] = useState(false);
@@ -83,6 +84,69 @@ const Accelerate = () => {
       toast({ title: "保存失败", description: err?.message || "网络异常", variant: "destructive" });
     } finally {
       setSavingNotice(false);
+    }
+  };
+
+  // ---- 免费体验装 ----
+  const [trialStatus, setTrialStatus] = useState<any>(null);
+  const [trialUrl, setTrialUrl] = useState<string>("");
+  const [claiming, setClaiming] = useState(false);
+  const [showAuthGate, setShowAuthGate] = useState(false);
+
+  const loadTrialStatus = async () => {
+    try {
+      const { data } = await supabase.rpc("trial_status");
+      const st = data as any;
+      setTrialStatus(st);
+      // 已领过的人直接取回链接，方便刷新后查看（不消耗名额）
+      if (st?.ok && st.claimed) {
+        const { data: cdata } = await supabase.rpc("claim_trial");
+        if ((cdata as any)?.ok) setTrialUrl((cdata as any).sub_url || "");
+      } else {
+        setTrialUrl("");
+      }
+    } catch {
+      /* 接口异常时不打扰 */
+    }
+  };
+
+  useEffect(() => {
+    loadTrialStatus();
+  }, [user]);
+
+  const handleClaim = async () => {
+    if (!user) {
+      setShowAuthGate(true);
+      return;
+    }
+    setClaiming(true);
+    try {
+      const { data } = await supabase.rpc("claim_trial");
+      const r = data as any;
+      if (!r?.ok) {
+        toast({
+          title: r?.error === "sold_out" ? "本月名额已领完，下个月再来" : "领取失败，稍后再试",
+          variant: "destructive",
+        });
+        loadTrialStatus();
+        return;
+      }
+      setTrialUrl(r.sub_url || "");
+      toast({ title: r.already ? "本月已领取" : "领取成功 🎉" });
+      loadTrialStatus();
+    } catch (err: any) {
+      toast({ title: "领取失败", description: err?.message || "网络异常", variant: "destructive" });
+    } finally {
+      setClaiming(false);
+    }
+  };
+
+  const copyTrialUrl = async () => {
+    try {
+      await navigator.clipboard.writeText(trialUrl);
+      toast({ title: "订阅链接已复制" });
+    } catch {
+      toast({ title: "复制失败，请手动长按复制", variant: "destructive" });
     }
   };
 
@@ -195,6 +259,76 @@ const Accelerate = () => {
               立即开始
             </button>
           </motion.div>
+          {/* 免费体验装 */}
+          <motion.div
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.45, delay: 0.08 }}
+            className="rounded-[38px] p-6 flex flex-col relative bg-transparent border border-glass-border/40"
+          >
+            <div className="flex items-center gap-3.5 mb-3 mt-1">
+              <div
+                className="w-14 h-14 rounded-full flex-shrink-0 flex items-center justify-center text-[28px]"
+                style={{ background: "rgba(168,85,247,0.14)", boxShadow: "0 0 20px rgba(168,85,247,0.35)" }}
+              >
+                🎁
+              </div>
+              <div>
+                <h2 className="font-heading text-lg font-semibold" style={{ color: "#f2f3fa" }}>
+                  免费体验装
+                </h2>
+                <p className="text-[11px] text-muted-foreground">
+                  小机场 · 每月200G大家分 · 速度一般
+                </p>
+              </div>
+            </div>
+            <p className="text-[13px] leading-relaxed flex-1 text-muted-foreground">
+              追剧看片悠着用——流量烧完连不上不是坏了，是该升级了。每月15个名额，先到先得，每人每月限领一次。
+            </p>
+
+            {trialStatus?.ok ? (
+              <>
+                {!trialUrl ? (
+                  <>
+                    <p className="mt-3 text-xs text-muted-foreground">
+                      本月剩余 <span style={{ color: "#a855f7" }} className="font-bold">{trialStatus.slots_left}</span> / {trialStatus.slots_total} 个名额
+                    </p>
+                    <button
+                      onClick={handleClaim}
+                      disabled={claiming || trialStatus.slots_left <= 0}
+                      className="mt-3 w-full rounded-full py-3 text-sm font-bold border border-white/10 bg-transparent transition-transform hover:scale-[1.02] disabled:opacity-50"
+                      style={{ color: "#a855f7" }}
+                    >
+                      {trialStatus.slots_left <= 0 ? "本月名额已领完" : claiming ? "领取中…" : "领取体验装"}
+                    </button>
+                  </>
+                ) : (
+                  <div className="mt-3">
+                    <p className="text-xs text-muted-foreground mb-2">本月已领取，复制到客户端订阅使用：</p>
+                    <div className="flex items-center gap-2 rounded-2xl border border-white/10 bg-black/30 px-3 py-2.5">
+                      <code className="flex-1 text-[11px] text-muted-foreground truncate select-all">{trialUrl}</code>
+                      <button onClick={copyTrialUrl} className="text-xs font-bold shrink-0" style={{ color: "#a855f7" }}>
+                        复制
+                      </button>
+                    </div>
+                    <p className="mt-2 text-[11px] text-muted-foreground">
+                      导入方法：复制链接 → 粘贴到 Clash / V2RayNG / 小火箭的订阅栏 → 更新订阅
+                    </p>
+                  </div>
+                )}
+              </>
+            ) : (
+              <p className="mt-3 text-xs text-muted-foreground">本月体验装筹备中，敬请期待</p>
+            )}
+
+            <button
+              onClick={() => window.open(YUETONG_URL, "_blank", "noopener,noreferrer")}
+              className="mt-4 w-full rounded-full py-3 text-sm font-bold transition-transform hover:scale-[1.02]"
+              style={{ background: "linear-gradient(135deg,#7c3aed,#a855f7)", color: "#fff" }}
+            >
+              流量不够用？一步到位用高性能的悦通
+            </button>
+          </motion.div>
         </div>
 
         <motion.a
@@ -219,6 +353,7 @@ opacity: 0 }}
           All Rights Reserved.
         </footer>
       </main>
+      <AuthGateModal open={showAuthGate} onOpenChange={setShowAuthGate} />
     </div>
   );
 };
