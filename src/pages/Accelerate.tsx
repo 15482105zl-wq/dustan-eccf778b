@@ -11,6 +11,7 @@ import { useToast } from "@/hooks/use-toast";
 import AuthGateModal from "@/components/AuthGateModal";
 
 const YUETONG_URL = "https://app.xn--jdu596h.com/#/register?code=OkGae8Qp";
+const FLCLASH_APK_URL = "https://qxtecefxbtcukpuizvzb.supabase.co/storage/v1/object/public/downloads/FLClash-0.8.93-android-arm64-v8a.apk";
 const APP_DOWNLOAD_URL = "https://pxyfbbohoazbslneagix.supabase.co/storage/v1/object/public/downloads/DustanHub.apk";
 
 const NOTICE_SLOT = "accelerate_marquee";
@@ -92,6 +93,7 @@ const Accelerate = () => {
   const [trialUrl, setTrialUrl] = useState<string>("");
   const [claiming, setClaiming] = useState(false);
   const [showAuthGate, setShowAuthGate] = useState(false);
+  const [showTutorial, setShowTutorial] = useState(false);
 
   const loadTrialStatus = async () => {
     try {
@@ -134,6 +136,8 @@ const Accelerate = () => {
       setTrialUrl(r.sub_url || "");
       toast({ title: r.already ? "本月已领取" : "领取成功 🎉" });
       loadTrialStatus();
+      // 领取成功（或已领过）直接弹出教程
+      setShowTutorial(true);
     } catch (err: any) {
       toast({ title: "领取失败", description: err?.message || "网络异常", variant: "destructive" });
     } finally {
@@ -304,16 +308,14 @@ const Accelerate = () => {
                   </>
                 ) : (
                   <div className="mt-3">
-                    <p className="text-xs text-muted-foreground mb-2">本月已领取，复制到客户端订阅使用：</p>
-                    <div className="flex items-center gap-2 rounded-2xl border border-white/10 bg-black/30 px-3 py-2.5">
-                      <code className="flex-1 text-[11px] text-muted-foreground truncate select-all">{trialUrl}</code>
-                      <button onClick={copyTrialUrl} className="text-xs font-bold shrink-0" style={{ color: "#a855f7" }}>
-                        复制
-                      </button>
-                    </div>
-                    <p className="mt-2 text-[11px] text-muted-foreground">
-                      导入方法：复制链接 → 粘贴到 Clash / V2RayNG / 小火箭的订阅栏 → 更新订阅
-                    </p>
+                    <p className="text-xs text-muted-foreground mb-2">本月已领取，教程里有客户端下载和订阅链接：</p>
+                    <button
+                      onClick={() => setShowTutorial(true)}
+                      className="w-full rounded-full py-3 text-sm font-bold border border-white/10 bg-transparent transition-transform hover:scale-[1.02]"
+                      style={{ color: "#a855f7" }}
+                    >
+                      查看使用教程
+                    </button>
                   </div>
                 )}
               </>
@@ -354,6 +356,80 @@ opacity: 0 }}
         </footer>
       </main>
       <AuthGateModal open={showAuthGate} onOpenChange={setShowAuthGate} />
+      {/* 免费体验装使用教程 */}
+      {showTutorial && (
+        <div
+          className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/70 backdrop-blur-sm p-4"
+          onClick={() => setShowTutorial(false)}
+        >
+          <div
+            className="w-full max-w-md rounded-[28px] border border-white/10 p-6 max-h-[85vh] overflow-y-auto"
+            style={{ background: "#14141c" }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between mb-5">
+              <h3 className="font-heading text-base font-semibold" style={{ color: "#f2f3fa" }}>
+                使用教程
+              </h3>
+              <button
+                onClick={() => setShowTutorial(false)}
+                className="text-muted-foreground text-2xl leading-none px-2"
+                aria-label="关闭"
+              >
+                ×
+              </button>
+            </div>
+
+            <div className="flex gap-3 mb-5">
+              <div className="w-6 h-6 rounded-full shrink-0 flex items-center justify-center text-xs font-bold" style={{ background: "#a855f7", color: "#fff" }}>1</div>
+              <div className="flex-1">
+                <p className="text-sm font-semibold mb-1" style={{ color: "#f2f3fa" }}>下载客户端</p>
+                <p className="text-xs text-muted-foreground mb-2">FLClash（安卓版约50MB），安装时允许"安装未知应用"</p>
+                <a
+                  href={FLCLASH_APK_URL}
+                  className="inline-block rounded-full px-5 py-2.5 text-sm font-bold"
+                  style={{ background: "linear-gradient(135deg,#7c3aed,#a855f7)", color: "#fff" }}
+                >
+                  下载 FLClash
+                </a>
+              </div>
+            </div>
+
+            <div className="flex gap-3 mb-5">
+              <div className="w-6 h-6 rounded-full shrink-0 flex items-center justify-center text-xs font-bold" style={{ background: "#a855f7", color: "#fff" }}>2</div>
+              <div className="flex-1">
+                <p className="text-sm font-semibold mb-1" style={{ color: "#f2f3fa" }}>复制订阅链接</p>
+                <div className="flex items-center gap-2 rounded-2xl border border-white/10 bg-black/30 px-3 py-2.5">
+                  <code className="flex-1 text-[11px] text-muted-foreground truncate select-all">{trialUrl}</code>
+                  <button onClick={copyTrialUrl} className="text-xs font-bold shrink-0" style={{ color: "#a855f7" }}>
+                    复制
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex gap-3 mb-5">
+              <div className="w-6 h-6 rounded-full shrink-0 flex items-center justify-center text-xs font-bold" style={{ background: "#a855f7", color: "#fff" }}>3</div>
+              <div className="flex-1">
+                <p className="text-sm font-semibold mb-1" style={{ color: "#f2f3fa" }}>导入订阅</p>
+                <p className="text-xs text-muted-foreground leading-relaxed">
+                  打开 FLClash，找到订阅管理，把链接粘贴进去，更新订阅
+                </p>
+              </div>
+            </div>
+
+            <div className="flex gap-3">
+              <div className="w-6 h-6 rounded-full shrink-0 flex items-center justify-center text-xs font-bold" style={{ background: "#a855f7", color: "#fff" }}>4</div>
+              <div className="flex-1">
+                <p className="text-sm font-semibold mb-1" style={{ color: "#f2f3fa" }}>选择节点并连接</p>
+                <p className="text-xs text-muted-foreground leading-relaxed">
+                  选一个节点，打开开关就能用了。流量烧完连不上是正常的——想要一直稳定，就去用高性能的悦通
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
