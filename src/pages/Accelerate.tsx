@@ -399,12 +399,16 @@ opacity: 0 }}
               <div className="w-6 h-6 rounded-full shrink-0 flex items-center justify-center text-xs font-bold" style={{ background: "#a855f7", color: "#fff" }}>2</div>
               <div className="flex-1">
                 <p className="text-sm font-semibold mb-1" style={{ color: "#f2f3fa" }}>复制订阅链接</p>
-                <div className="flex items-center gap-2 rounded-2xl border border-white/10 bg-black/30 px-3 py-2.5">
-                  <code className="flex-1 text-[11px] text-muted-foreground truncate select-all">{trialUrl}</code>
-                  <button onClick={copyTrialUrl} className="text-xs font-bold shrink-0" style={{ color: "#a855f7" }}>
-                    复制
-                  </button>
+                <div className="rounded-2xl border border-white/10 bg-black/30 px-3 py-2.5 mb-2">
+                  <code className="block text-[11px] text-muted-foreground break-all select-all">{trialUrl}</code>
                 </div>
+                <button
+                  onClick={copyTrialUrl}
+                  className="w-full rounded-full py-2.5 text-sm font-bold"
+                  style={{ background: "rgba(168,85,247,0.15)", color: "#a855f7" }}
+                >
+                  复制订阅链接
+                </button>
               </div>
             </div>
 
@@ -413,7 +417,7 @@ opacity: 0 }}
               <div className="flex-1">
                 <p className="text-sm font-semibold mb-1" style={{ color: "#f2f3fa" }}>导入订阅</p>
                 <p className="text-xs text-muted-foreground leading-relaxed">
-                  打开 FLClash，找到订阅管理，把链接粘贴进去，更新订阅
+                  打开 FLClash，点下方"配置" → 点"+"添加配置 → 选"URL" → 粘贴订阅链接 → 点提交
                 </p>
               </div>
             </div>
@@ -423,7 +427,7 @@ opacity: 0 }}
               <div className="flex-1">
                 <p className="text-sm font-semibold mb-1" style={{ color: "#f2f3fa" }}>选择节点并连接</p>
                 <p className="text-xs text-muted-foreground leading-relaxed">
-                  选一个节点，打开开关就能用了。流量烧完连不上是正常的——想要一直稳定，就去用高性能的悦通
+                  点下方"代理"，选一个节点，打开开关就能用了。流量烧完连不上是正常的——想要一直稳定，就去用高性能的悦通
                 </p>
               </div>
             </div>
