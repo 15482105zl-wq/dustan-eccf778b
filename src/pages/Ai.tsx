@@ -10,11 +10,7 @@ const Ai = () => {
   const navigate = useNavigate();
 
   const handleClose = useCallback(() => {
-    if (window.history.length > 1) {
-      navigate(-1);
-    } else {
-      navigate("/", { replace: true });
-    }
+    navigate("/", { replace: true });
   }, [navigate]);
 
   return (
