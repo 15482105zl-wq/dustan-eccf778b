@@ -17,7 +17,7 @@ const APP_DOWNLOAD_URL = "https://pxyfbbohoazbslneagix.supabase.co/storage/v1/ob
 const NOTICE_SLOT = "accelerate_marquee";
 // 公告图标固定写在代码里（换图标跟助手说）；文字走数据库，编辑按钮可改；默认文案保证打开即显示
 const NOTICE_ICON = "📢";
-const DEFAULT_NOTICE = "悦享中秋：悦通全场7折+下单博饼赢最高¥100现金红包，10月7日23:59结束";
+const DEFAULT_NOTICE = "站内网络加速已升级为高性能的悦通：56国112节点，每日签到送流量，稳定长久";
 
 // 悦通官方图标（手绘还原，内联 SVG 打开即显示，无需网络加载）
 const YuetongIcon = () => (
