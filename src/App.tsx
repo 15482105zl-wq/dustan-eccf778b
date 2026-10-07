@@ -12,6 +12,7 @@ import Profile from "./pages/Profile";
 import ResetPassword from "./pages/ResetPassword";
 import Vip from "./pages/Vip";
 import Accelerate from "./pages/Accelerate";
+import Ai from "./pages/Ai";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
