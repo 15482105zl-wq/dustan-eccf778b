@@ -200,6 +200,36 @@ export type Database = {
         }
         Relationships: []
       }
+      shared_trials: {
+        Row: {
+          created_at: string
+          id: string
+          is_active: boolean
+          month: string
+          slots_claimed: number
+          slots_total: number
+          sub_url: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          month: string
+          slots_claimed?: number
+          slots_total?: number
+          sub_url?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          month?: string
+          slots_claimed?: number
+          slots_total?: number
+          sub_url?: string
+        }
+        Relationships: []
+      }
       site_announcements: {
         Row: {
           button_text: string
@@ -281,6 +311,27 @@ export type Database = {
           slot?: string
           text?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      trial_claims: {
+        Row: {
+          claimed_at: string
+          id: string
+          month: string
+          user_id: string
+        }
+        Insert: {
+          claimed_at?: string
+          id?: string
+          month: string
+          user_id: string
+        }
+        Update: {
+          claimed_at?: string
+          id?: string
+          month?: string
+          user_id?: string
         }
         Relationships: []
       }
@@ -375,6 +426,7 @@ export type Database = {
         }
         Returns: Json
       }
+      claim_trial: { Args: never; Returns: Json }
       get_site_owner_profile: { Args: never; Returns: Json }
       has_role: {
         Args: {
@@ -388,6 +440,7 @@ export type Database = {
         Returns: undefined
       }
       is_email_confirmed: { Args: never; Returns: boolean }
+      trial_status: { Args: never; Returns: Json }
     }
     Enums: {
       app_role: "admin" | "moderator" | "user"
