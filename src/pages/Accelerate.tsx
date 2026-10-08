@@ -25,8 +25,7 @@ const YuetongIcon = () => (
     src="https://qxtecefxbtcukpuizvzb.supabase.co/storage/v1/object/public/site-icons/yuetong-transparent-256.webp?v=2"
     alt="悦通"
     loading="lazy"
-    className="w-14 h-14 rounded-2xl flex-shrink-0 object-cover"
-    style={{ boxShadow: "0 0 20px rgba(88, 86, 237, 0.55)" }}
+    className="w-14 h-14 flex-shrink-0"
   />
 );
 
