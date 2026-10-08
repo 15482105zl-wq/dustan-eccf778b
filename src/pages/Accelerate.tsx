@@ -66,7 +66,7 @@ const YuetongIcon = () => (
   >
     <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 56 56">
       <defs>
-        <linearGradient id="yuetongYShine" x1="0" y1="0" x2="0" y2="1">
+        <linearGradient id="yuetongRingShine" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stopColor="#ffffff" stopOpacity="0.95" />
           <stop offset="50%" stopColor="#e9d5ff" stopOpacity="0.85" />
           <stop offset="100%" stopColor="#a855f7" stopOpacity="0.55" />
@@ -78,10 +78,10 @@ const YuetongIcon = () => (
       <circle cx="41" cy="18" r="1.5" fill="#ffffff" filter="drop-shadow(0 0 2px #fff)" />
       <circle cx="44" cy="35" r="1.2" fill="#ffffff" filter="drop-shadow(0 0 2px #fff)" />
       <g filter="drop-shadow(0 4px 8px rgba(40, 10, 90, 0.5))">
-        <path d="M19 18 L28 28.5 L37 18" fill="none" stroke="url(#yuetongYShine)" strokeWidth="7.5" strokeLinecap="round" strokeLinejoin="round" />
-        <path d="M28 28.5 L28 40" fill="none" stroke="url(#yuetongYShine)" strokeWidth="7.5" strokeLinecap="round" />
+        <circle cx="22.5" cy="29" r="8.5" fill="none" stroke="url(#yuetongRingShine)" strokeWidth="5" />
+        <circle cx="33.5" cy="29" r="8.5" fill="none" stroke="url(#yuetongRingShine)" strokeWidth="5" />
       </g>
-      <path d="M19 18 L28 28.5 L37 18" fill="none" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" opacity="0.55" transform="translate(0,-1.8)" />
+      <path d="M15.5 24a8.5 8.5 0 0 1 6-7.2" fill="none" stroke="#ffffff" strokeWidth="1.6" strokeLinecap="round" opacity="0.6" />
     </svg>
   </div>
 );
