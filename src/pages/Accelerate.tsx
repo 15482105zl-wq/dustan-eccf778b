@@ -271,7 +271,7 @@ const Accelerate = () => {
                   免费体验装
                 </h2>
                 <p className="text-[11px] text-muted-foreground">
-                  小机场 · 每月200G大家分 · 日常够用
+                  小机场 · 每月200G · 日常够用
                 </p>
               </div>
             </div>
