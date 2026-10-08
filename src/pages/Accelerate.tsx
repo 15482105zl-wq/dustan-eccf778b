@@ -56,13 +56,36 @@ const NiceCloudIcon = () => (
 
 // 悦通官方图标（3D 立体图，图床直链，保持原尺寸与辉光阴影）
 const YuetongIcon = () => (
-  <img
-    src="https://qxtecefxbtcukpuizvzb.supabase.co/storage/v1/object/public/site-icons/yuetong-transparent-256.webp?v=3"
-    alt="悦通"
-    loading="lazy"
-    className="w-14 h-14 rounded-full flex-shrink-0 object-cover"
-    style={{ filter: "drop-shadow(0 0 14px rgba(88, 86, 237, 0.65))" }}
-  />
+  <div
+    className="w-14 h-14 rounded-full relative flex items-center justify-center flex-shrink-0 overflow-hidden"
+    style={{
+      background: "radial-gradient(100% 100% at 30% 25%, #c084fc 0%, #7c3aed 55%, #2e1065 100%)",
+      boxShadow: "0 0 20px rgba(124, 58, 237, 0.55), inset 0 1.5px 2px rgba(255, 255, 255, 0.75), inset 0 -3px 6px rgba(0, 0, 0, 0.45)",
+      border: "1px solid rgba(255, 255, 255, 0.4)",
+    }}
+  >
+    <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 56 56">
+      <defs>
+        <linearGradient id="yuetongCloudShine" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#ffffff" stopOpacity="0.95" />
+          <stop offset="40%" stopColor="#e9d5ff" stopOpacity="0.75" />
+          <stop offset="100%" stopColor="#c084fc" stopOpacity="0.4" />
+        </linearGradient>
+      </defs>
+      <circle cx="28" cy="28" r="20" fill="none" stroke="rgba(255,255,255,0.22)" strokeWidth="0.8" strokeDasharray="3 3" />
+      <ellipse cx="28" cy="28" rx="22" ry="11" fill="none" stroke="rgba(255,255,255,0.3)" strokeWidth="0.8" transform="rotate(-20 28 28)" />
+      <circle cx="10" cy="24" r="1.3" fill="#ffffff" filter="drop-shadow(0 0 2px #fff)" />
+      <circle cx="41" cy="18" r="1.5" fill="#ffffff" filter="drop-shadow(0 0 2px #fff)" />
+      <circle cx="44" cy="35" r="1.2" fill="#ffffff" filter="drop-shadow(0 0 2px #fff)" />
+      <path
+        d="M20 37h17a7.5 7.5 0 0 0 2.2-14.7 10 10 0 0 0-18.7-2.8A7.5 7.5 0 0 0 20 37z"
+        fill="url(#yuetongCloudShine)"
+        filter="drop-shadow(0 4px 8px rgba(40, 10, 90, 0.45))"
+      />
+      <ellipse cx="29" cy="25" rx="5.5" ry="4.5" fill="#ffffff" opacity="0.45" />
+      <ellipse cx="23" cy="31" rx="4" ry="3" fill="#ffffff" opacity="0.35" />
+    </svg>
+  </div>
 );
 
 const Accelerate = () => {
@@ -296,11 +319,12 @@ const Accelerate = () => {
             >
               立即开始
             </button>
-            <p className="mt-2 text-center">
-              <a href="https://app.xn--9kq451mn9g.com/#/register?code=OkGae8Qp" target="_blank" rel="noopener noreferrer" className="text-[11px] text-muted-foreground/60 hover:text-muted-foreground break-all">
-                备用链接：https://app.xn--9kq451mn9g.com/#/register?code=OkGae8Qp
-              </a>
-            </p>
+            <button
+              onClick={() => window.open("https://app.xn--9kq451mn9g.com/#/register?code=OkGae8Qp", "_blank", "noopener,noreferrer")}
+              className="mt-2 mx-auto block text-[12px] px-5 py-1.5 rounded-full border border-white/15 text-muted-foreground hover:border-white/30 transition-colors"
+            >
+              备用链接
+            </button>
           </motion.div>
           {/* Nice·云 */}
           <motion.div
