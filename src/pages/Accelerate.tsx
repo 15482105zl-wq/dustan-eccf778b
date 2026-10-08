@@ -66,10 +66,10 @@ const YuetongIcon = () => (
   >
     <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 56 56">
       <defs>
-        <linearGradient id="yuetongCloudShine" x1="0" y1="0" x2="0" y2="1">
+        <linearGradient id="yuetongYShine" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stopColor="#ffffff" stopOpacity="0.95" />
-          <stop offset="40%" stopColor="#e9d5ff" stopOpacity="0.75" />
-          <stop offset="100%" stopColor="#c084fc" stopOpacity="0.4" />
+          <stop offset="50%" stopColor="#e9d5ff" stopOpacity="0.85" />
+          <stop offset="100%" stopColor="#a855f7" stopOpacity="0.55" />
         </linearGradient>
       </defs>
       <circle cx="28" cy="28" r="20" fill="none" stroke="rgba(255,255,255,0.22)" strokeWidth="0.8" strokeDasharray="3 3" />
@@ -77,13 +77,11 @@ const YuetongIcon = () => (
       <circle cx="10" cy="24" r="1.3" fill="#ffffff" filter="drop-shadow(0 0 2px #fff)" />
       <circle cx="41" cy="18" r="1.5" fill="#ffffff" filter="drop-shadow(0 0 2px #fff)" />
       <circle cx="44" cy="35" r="1.2" fill="#ffffff" filter="drop-shadow(0 0 2px #fff)" />
-      <path
-        d="M20 37h17a7.5 7.5 0 0 0 2.2-14.7 10 10 0 0 0-18.7-2.8A7.5 7.5 0 0 0 20 37z"
-        fill="url(#yuetongCloudShine)"
-        filter="drop-shadow(0 4px 8px rgba(40, 10, 90, 0.45))"
-      />
-      <ellipse cx="29" cy="25" rx="5.5" ry="4.5" fill="#ffffff" opacity="0.45" />
-      <ellipse cx="23" cy="31" rx="4" ry="3" fill="#ffffff" opacity="0.35" />
+      <g filter="drop-shadow(0 4px 8px rgba(40, 10, 90, 0.5))">
+        <path d="M19 18 L28 28.5 L37 18" fill="none" stroke="url(#yuetongYShine)" strokeWidth="7.5" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M28 28.5 L28 40" fill="none" stroke="url(#yuetongYShine)" strokeWidth="7.5" strokeLinecap="round" />
+      </g>
+      <path d="M19 18 L28 28.5 L37 18" fill="none" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" opacity="0.55" transform="translate(0,-1.8)" />
     </svg>
   </div>
 );
