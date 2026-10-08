@@ -6,7 +6,6 @@ import ParticleBackground from "@/components/ParticleBackground";
 import GlassCard from "@/components/GlassCard";
 import SEO from "@/components/SEO";
 import UserNav from "@/components/UserNav";
-import VipResourceCard from "@/components/VipResourceCard";
 import UnlockForum from "@/components/UnlockForum";
 import AuthGateModal from "@/components/AuthGateModal";
 import AiChatModal from "@/components/AiChatModal";
@@ -47,15 +46,15 @@ const SUBTITLE_MAP: Record<string, string> = {
 
 // 3D 立体图标（图床直链）：按卡片 id 与标题硬编码映射，未命中的卡片回退 lucide 线条图标
 const VIP_ICON_IMAGES: Record<string, string> = {
-  f1: "https://qxtecefxbtcukpuizvzb.supabase.co/storage/v1/object/public/site-icons/shadowrocket-3d-256.webp",
-  "网络加速": "https://qxtecefxbtcukpuizvzb.supabase.co/storage/v1/object/public/site-icons/shadowrocket-3d-256.webp",
-  f2: "https://qxtecefxbtcukpuizvzb.supabase.co/storage/v1/object/public/site-icons/apple-3d-256.webp",
-  "海外账号": "https://qxtecefxbtcukpuizvzb.supabase.co/storage/v1/object/public/site-icons/apple-3d-256.webp",
-  "苹果商店": "https://qxtecefxbtcukpuizvzb.supabase.co/storage/v1/object/public/site-icons/apple-3d-256.webp",
-  f3: "https://qxtecefxbtcukpuizvzb.supabase.co/storage/v1/object/public/site-icons/earth-3d-256.webp",
-  "免费订阅": "https://qxtecefxbtcukpuizvzb.supabase.co/storage/v1/object/public/site-icons/earth-3d-256.webp",
-  f5: "https://qxtecefxbtcukpuizvzb.supabase.co/storage/v1/object/public/site-icons/bbs-3d-256.webp",
-  "BBS论坛": "https://qxtecefxbtcukpuizvzb.supabase.co/storage/v1/object/public/site-icons/bbs-3d-256.webp",
+  f1: "https://qxtecefxbtcukpuizvzb.supabase.co/storage/v1/object/public/site-icons/shadowrocket-transparent-256.webp",
+  "网络加速": "https://qxtecefxbtcukpuizvzb.supabase.co/storage/v1/object/public/site-icons/shadowrocket-transparent-256.webp",
+  f2: "https://qxtecefxbtcukpuizvzb.supabase.co/storage/v1/object/public/site-icons/apple-transparent-256.webp",
+  "海外账号": "https://qxtecefxbtcukpuizvzb.supabase.co/storage/v1/object/public/site-icons/apple-transparent-256.webp",
+  "苹果商店": "https://qxtecefxbtcukpuizvzb.supabase.co/storage/v1/object/public/site-icons/apple-transparent-256.webp",
+  f3: "https://qxtecefxbtcukpuizvzb.supabase.co/storage/v1/object/public/site-icons/earth-transparent-256.webp",
+  "免费订阅": "https://qxtecefxbtcukpuizvzb.supabase.co/storage/v1/object/public/site-icons/earth-transparent-256.webp",
+  f5: "https://qxtecefxbtcukpuizvzb.supabase.co/storage/v1/object/public/site-icons/bbs-transparent-256.webp",
+  "BBS论坛": "https://qxtecefxbtcukpuizvzb.supabase.co/storage/v1/object/public/site-icons/bbs-transparent-256.webp",
 };
 
 const FALLBACK_ROWS: VipResourceRow[] = [
@@ -188,12 +187,28 @@ const Vip = () => {
           </p>
         </motion.div>
 
-        <div className="w-full max-w-2xl grid grid-cols-2 gap-4 mb-6">
-          {primary.map((c, i) => (
-            <VipResourceCard key={i} {...c} delay={i * 0.06} />
-          ))}
-          {secondary.map((c, i) => (
-            <VipResourceCard key={i} {...c} delay={(i + 2) * 0.06} />
+        <div className="w-full max-w-2xl flex items-center justify-center gap-6 sm:gap-10 mb-6">
+          {[...primary, ...secondary].map((c, i) => (
+            <motion.button
+              key={i}
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: i * 0.06 }}
+              whileHover={{ scale: 1.08 }}
+              whileTap={{ scale: 0.94 }}
+              onClick={c.onClick}
+              className="relative cursor-pointer"
+              aria-label={c.title}
+            >
+              {c.imgUrl ? (
+                <img src={c.imgUrl} alt={c.title} loading="lazy" className="w-16 h-16 object-contain" />
+              ) : (
+                <c.icon className="w-16 h-16 text-primary" />
+              )}
+              {c.badge && (
+                <span className="absolute top-0 right-0 w-2.5 h-2.5 rounded-full bg-destructive shadow-[0_0_6px_hsl(var(--destructive)/0.7)]" />
+              )}
+            </motion.button>
           ))}
         </div>
 
