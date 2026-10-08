@@ -19,25 +19,15 @@ const NOTICE_SLOT = "accelerate_marquee";
 const NOTICE_ICON = "📢";
 const DEFAULT_NOTICE = "站内网络加速已升级为高性能的悦通：56国112节点，每日签到送流量，稳定长久";
 
-// 悦通官方图标（手绘还原，内联 SVG 打开即显示，无需网络加载）
+// 悦通官方图标（3D 立体图，图床直链，保持原尺寸与辉光阴影）
 const YuetongIcon = () => (
-  <svg
-    viewBox="0 0 56 56"
-    className="w-14 h-14 rounded-full flex-shrink-0"
+  <img
+    src="https://qxtecefxbtcukpuizvzb.supabase.co/storage/v1/object/public/site-icons/yuetong-3d-256.webp"
+    alt="悦通"
+    loading="lazy"
+    className="w-14 h-14 rounded-full flex-shrink-0 object-cover"
     style={{ boxShadow: "0 0 20px rgba(88, 86, 237, 0.55)" }}
-  >
-    <circle cx="28" cy="28" r="28" fill="#5856ED" />
-    <path
-      d="M26.3 15.5 L28 24.5 L29.7 15.5"
-      fill="none"
-      stroke="#ffffff"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-    <circle cx="19.7" cy="28.5" r="11" fill="none" stroke="#ffffff" strokeWidth="3" />
-    <circle cx="36.3" cy="28.5" r="11" fill="none" stroke="#ffffff" strokeWidth="3" />
-  </svg>
+  />
 );
 
 const Accelerate = () => {
