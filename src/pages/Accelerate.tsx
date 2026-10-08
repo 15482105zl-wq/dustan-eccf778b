@@ -60,7 +60,7 @@ const YuetongIcon = () => (
     src="https://qxtecefxbtcukpuizvzb.supabase.co/storage/v1/object/public/site-icons/yuetong-transparent-256.webp?v=2"
     alt="悦通"
     loading="lazy"
-    className="w-16 h-16 rounded-full flex-shrink-0 object-cover"
+    className="w-14 h-14 rounded-full flex-shrink-0 object-cover"
     style={{ filter: "drop-shadow(0 0 14px rgba(88, 86, 237, 0.65))" }}
   />
 );
@@ -316,7 +316,7 @@ const Accelerate = () => {
               </div>
             </div>
             <p className="text-[13px] leading-relaxed flex-1 text-muted-foreground">
-              主打一个"稳"字——内置防失联节点，主线路波动无感快速切换。SS/Hy2/Vmess协议，峰值10Gbps，流媒体一键解锁，适合追求速度和稳定的重度用户。
+              防失联是看家本领——内置备用节点，主线路波动无感快速切换。SS/Hy2/Vmess协议，峰值10Gbps，流媒体一键解锁，适合追求速度和稳定的重度用户。
             </p>
 
             <button
