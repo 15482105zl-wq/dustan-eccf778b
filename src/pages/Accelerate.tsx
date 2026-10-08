@@ -271,12 +271,12 @@ const Accelerate = () => {
                   免费体验装
                 </h2>
                 <p className="text-[11px] text-muted-foreground">
-                  小机场 · 每月200G · 日常够用
+                  每月200G · 日常够用
                 </p>
               </div>
             </div>
             <p className="text-[13px] leading-relaxed flex-1 text-muted-foreground">
-              每月15个名额，先到先得，每人每月限领一次。
+              追剧看片悠着用——流量烧完连不上不是坏了，是该升级了。每月15个名额，先到先得，每人每月限领一次。
             </p>
 
             {trialStatus?.ok ? (
