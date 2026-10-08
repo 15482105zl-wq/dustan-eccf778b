@@ -15,7 +15,7 @@ const FLCLASH_APK_URL = "https://qxtecefxbtcukpuizvzb.supabase.co/storage/v1/obj
 const APP_DOWNLOAD_URL = "https://pxyfbbohoazbslneagix.supabase.co/storage/v1/object/public/downloads/DustanHub.apk";
 
 const NOTICE_SLOT = "accelerate_marquee";
-// 公告图标固定写在代码里（换图标跟助手说）；文字走数据库，编辑按钮可改；默认文案保证打开即显示
+// 公告图标默认📢；文案开头自带 emoji 时用文案自带的
 const NOTICE_ICON = "📢";
 const DEFAULT_NOTICE = "";
 
@@ -186,7 +186,7 @@ const Accelerate = () => {
               className="whitespace-nowrap"
               style={{ display: "inline-block", paddingLeft: "100%", animation: "dustanNoticeScroll 26s linear infinite" }}
             >
-              <span className="text-xs text-amber-100/90">{NOTICE_ICON} {noticeText}</span>
+              <span className="text-xs text-amber-100/90">{/^\p{Extended_Pictographic}/u.test(noticeText) ? noticeText : `${NOTICE_ICON} ${noticeText}`}</span>
             </div>
           </div>
           )}
