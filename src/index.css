@@ -124,6 +124,17 @@
 .animate-breathe-glow-strong {
   animation: breathe-glow-strong 2.2s ease-in-out infinite;
 }
+@keyframes breathe {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.07);
+  }
+}
+.animate-breathe {
+  animation: breathe 2.6s ease-in-out infinite;
+}
 @keyframes app-link-glow {
   0%, 100% {
     opacity: 1;
