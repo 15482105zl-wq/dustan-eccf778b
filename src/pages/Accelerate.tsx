@@ -10,7 +10,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 import AuthGateModal from "@/components/AuthGateModal";
 
-const YUETONG_URL = "https://app.xn--9kq451mn9g.com/#/register?code=OkGae8Qp";
+const YUETONG_URL = "https://app.xn--jdu596h.com/#/register?code=OkGae8Qp";
 const NICE_URL = "https://dustan.mmmoyou.com/#/register?code=0lc8ncSH";
 const FLCLASH_APK_URL = "https://qxtecefxbtcukpuizvzb.supabase.co/storage/v1/object/public/downloads/FLClash-0.8.93-android-arm64-v8a.apk";
 const APP_DOWNLOAD_URL = "https://pxyfbbohoazbslneagix.supabase.co/storage/v1/object/public/downloads/DustanHub.apk";
