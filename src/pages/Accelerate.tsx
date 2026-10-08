@@ -312,8 +312,8 @@ const Accelerate = () => {
 
             <button
               onClick={() => window.open(YUETONG_URL, "_blank", "noopener,noreferrer")}
-              className="mt-4 w-full rounded-full py-3 text-sm font-bold text-white transition-transform hover:scale-[1.02]"
-              style={{ background: "linear-gradient(135deg, #7c3aed, #a855f7)", boxShadow: "0 4px 24px rgba(168, 85, 247, 0.45)" }}
+              className="mt-4 w-full rounded-full py-3 text-sm font-bold border border-white/10 bg-transparent transition-transform hover:scale-[1.02]"
+              style={{ color: "#a855f7" }}
             >
               立即开始
             </button>
