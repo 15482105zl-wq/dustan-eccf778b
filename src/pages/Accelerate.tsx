@@ -17,7 +17,7 @@ const APP_DOWNLOAD_URL = "https://pxyfbbohoazbslneagix.supabase.co/storage/v1/ob
 const NOTICE_SLOT = "accelerate_marquee";
 // 公告图标固定写在代码里（换图标跟助手说）；文字走数据库，编辑按钮可改；默认文案保证打开即显示
 const NOTICE_ICON = "📢";
-const DEFAULT_NOTICE = "站内网络加速已升级为高性能的悦通：56国112节点，每日签到送流量，稳定长久";
+const DEFAULT_NOTICE = "";
 
 // 悦通官方图标（3D 立体图，图床直链，保持原尺寸与辉光阴影）
 const YuetongIcon = () => (
@@ -57,20 +57,27 @@ const Accelerate = () => {
 
   const saveNotice = async () => {
     const text = noticeDraft.trim();
-    if (!text) {
-      toast({ title: "公告内容不能为空", variant: "destructive" });
-      return;
-    }
     setSavingNotice(true);
     try {
-      const { error } = await supabase
-        .from("site_notices" as any)
-        .update({ text, updated_at: new Date().toISOString() } as any)
-        .eq("slot", NOTICE_SLOT);
-      if (error) throw error;
-      setNoticeText(text);
-      setEditingNotice(false);
-      toast({ title: "公告已更新，全站即刻同步" });
+      if (!text) {
+        const { error } = await supabase
+          .from("site_notices" as any)
+          .update({ is_active: false, updated_at: new Date().toISOString() } as any)
+          .eq("slot", NOTICE_SLOT);
+        if (error) throw error;
+        setNoticeText("");
+        setEditingNotice(false);
+        toast({ title: "滚动公告已关闭" });
+      } else {
+        const { error } = await supabase
+          .from("site_notices" as any)
+          .update({ text, is_active: true, updated_at: new Date().toISOString() } as any)
+          .eq("slot", NOTICE_SLOT);
+        if (error) throw error;
+        setNoticeText(text);
+        setEditingNotice(false);
+        toast({ title: "公告已更新，全站即刻同步" });
+      }
     } catch (err: any) {
       toast({ title: "保存失败", description: err?.message || "网络异常", variant: "destructive" });
     } finally {
@@ -171,7 +178,8 @@ const Accelerate = () => {
         </motion.div>
 
         <div className="w-full max-w-4xl flex flex-col gap-4">
-          {/* 滚动公告：文案写死在代码里即时显示，数据库有更新时自动覆盖 */}
+          {/* 滚动公告：数据库有文案时才显示，清空即关闭 */}
+          {noticeText && (
           <div className="overflow-hidden rounded-2xl border border-amber-300/25 bg-amber-400/[0.07] py-2.5 -mt-3">
             <style>{`@keyframes dustanNoticeScroll { to { transform: translateX(-100%); } }`}</style>
             <div
@@ -181,6 +189,7 @@ const Accelerate = () => {
               <span className="text-xs text-amber-100/90">{NOTICE_ICON} {noticeText}</span>
             </div>
           </div>
+          )}
           {isAdmin && !editingNotice && (
             <div className="flex justify-end -mt-2">
               <button
