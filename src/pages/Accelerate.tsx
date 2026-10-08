@@ -60,7 +60,7 @@ const YuetongIcon = () => (
     src="https://qxtecefxbtcukpuizvzb.supabase.co/storage/v1/object/public/site-icons/yuetong-transparent-256.webp?v=2"
     alt="悦通"
     loading="lazy"
-    className="w-16 h-16 flex-shrink-0"
+    className="w-16 h-16 rounded-full flex-shrink-0 object-cover"
     style={{ filter: "drop-shadow(0 0 14px rgba(88, 86, 237, 0.65))" }}
   />
 );
@@ -267,7 +267,7 @@ const Accelerate = () => {
               </div>
             </div>
           )}
-          {/* 悦通 - 主通道 */}
+          {/* 悦通 */}
           <motion.div
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
@@ -297,7 +297,7 @@ const Accelerate = () => {
               立即开始
             </button>
           </motion.div>
-          {/* Nice·云 - 备用通道 */}
+          {/* Nice·云 */}
           <motion.div
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
@@ -309,15 +309,14 @@ const Accelerate = () => {
               <div>
                 <h2 className="font-heading text-lg font-semibold" style={{ color: "#f2f3fa" }}>
                   Nice·云
-                  <span className="ml-2 text-[10px] px-2 py-0.5 rounded-full border border-white/15 text-muted-foreground align-middle font-normal">备用</span>
                 </h2>
                 <p className="text-[11px] text-muted-foreground">
-                  备用通道 · 线路稳定 · 全球直连
+                  老牌机场 · 线路稳定 · 全球直连
                 </p>
               </div>
             </div>
             <p className="text-[13px] leading-relaxed flex-1 text-muted-foreground">
-              悦通打不开时用这个进。老牌机场，SS/Hy2/Vmess 协议，流媒体一键解锁，稳定不掉线。
+              主打一个"稳"字——内置防失联节点，主线路波动无感快速切换。SS/Hy2/Vmess协议，峰值10Gbps，流媒体一键解锁，适合追求速度和稳定的重度用户。
             </p>
 
             <button
@@ -325,7 +324,7 @@ const Accelerate = () => {
               className="mt-4 w-full rounded-full py-3 text-sm font-bold border border-white/10 bg-transparent transition-transform hover:scale-[1.02]"
               style={{ color: "#a855f7" }}
             >
-              备用进入
+              立即开始
             </button>
           </motion.div>
           {/* 免费体验装 */}
