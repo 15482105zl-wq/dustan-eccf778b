@@ -34,6 +34,7 @@ type CardProps = {
   url?: string;
   onClick?: () => void;
   badge?: boolean;
+  imgUrl?: string;
 };
 
 const SUBTITLE_MAP: Record<string, string> = {
@@ -42,6 +43,19 @@ const SUBTITLE_MAP: Record<string, string> = {
   "苹果商店": "账号服务", // 兼容数据库旧 title，vip_resources 表更新后可删
   "免费订阅": "FLclash",
   "BBS论坛": "会员社区",
+};
+
+// 3D 立体图标（图床直链）：按卡片 id 与标题硬编码映射，未命中的卡片回退 lucide 线条图标
+const VIP_ICON_IMAGES: Record<string, string> = {
+  f1: "https://qxtecefxbtcukpuizvzb.supabase.co/storage/v1/object/public/site-icons/shadowrocket-3d-256.webp",
+  "网络加速": "https://qxtecefxbtcukpuizvzb.supabase.co/storage/v1/object/public/site-icons/shadowrocket-3d-256.webp",
+  f2: "https://qxtecefxbtcukpuizvzb.supabase.co/storage/v1/object/public/site-icons/apple-3d-256.webp",
+  "海外账号": "https://qxtecefxbtcukpuizvzb.supabase.co/storage/v1/object/public/site-icons/apple-3d-256.webp",
+  "苹果商店": "https://qxtecefxbtcukpuizvzb.supabase.co/storage/v1/object/public/site-icons/apple-3d-256.webp",
+  f3: "https://qxtecefxbtcukpuizvzb.supabase.co/storage/v1/object/public/site-icons/earth-3d-256.webp",
+  "免费订阅": "https://qxtecefxbtcukpuizvzb.supabase.co/storage/v1/object/public/site-icons/earth-3d-256.webp",
+  f5: "https://qxtecefxbtcukpuizvzb.supabase.co/storage/v1/object/public/site-icons/bbs-3d-256.webp",
+  "BBS论坛": "https://qxtecefxbtcukpuizvzb.supabase.co/storage/v1/object/public/site-icons/bbs-3d-256.webp",
 };
 
 const FALLBACK_ROWS: VipResourceRow[] = [
@@ -127,6 +141,7 @@ const Vip = () => {
       icon: ICON_MAP[r.icon] ?? Rocket,
       title,
       subtitle: SUBTITLE_MAP[title] ?? "精选服务",
+      imgUrl: VIP_ICON_IMAGES[r.id] ?? VIP_ICON_IMAGES[title],
       url: href,
       badge: isBBS ? hasUnread : undefined,
       onClick: () => { track(ckey, title, "service"); base?.(); },
