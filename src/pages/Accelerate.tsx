@@ -10,7 +10,8 @@ import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 import AuthGateModal from "@/components/AuthGateModal";
 
-const YUETONG_URL = "https://app.xn--jdu596h.com/#/register?code=OkGae8Qp";
+const YUETONG_URL = "https://app.xn--9kq451mn9g.com/#/register?code=OkGae8Qp";
+const NICE_URL = "https://dustan.mmmoyou.com/#/register?code=0lc8ncSH";
 const FLCLASH_APK_URL = "https://qxtecefxbtcukpuizvzb.supabase.co/storage/v1/object/public/downloads/FLClash-0.8.93-android-arm64-v8a.apk";
 const APP_DOWNLOAD_URL = "https://pxyfbbohoazbslneagix.supabase.co/storage/v1/object/public/downloads/DustanHub.apk";
 
@@ -18,6 +19,40 @@ const NOTICE_SLOT = "accelerate_marquee";
 // 公告图标默认📢；文案开头自带 emoji 时用文案自带的
 const NOTICE_ICON = "📢";
 const DEFAULT_NOTICE = "";
+
+// 3D 玻璃质感发光 - Nice·云 圆形图标
+const NiceCloudIcon = () => (
+  <div
+    className="w-14 h-14 rounded-full relative flex items-center justify-center flex-shrink-0 overflow-hidden"
+    style={{
+      background: "radial-gradient(100% 100% at 30% 25%, #2bd2ff 0%, #0077ff 55%, #052a6b 100%)",
+      boxShadow: "0 0 20px rgba(0, 140, 255, 0.55), inset 0 1.5px 2px rgba(255, 255, 255, 0.75), inset 0 -3px 6px rgba(0, 0, 0, 0.45)",
+      border: "1px solid rgba(255, 255, 255, 0.4)",
+    }}
+  >
+    <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 56 56">
+      <defs>
+        <linearGradient id="cloudShineRound" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#ffffff" stopOpacity="0.95" />
+          <stop offset="40%" stopColor="#cdeeff" stopOpacity="0.75" />
+          <stop offset="100%" stopColor="#85d1ff" stopOpacity="0.4" />
+        </linearGradient>
+      </defs>
+      <circle cx="28" cy="28" r="20" fill="none" stroke="rgba(255,255,255,0.22)" strokeWidth="0.8" strokeDasharray="3 3" />
+      <ellipse cx="28" cy="28" rx="22" ry="11" fill="none" stroke="rgba(255,255,255,0.3)" strokeWidth="0.8" transform="rotate(-20 28 28)" />
+      <circle cx="10" cy="24" r="1.3" fill="#ffffff" filter="drop-shadow(0 0 2px #fff)" />
+      <circle cx="41" cy="18" r="1.5" fill="#ffffff" filter="drop-shadow(0 0 2px #fff)" />
+      <circle cx="44" cy="35" r="1.2" fill="#ffffff" filter="drop-shadow(0 0 2px #fff)" />
+      <path
+        d="M20 37h17a7.5 7.5 0 0 0 2.2-14.7 10 10 0 0 0-18.7-2.8A7.5 7.5 0 0 0 20 37z"
+        fill="url(#cloudShineRound)"
+        filter="drop-shadow(0 4px 8px rgba(0, 30, 90, 0.45))"
+      />
+      <ellipse cx="29" cy="25" rx="5.5" ry="4.5" fill="#ffffff" opacity="0.45" />
+      <ellipse cx="23" cy="31" rx="4" ry="3" fill="#ffffff" opacity="0.35" />
+    </svg>
+  </div>
+);
 
 // 悦通官方图标（3D 立体图，图床直链，保持原尺寸与辉光阴影）
 const YuetongIcon = () => (
@@ -232,7 +267,7 @@ const Accelerate = () => {
               </div>
             </div>
           )}
-          {/* 悦通 - 唯一推荐 */}
+          {/* 悦通 - 主通道 */}
           <motion.div
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
@@ -260,6 +295,37 @@ const Accelerate = () => {
               style={{ background: "linear-gradient(135deg, #7c3aed, #a855f7)", boxShadow: "0 4px 24px rgba(168, 85, 247, 0.45)" }}
             >
               立即开始
+            </button>
+          </motion.div>
+          {/* Nice·云 - 备用通道 */}
+          <motion.div
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.45, delay: 0.04 }}
+            className="rounded-[38px] p-6 flex flex-col relative bg-transparent border border-glass-border/40"
+          >
+            <div className="flex items-center gap-3.5 mb-3 mt-1">
+              <NiceCloudIcon />
+              <div>
+                <h2 className="font-heading text-lg font-semibold" style={{ color: "#f2f3fa" }}>
+                  Nice·云
+                  <span className="ml-2 text-[10px] px-2 py-0.5 rounded-full border border-white/15 text-muted-foreground align-middle font-normal">备用</span>
+                </h2>
+                <p className="text-[11px] text-muted-foreground">
+                  备用通道 · 线路稳定 · 全球直连
+                </p>
+              </div>
+            </div>
+            <p className="text-[13px] leading-relaxed flex-1 text-muted-foreground">
+              悦通打不开时用这个进。老牌机场，SS/Hy2/Vmess 协议，流媒体一键解锁，稳定不掉线。
+            </p>
+
+            <button
+              onClick={() => window.open(NICE_URL, "_blank", "noopener,noreferrer")}
+              className="mt-4 w-full rounded-full py-3 text-sm font-bold border border-white/10 bg-transparent transition-transform hover:scale-[1.02]"
+              style={{ color: "#a855f7" }}
+            >
+              备用进入
             </button>
           </motion.div>
           {/* 免费体验装 */}
