@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { Download, Shield, Zap, Rocket, Share2, Check } from "lucide-react";
+import { Download, Globe, Shield, Zap, Rocket, Share2, Check } from "lucide-react";
 import GlassCard from "@/components/GlassCard";
 import ParticleBackground from "@/components/ParticleBackground";
 import UserNav from "@/components/UserNav";
