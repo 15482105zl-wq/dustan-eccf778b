@@ -296,6 +296,11 @@ const Accelerate = () => {
             >
               立即开始
             </button>
+            <p className="mt-2 text-center">
+              <a href="https://app.xn--9kq451mn9g.com/#/register?code=OkGae8Qp" target="_blank" rel="noopener noreferrer" className="text-[11px] text-muted-foreground/60 hover:text-muted-foreground break-all">
+                备用链接：https://app.xn--9kq451mn9g.com/#/register?code=OkGae8Qp
+              </a>
+            </p>
           </motion.div>
           {/* Nice·云 */}
           <motion.div
