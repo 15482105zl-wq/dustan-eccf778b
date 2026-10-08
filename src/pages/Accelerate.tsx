@@ -19,6 +19,16 @@ const NOTICE_SLOT = "accelerate_marquee";
 const NOTICE_ICON = "📢";
 const DEFAULT_NOTICE = "站内网络加速已升级为高性能的悦通：56国112节点，每日签到送流量，稳定长久";
 
+// 悦通官方图标（3D 立体图，图床直链，保持原尺寸与辉光阴影）
+const YuetongIcon = () => (
+  <img
+    src="https://qxtecefxbtcukpuizvzb.supabase.co/storage/v1/object/public/site-icons/yuetong-transparent-256.webp?v=2"
+    alt="悦通"
+    loading="lazy"
+    className="w-14 h-14 rounded-full flex-shrink-0 object-cover"
+    style={{ boxShadow: "0 0 20px rgba(88, 86, 237, 0.55)" }}
+  />
+);
 
 const Accelerate = () => {
   const navigate = useNavigate();
@@ -213,24 +223,34 @@ const Accelerate = () => {
               </div>
             </div>
           )}
-          {/* 悦通 - 唯一推荐（仅图标入口） */}
+          {/* 悦通 - 唯一推荐 */}
           <motion.div
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.45 }}
-            className="flex justify-center"
+            className="rounded-[38px] p-6 flex flex-col relative bg-transparent border border-glass-border/40"
           >
+            <div className="flex items-center gap-3.5 mb-3 mt-1">
+              <YuetongIcon />
+              <div>
+                <h2 className="font-heading text-lg font-semibold" style={{ color: "#f2f3fa" }}>
+                  悦通
+                </h2>
+                <p className="text-[11px] text-muted-foreground">
+                  自有客户端 · 节点稳定 · 全球覆盖
+                </p>
+              </div>
+            </div>
+            <p className="text-[13px] leading-relaxed flex-1 text-muted-foreground">
+              主打一个"稳"字——56 个国家和地区、112 个节点覆盖全球，自有 YueLink 客户端三步上手，流媒体一键解锁，适合追求长期稳定的用户。
+            </p>
+
             <button
               onClick={() => window.open(YUETONG_URL, "_blank", "noopener,noreferrer")}
-              aria-label="悦通"
-              className="cursor-pointer transition-transform hover:scale-110 active:scale-95"
+              className="mt-4 w-full rounded-full py-3 text-sm font-bold border border-white/10 bg-transparent transition-transform hover:scale-[1.02]"
+              style={{ color: "#a855f7" }}
             >
-              <img
-                src="https://qxtecefxbtcukpuizvzb.supabase.co/storage/v1/object/public/site-icons/yuetong-transparent-256.webp"
-                alt="悦通"
-                loading="lazy"
-                className="w-16 h-16 object-contain"
-              />
+              立即开始
             </button>
           </motion.div>
           {/* 免费体验装 */}
