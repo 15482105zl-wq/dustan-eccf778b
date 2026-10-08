@@ -57,7 +57,7 @@ const NiceCloudIcon = () => (
 // 悦通官方图标（3D 立体图，图床直链，保持原尺寸与辉光阴影）
 const YuetongIcon = () => (
   <img
-    src="https://qxtecefxbtcukpuizvzb.supabase.co/storage/v1/object/public/site-icons/yuetong-transparent-256.webp?v=2"
+    src="https://qxtecefxbtcukpuizvzb.supabase.co/storage/v1/object/public/site-icons/yuetong-transparent-256.webp?v=3"
     alt="悦通"
     loading="lazy"
     className="w-14 h-14 rounded-full flex-shrink-0 object-cover"
