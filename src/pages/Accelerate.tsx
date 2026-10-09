@@ -317,12 +317,6 @@ const Accelerate = () => {
             >
               立即开始
             </button>
-            <button
-              onClick={() => window.open("https://app.xn--jdu596h.com/#/register?code=OkGae8Qp", "_blank", "noopener,noreferrer")}
-              className="mt-2 mx-auto block text-[12px] px-5 py-1.5 rounded-full border border-white/15 text-muted-foreground hover:border-white/30 transition-colors"
-            >
-              备用链接
-            </button>
           </motion.div>
           {/* Nice·云 */}
           <motion.div
