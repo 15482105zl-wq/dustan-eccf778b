@@ -288,36 +288,6 @@ const Accelerate = () => {
               </div>
             </div>
           )}
-          {/* 悦通 */}
-          <motion.div
-            initial={{ opacity: 0, y: 18 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.45 }}
-            className="rounded-[38px] p-6 flex flex-col relative bg-transparent border border-glass-border/40"
-          >
-            <div className="flex items-center gap-3.5 mb-3 mt-1">
-              <YuetongIcon />
-              <div>
-                <h2 className="font-heading text-lg font-semibold" style={{ color: "#f2f3fa" }}>
-                  悦通
-                </h2>
-                <p className="text-[11px] text-muted-foreground">
-                  自有客户端 · 节点稳定 · 全球覆盖
-                </p>
-              </div>
-            </div>
-            <p className="text-[13px] leading-relaxed flex-1 text-muted-foreground">
-              主打一个"稳"字——56 个国家和地区、112 个节点覆盖全球，自有 YueLink 客户端三步上手，流媒体一键解锁，适合追求长期稳定的用户。
-            </p>
-
-            <button
-              onClick={() => window.open(YUETONG_URL, "_blank", "noopener,noreferrer")}
-              className="mt-4 w-full rounded-full py-3 text-sm font-bold border border-white/10 bg-transparent transition-transform hover:scale-[1.02]"
-              style={{ color: "#a855f7" }}
-            >
-              立即开始
-            </button>
-          </motion.div>
           {/* Nice·云 */}
           <motion.div
             initial={{ opacity: 0, y: 18 }}
@@ -342,6 +312,36 @@ const Accelerate = () => {
 
             <button
               onClick={() => window.open(NICE_URL, "_blank", "noopener,noreferrer")}
+              className="mt-4 w-full rounded-full py-3 text-sm font-bold border border-white/10 bg-transparent transition-transform hover:scale-[1.02]"
+              style={{ color: "#a855f7" }}
+            >
+              立即开始
+            </button>
+          </motion.div>
+          {/* 悦通 */}
+          <motion.div
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.45 }}
+            className="rounded-[38px] p-6 flex flex-col relative bg-transparent border border-glass-border/40"
+          >
+            <div className="flex items-center gap-3.5 mb-3 mt-1">
+              <YuetongIcon />
+              <div>
+                <h2 className="font-heading text-lg font-semibold" style={{ color: "#f2f3fa" }}>
+                  悦通
+                </h2>
+                <p className="text-[11px] text-muted-foreground">
+                  自有客户端 · 节点稳定 · 全球覆盖
+                </p>
+              </div>
+            </div>
+            <p className="text-[13px] leading-relaxed flex-1 text-muted-foreground">
+              主打一个"稳"字——56 个国家和地区、112 个节点覆盖全球，自有 YueLink 客户端三步上手，流媒体一键解锁，适合追求长期稳定的用户。
+            </p>
+
+            <button
+              onClick={() => window.open(YUETONG_URL, "_blank", "noopener,noreferrer")}
               className="mt-4 w-full rounded-full py-3 text-sm font-bold border border-white/10 bg-transparent transition-transform hover:scale-[1.02]"
               style={{ color: "#a855f7" }}
             >
