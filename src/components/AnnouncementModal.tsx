@@ -374,7 +374,7 @@ export default function AnnouncementModal() {
                   </div>
 
                   <h3 className="font-heading text-xl sm:text-2xl font-bold tracking-tight">
-                    <span className="gradient-text glow-text">{editForm.title}</span>
+                    <span className="text-foreground">{editForm.title}</span>
                   </h3>
 
                   <div className="space-y-2 py-1">
@@ -442,7 +442,7 @@ export default function AnnouncementModal() {
               </div>
 
               <h3 className="font-heading text-xl sm:text-2xl font-bold tracking-tight">
-                <span className="gradient-text glow-text">{data.title}</span>
+                <span className="text-foreground">{data.title}</span>
               </h3>
 
               <div className="space-y-2 py-1">
