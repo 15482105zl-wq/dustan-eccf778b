@@ -56,7 +56,7 @@ export default function AnnouncementButton() {
         type="button"
         onClick={() => setOpen(true)}
         aria-label="查看最新公告"
-        className="flex items-center gap-1.5 h-9 px-3 rounded-full bg-accent/15 border border-accent/40 text-accent text-xs transition-transform hover:scale-105"
+        className="flex items-center gap-1.5 h-9 px-3 rounded-full bg-accent/15 border border-accent/40 text-accent text-xs transition-transform hover:scale-105 whitespace-nowrap shrink-0"
       >
         <Megaphone className="w-3.5 h-3.5" />
         公告
