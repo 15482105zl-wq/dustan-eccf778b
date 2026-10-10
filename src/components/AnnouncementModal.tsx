@@ -56,6 +56,12 @@ export default function AnnouncementModal() {
     void fetchAnnouncement();
   }, []);
 
+  useEffect(() => {
+    const handler = () => setIsOpen(true);
+    window.addEventListener("open-announcement", handler);
+    return () => window.removeEventListener("open-announcement", handler);
+  }, []);
+
   const checkShouldShow = (announcement: AnnouncementData) => {
     if (!announcement.is_active) return;
     if (localStorage.getItem(STORAGE_KEY) !== announcement.version) {
