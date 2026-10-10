@@ -33,16 +33,16 @@ const Index = () => {
       <AnnouncementModal />
       <ParticleBackground />
       <main className="relative z-10 flex flex-col items-center px-4 pt-6 pb-10 sm:pt-10 sm:pb-12">
-        <div className="w-full max-w-2xl grid grid-cols-3 items-center mb-3">
-          <img src="/logo.png" alt="Dustan Hub" className="w-12 h-12 rounded-full object-cover ring-2 ring-primary/30 shadow-lg shadow-primary/20 justify-self-start" />
-          <div className="flex items-center gap-2 justify-self-center">
-            <button onClick={handleShare} className="flex items-center gap-1.5 h-9 px-3 rounded-full bg-accent/15 border border-accent/40 text-accent text-xs transition-transform hover:scale-105" aria-label="分享好友">
+        <div className="w-full max-w-2xl flex items-center justify-between gap-2 mb-3">
+          <img src="/logo.png" alt="Dustan Hub" className="w-12 h-12 rounded-full object-cover ring-2 ring-primary/30 shadow-lg shadow-primary/20 shrink-0" />
+          <div className="flex items-center gap-2">
+            <button onClick={handleShare} className="flex items-center gap-1.5 h-9 px-3 rounded-full bg-accent/15 border border-accent/40 text-accent text-xs transition-transform hover:scale-105 whitespace-nowrap shrink-0" aria-label="分享好友">
               {shared ? <Check className="w-3.5 h-3.5" /> : <Share2 className="w-3.5 h-3.5" />}
               {shared ? "已复制" : "分享好友"}
             </button>
             <AnnouncementButton />
           </div>
-          <div className="justify-self-end"><UserNav /></div>
+          <div className="shrink-0"><UserNav /></div>
         </div>
         <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-3 mt-6"><h1 className="font-heading text-3xl sm:text-4xl font-bold mb-2"><span className="gradient-text glow-text">Dustan Hub</span></h1><p className="text-muted-foreground text-sm max-w-md mx-auto">AI工具 · 软件资源 · 实用服务 · 精选分享</p></motion.div>
         <h2 className="sr-only">资源通道</h2><p className="text-center text-xs gradient-text font-medium mb-3">一个资源库 · 多种下载方式</p><div className="w-full max-w-2xl grid grid-cols-2 gap-3 sm:gap-4 mb-5">{resourceLinks.map((item, i) => <GlassCard key={item.label} delay={i * 0.1} onClick={() => { track(item.key, item.label, "netdisk"); window.open(item.url, "_blank", "noopener,noreferrer"); }} className="!bg-transparent !backdrop-blur-none !shadow-none p-5 flex flex-col items-center gap-3"><item.icon className={`w-7 h-7 ${item.color}`} /><span className="text-sm font-medium text-foreground/90 text-center">{item.label}</span></GlassCard>)}</div>
