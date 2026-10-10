@@ -115,7 +115,7 @@ export default function AnnouncementBanner() {
               </div>
 
               <h3 className="font-heading text-xl sm:text-2xl font-bold tracking-tight">
-                <span className="[background:linear-gradient(90deg,#4285F4,#EA4335,#FBBC05,#34A853)] bg-clip-text text-transparent">
+                <span className="text-foreground">
                   {data.title}
                 </span>
               </h3>
