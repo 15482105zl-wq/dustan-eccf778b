@@ -12,6 +12,7 @@ import AuthGateModal from "@/components/AuthGateModal";
 
 const YUETONG_URL = "https://app.xn--9kq451mn9g.com/#/register?code=OkGae8Qp";
 const NICE_URL = "https://dustan.mmmoyou.com/#/register?code=0lc8ncSH";
+const XINGCHEN_URL = "https://xc.luniu8.com/?code=qm8A2dss";
 const FLCLASH_APK_URL = "https://qxtecefxbtcukpuizvzb.supabase.co/storage/v1/object/public/downloads/FLClash-0.8.93-android-arm64-v8a.apk";
 const APP_DOWNLOAD_URL = "https://pxyfbbohoazbslneagix.supabase.co/storage/v1/object/public/downloads/DustanHub.apk";
 
@@ -82,6 +83,44 @@ const YuetongIcon = () => (
         <circle cx="33.5" cy="29" r="8.5" fill="none" stroke="url(#yuetongRingShine)" strokeWidth="5" />
       </g>
       <path d="M15.5 24a8.5 8.5 0 0 1 6-7.2" fill="none" stroke="#ffffff" strokeWidth="1.6" strokeLinecap="round" opacity="0.6" />
+    </svg>
+  </div>
+);
+
+// 星辰云图标（3D 立体星空，保持原尺寸与辉光阴影）
+const XingchenIcon = () => (
+  <div
+    className="w-14 h-14 rounded-full relative flex items-center justify-center flex-shrink-0 overflow-hidden"
+    style={{
+      background: "radial-gradient(100% 100% at 30% 25%, #5eead4 0%, #0d9488 55%, #042f2e 100%)",
+      boxShadow: "0 0 20px rgba(20, 184, 166, 0.55), inset 0 1.5px 2px rgba(255, 255, 255, 0.75), inset 0 -3px 6px rgba(0, 0, 0, 0.45)",
+      border: "1px solid rgba(255, 255, 255, 0.4)",
+    }}
+  >
+    <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 56 56">
+      <defs>
+        <linearGradient id="xingchenStarShine" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#ffffff" stopOpacity="0.95" />
+          <stop offset="50%" stopColor="#ccfbf1" stopOpacity="0.85" />
+          <stop offset="100%" stopColor="#5eead4" stopOpacity="0.55" />
+        </linearGradient>
+      </defs>
+      <circle cx="28" cy="28" r="20" fill="none" stroke="rgba(255,255,255,0.22)" strokeWidth="0.8" strokeDasharray="3 3" />
+      <circle cx="12" cy="20" r="1.3" fill="#ffffff" filter="drop-shadow(0 0 2px #fff)" />
+      <circle cx="43" cy="16" r="1.5" fill="#ffffff" filter="drop-shadow(0 0 2px #fff)" />
+      <circle cx="45" cy="38" r="1.2" fill="#ffffff" filter="drop-shadow(0 0 2px #fff)" />
+      <circle cx="16" cy="40" r="1" fill="#ffffff" opacity="0.8" />
+      <g filter="drop-shadow(0 4px 8px rgba(4, 47, 46, 0.5))">
+        <path
+          d="M28 13c1.6 7.5 4.6 10.5 12.1 12.1-7.5 1.6-10.5 4.6-12.1 12.1-1.6-7.5-4.6-10.5-12.1-12.1 7.5-1.6 10.5-4.6 12.1-12.1z"
+          fill="url(#xingchenStarShine)"
+        />
+      </g>
+      <path
+        d="M40 34c.8 3.6 2.2 5 5.8 5.8-3.6.8-5 2.2-5.8 5.8-.8-3.6-2.2-5-5.8-5.8 3.6-.8 5-2.2 5.8-5.8z"
+        fill="#ffffff"
+        opacity="0.75"
+      />
     </svg>
   </div>
 );
@@ -288,7 +327,7 @@ const Accelerate = () => {
               </div>
             </div>
           )}
-          {/* Nice·云 */}
+          {/* 2026-10-12 暂停推广：Nice·云卡片暂时隐藏，Saber 谈判后视结果恢复（恢复时取消本注释块即可）
           <motion.div
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
@@ -318,7 +357,38 @@ const Accelerate = () => {
               立即开始
             </button>
           </motion.div>
-          {/* 悦通 */}
+          */}
+          {/* 星辰云（2026-10-12 新增，首推） */}
+          <motion.div
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.45, delay: 0.04 }}
+            className="rounded-[38px] p-6 flex flex-col relative bg-transparent border border-glass-border/40"
+          >
+            <div className="flex items-center gap-3.5 mb-3 mt-1">
+              <XingchenIcon />
+              <div>
+                <h2 className="font-heading text-lg font-semibold" style={{ color: "#f2f3fa" }}>
+                  星辰云
+                </h2>
+                <p className="text-[11px] text-muted-foreground">
+                  免翻直连 · 套餐亲民 · 不限设备
+                </p>
+              </div>
+            </div>
+            <p className="text-[13px] leading-relaxed flex-1 text-muted-foreground">
+              免翻是看家本领——官网在国内不用翻墙直接打开。月付 9.9 元起，不限设备，IEPL 专线，流媒体一键解锁，适合追求性价比的用户。
+            </p>
+
+            <button
+              onClick={() => window.open(XINGCHEN_URL, "_blank", "noopener,noreferrer")}
+              className="mt-4 w-full rounded-full py-3 text-sm font-bold border border-white/10 bg-transparent transition-transform hover:scale-[1.02]"
+              style={{ color: "#a855f7" }}
+            >
+              立即开始
+            </button>
+          </motion.div>
+{/* 悦通 */}
           <motion.div
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
