@@ -204,8 +204,10 @@ const AuthGateModal = ({ open, onOpenChange }: Props) => {
 
               <TabsContent value="login">
                 <form onSubmit={handleLogin} className="space-y-3 mt-4">
-                  <EmailInput value={email} onChange={setEmail} placeholder="邮箱 (支持 QQ/163/Gmail 等)" required />
+                  <EmailInput name="email" id="email" value={email} onChange={setEmail} placeholder="邮箱 (支持 QQ/163/Gmail 等)" required />
                   <PasswordInput
+                    name="login-password"
+                    id="login-password"
                     autoComplete="current-password"
                     placeholder="密码"
                     value={password}
