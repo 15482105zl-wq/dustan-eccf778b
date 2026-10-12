@@ -372,12 +372,12 @@ const Accelerate = () => {
                   星辰云
                 </h2>
                 <p className="text-[11px] text-muted-foreground">
-                  免翻直连 · 套餐亲民 · 不限设备
+                  IEPL专线 · 套餐亲民 · 不限设备
                 </p>
               </div>
             </div>
             <p className="text-[13px] leading-relaxed flex-1 text-muted-foreground">
-              免翻是看家本领——官网在国内不用翻墙直接打开。月付 9.9 元起，不限设备，IEPL 专线，流媒体一键解锁，适合追求性价比的用户。
+              专线是看家本领——IEPL 高速专线，月付 9.9 元起，不限设备，流媒体一键解锁，适合追求性价比的用户。
             </p>
 
             <button
@@ -442,7 +442,7 @@ const Accelerate = () => {
               </div>
             </div>
             <p className="text-[13px] leading-relaxed flex-1 text-muted-foreground">
-              追剧看片悠着用——流量烧完连不上不是坏了，是该升级了。每月15个名额，先到先得，每人每月限领一次。
+              追剧看片悠着用——流量烧完连不上不是坏了，是该升级了。每月15个名额，先到先得，每人每月限领一次，每月3号重置流量。
             </p>
 
             {trialStatus?.ok ? (
