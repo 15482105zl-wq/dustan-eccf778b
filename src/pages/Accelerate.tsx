@@ -442,7 +442,7 @@ const Accelerate = () => {
               </div>
             </div>
             <p className="text-[13px] leading-relaxed flex-1 text-muted-foreground">
-              追剧看片悠着用——流量烧完连不上不是坏了，是该升级了。每月15个名额，先到先得，每人每月限领一次，<span style={{ color: "#ef4444" }}>每月3日重置流量</span>。
+              追剧看片悠着用——流量烧完连不上不是坏了，是该升级了。每月15个名额，先到先得，每人每月限领一次，<span style={{ color: "#ef4444" }}>每月3日重置流量并重新开始活动</span>。
             </p>
 
             {trialStatus?.ok ? (
