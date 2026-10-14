@@ -327,7 +327,6 @@ const Accelerate = () => {
               </div>
             </div>
           )}
-          {/* 2026-10-12 暂停推广：Nice·云卡片暂时隐藏，Saber 谈判后视结果恢复（恢复时取消本注释块即可）
           <motion.div
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
@@ -357,7 +356,6 @@ const Accelerate = () => {
               立即开始
             </button>
           </motion.div>
-          */}
           {/* 星辰云（2026-10-12 新增，首推） */}
           <motion.div
             initial={{ opacity: 0, y: 18 }}
@@ -388,7 +386,7 @@ const Accelerate = () => {
               立即开始
             </button>
           </motion.div>
-{/* 悦通 */}
+          {/* 2026-10-14 隐藏悦通：只推星辰云和Nice·云（恢复时取消本注释块即可）
           <motion.div
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
@@ -418,6 +416,7 @@ const Accelerate = () => {
               立即开始
             </button>
           </motion.div>
+          */}
           {/* 免费体验装 */}
           <motion.div
             initial={{ opacity: 0, y: 18 }}
@@ -582,7 +581,7 @@ opacity: 0 }}
               <div className="flex-1">
                 <p className="text-sm font-semibold mb-1" style={{ color: "#f2f3fa" }}>选择节点并连接</p>
                 <p className="text-xs text-muted-foreground leading-relaxed">
-                  点下方"代理"，选一个节点，打开开关就能用了。流量烧完连不上是正常的——想要一直稳定，就去用高性能的悦通
+                  点下方"代理"，选一个节点，打开开关就能用了。流量烧完连不上是正常的——想要一直稳定，就去用星辰云
                 </p>
               </div>
             </div>
