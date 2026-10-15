@@ -28,7 +28,7 @@ const Index = () => {
   };
   return (
     <div className="min-h-screen relative">
-      <SEO title="Dustan Hub · 数字站" description="" path="/" />
+      <SEO title="Dustan Hub · 数字站" description="AI工具 · 软件资源 · 实用服务 · 精选分享" path="/" />
       <AnnouncementModal />
       <ParticleBackground />
       <main className="relative z-10 flex flex-col items-center px-4 pt-6 pb-10 sm:pt-10 sm:pb-12">
