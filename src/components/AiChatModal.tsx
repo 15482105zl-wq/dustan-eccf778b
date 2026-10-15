@@ -200,7 +200,7 @@ const AiChatModal = ({ open, onOpenChange }: AiChatModalProps) => {
         body: JSON.stringify({ type: "chat", session: sessionRef.current, content: text }),
       });
       if (!res.ok) {
-        setNotice(res.status === 503 ? "AI 现在有点忙，稍后再试一下。" : "发送失败，请重试。");
+        setNotice(res.status === 503 ? "AI 现在有点忙，稍后再试一下。" : res.status === 429 ? "发得太快了，稍等一下再试。" : "发送失败，请重试。");
       }
     } catch {
       setInput(text);
