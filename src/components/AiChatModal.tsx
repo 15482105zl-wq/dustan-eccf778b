@@ -285,6 +285,7 @@ const AiChatModal = ({ open, onOpenChange }: AiChatModalProps) => {
                   <Send className="w-5 h-5" />
                 </button>
               </div>
+              <div className="text-center text-[10px] text-muted-foreground/50 pt-1">对话记录保存7天用于改进服务</div>
             </div>
           </motion.div>
         </motion.div>

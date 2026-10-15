@@ -34,6 +34,10 @@ const Auth = () => {
       toast({ title: "请填写邮箱和密码", variant: "destructive" });
       return;
     }
+    if (!isLogin && password.length < 6) {
+      toast({ title: "密码至少需要6位", variant: "destructive" });
+      return;
+    }
     if (!isLogin && password !== confirmPassword) {
       toast({ title: "[错误：两次输入的密码不一致，请重新检查]", variant: "destructive" });
       return;

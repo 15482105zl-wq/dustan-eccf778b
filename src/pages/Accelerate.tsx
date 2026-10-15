@@ -248,7 +248,7 @@ const Accelerate = () => {
 
   return (
     <div className="min-h-screen relative">
-      <SEO title="网络加速" description="" path="/accelerate" noindex />
+      <SEO title="网络加速" description="星辰云、Nice云网络加速，IEPL专线，稳定快速" path="/accelerate" noindex />
       <ParticleBackground />
       <main className="relative z-10 flex flex-col items-center px-4 pt-5 pb-10 sm:py-10">
         <div className="w-full max-w-4xl flex items-center justify-between mb-6">

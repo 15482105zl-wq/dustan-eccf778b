@@ -64,7 +64,11 @@ export default function AnnouncementModal() {
 
   const checkShouldShow = (announcement: AnnouncementData) => {
     if (!announcement.is_active) return;
-    if (localStorage.getItem(STORAGE_KEY) !== announcement.version) {
+    try {
+      if (localStorage.getItem(STORAGE_KEY) !== announcement.version) {
+        setIsOpen(true);
+      }
+    } catch {
       setIsOpen(true);
     }
   };
@@ -102,7 +106,11 @@ export default function AnnouncementModal() {
   };
 
   const close = () => {
-    localStorage.setItem(STORAGE_KEY, data.version);
+    try {
+      localStorage.setItem(STORAGE_KEY, data.version);
+    } catch {
+      // localStorage unavailable, ignore
+    }
     setIsOpen(false);
     setIsEditing(false);
   };
