@@ -463,15 +463,15 @@ const Accelerate = () => {
                   免费体验装
                 </h2>
                 <p className="text-[11px] text-muted-foreground">
+                  重置倒计时：<ResetCountdownText />
+                </p>
+                <p className="text-[11px] text-muted-foreground">
                   每月200G · 日常够用
                 </p>
               </div>
             </div>
             <p className="text-[13px] leading-relaxed flex-1 text-muted-foreground">
               追剧看片悠着用——流量烧完连不上不是坏了，是该升级了。每月15个名额，先到先得，每人每月限领一次，<span style={{ color: "#ef4444" }}>每月3日重置流量并重新开始活动</span>。
-            </p>
-            <p className="mt-2 text-xs text-muted-foreground">
-              ⏳ 距下次重置还有 <ResetCountdownText />
             </p>
 
             {trialStatus?.ok ? (
