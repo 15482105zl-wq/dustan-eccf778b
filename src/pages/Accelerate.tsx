@@ -149,7 +149,7 @@ const ResetCountdownText = () => {
     const t = setInterval(tick, 1000);
     return () => clearInterval(t);
   }, []);
-  return <span style={{ color: "#a855f7" }} className="font-bold tabular-nums">{txt}</span>;
+  return <span className="font-bold tabular-nums">{txt}</span>;
 };
 
 const Accelerate = () => {
@@ -462,7 +462,7 @@ const Accelerate = () => {
                 <h2 className="font-heading text-lg font-semibold" style={{ color: "#f2f3fa" }}>
                   免费体验装
                 </h2>
-                <p className="text-[11px] text-muted-foreground">
+                <p className="text-xs font-medium" style={{ color: "#ef4444" }}>
                   重置倒计时：<ResetCountdownText />
                 </p>
                 <p className="text-[11px] text-muted-foreground">
