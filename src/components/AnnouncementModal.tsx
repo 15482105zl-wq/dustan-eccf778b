@@ -388,7 +388,7 @@ export default function AnnouncementModal() {
                   </div>
 
                   <h3 className="font-heading text-xl sm:text-2xl font-bold tracking-tight">
-                    <span className="[background:linear-gradient(90deg,#4285F4,#EA4335,#FBBC05,#34A853)] bg-clip-text text-transparent">{editForm.title}</span>
+                    <span style={{ background: "linear-gradient(90deg,#4285F4,#EA4335,#FBBC05,#34A853)", WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent" }}>{editForm.title}</span>
                   </h3>
 
                   <div className="space-y-2 py-1">
@@ -456,7 +456,7 @@ export default function AnnouncementModal() {
               </div>
 
               <h3 className="font-heading text-xl sm:text-2xl font-bold tracking-tight">
-                <span className="[background:linear-gradient(90deg,#4285F4,#EA4335,#FBBC05,#34A853)] bg-clip-text text-transparent">{data.title}</span>
+                <span style={{ background: "linear-gradient(90deg,#4285F4,#EA4335,#FBBC05,#34A853)", WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent" }}>{data.title}</span>
               </h3>
 
               <div className="space-y-2 py-1">
