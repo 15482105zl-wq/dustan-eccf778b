@@ -125,6 +125,69 @@ const XingchenIcon = () => (
   </div>
 );
 
+
+// 流量重置倒计时：每月3日 00:00 重置，动态计算下次重置时间
+const ResetCountdown = () => {
+  const [left, setLeft] = useState({ d: 0, h: 0, m: 0, s: 0 });
+
+  useEffect(() => {
+    const tick = () => {
+      const now = new Date();
+      let target = new Date(now.getFullYear(), now.getMonth(), 3, 0, 0, 0);
+      if (now.getTime() >= target.getTime()) {
+        target = new Date(now.getFullYear(), now.getMonth() + 1, 3, 0, 0, 0);
+      }
+      const diff = Math.max(0, target.getTime() - now.getTime());
+      setLeft({
+        d: Math.floor(diff / 86400000),
+        h: Math.floor((diff % 86400000) / 3600000),
+        m: Math.floor((diff % 3600000) / 60000),
+        s: Math.floor((diff % 60000) / 1000),
+      });
+    };
+    tick();
+    const t = setInterval(tick, 1000);
+    return () => clearInterval(t);
+  }, []);
+
+  const pad = (n: number) => String(n).padStart(2, "0");
+  const units: [string, string][] = [
+    [pad(left.d), "天"],
+    [pad(left.h), "时"],
+    [pad(left.m), "分"],
+    [pad(left.s), "秒"],
+  ];
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 18 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.45, delay: 0.12 }}
+      className="w-full max-w-2xl rounded-[38px] p-6 bg-transparent border border-glass-border/40 mt-5"
+    >
+      <p className="text-center text-sm font-semibold mb-4" style={{ color: "#f2f3fa" }}>
+        ⏳ 距离下次流量重置还有
+      </p>
+      <div className="flex justify-center items-end gap-2 sm:gap-3">
+        {units.map(([num, label]) => (
+          <div key={label} className="flex flex-col items-center">
+            <div
+              className="w-14 sm:w-16 h-14 sm:h-16 rounded-2xl flex items-center justify-center text-2xl sm:text-3xl font-bold tabular-nums"
+              style={{ background: "rgba(168,85,247,0.12)", color: "#a855f7", border: "1px solid rgba(168,85,247,0.25)" }}
+            >
+              {num}
+            </div>
+            <span className="text-xs text-muted-foreground mt-1.5">{label}</span>
+          </div>
+        ))}
+      </div>
+      <p className="text-center text-xs text-muted-foreground mt-4">
+        每月3日自动重置流量并开启新一轮
+      </p>
+    </motion.div>
+  );
+};
+
 const Accelerate = () => {
   const navigate = useNavigate();
   const { isAdmin, user } = useAuth();
@@ -486,6 +549,8 @@ const Accelerate = () => {
             </button>
           </motion.div>
         </div>
+
+        <ResetCountdown />
 
         <motion.a
           href={APP_DOWNLOAD_URL}
