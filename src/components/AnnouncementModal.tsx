@@ -388,7 +388,7 @@ export default function AnnouncementModal() {
                   </div>
 
                   <h3 className="font-heading text-xl sm:text-2xl font-bold tracking-tight">
-                    <span className="text-foreground">{editForm.title}</span>
+                    <span className="bg-gradient-to-r from-[#e9d5ff] to-[#a855f7] bg-clip-text text-transparent">{editForm.title}</span>
                   </h3>
 
                   <div className="space-y-2 py-1">
@@ -456,7 +456,7 @@ export default function AnnouncementModal() {
               </div>
 
               <h3 className="font-heading text-xl sm:text-2xl font-bold tracking-tight">
-                <span className="text-foreground">{data.title}</span>
+                <span className="bg-gradient-to-r from-[#e9d5ff] to-[#a855f7] bg-clip-text text-transparent">{data.title}</span>
               </h3>
 
               <div className="space-y-2 py-1">
