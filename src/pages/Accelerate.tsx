@@ -128,15 +128,15 @@ const XingchenIcon = () => (
 
 
 
-// 小倒计时：每月3日 00:00 重置，小字显示
-const ResetCountdownText = () => {
+// 小倒计时：按指定日期（每月X日 00:00）重置，小字显示
+const ResetCountdownText = ({ day }: { day: number }) => {
   const [txt, setTxt] = useState("");
   useEffect(() => {
     const tick = () => {
       const now = new Date();
-      let target = new Date(now.getFullYear(), now.getMonth(), 3, 0, 0, 0);
+      let target = new Date(now.getFullYear(), now.getMonth(), day, 0, 0, 0);
       if (now.getTime() >= target.getTime()) {
-        target = new Date(now.getFullYear(), now.getMonth() + 1, 3, 0, 0, 0);
+        target = new Date(now.getFullYear(), now.getMonth() + 1, day, 0, 0, 0);
       }
       const diff = Math.max(0, target.getTime() - now.getTime());
       const d = Math.floor(diff / 86400000);
@@ -148,9 +148,12 @@ const ResetCountdownText = () => {
     tick();
     const t = setInterval(tick, 1000);
     return () => clearInterval(t);
-  }, []);
+  }, [day]);
   return <span className="font-bold tabular-nums">{txt}</span>;
 };
+
+// 每款订阅的重置日期：疾风版每月4日，流云版每月10日
+const TRIAL_RESET_DAYS: Record<string, number> = { main: 4, kitty: 10 };
 
 const Accelerate = () => {
   const navigate = useNavigate();
@@ -466,16 +469,13 @@ const Accelerate = () => {
                 <h2 className="font-heading text-lg font-semibold" style={{ color: "#f2f3fa" }}>
                   免费体验装
                 </h2>
-                <p className="text-xs font-medium" style={{ color: "#ef4444" }}>
-                  重置倒计时：<ResetCountdownText />
-                </p>
                 <p className="text-[11px] text-muted-foreground">
-                  每月200G · 日常够用
+                  两款订阅 · 二选一 · 每月重置
                 </p>
               </div>
             </div>
             <p className="text-[13px] leading-relaxed flex-1 text-muted-foreground">
-              追剧看片悠着用——流量烧完连不上不是坏了，是该升级了。两款订阅二选一，名额有限先到先得，每人每月限领一款，<span style={{ color: "#ef4444" }}>每月3日重置流量并重新开始活动</span>。
+              追剧看片悠着用——流量烧完连不上不是坏了，是该升级了。两款订阅二选一，名额有限先到先得，每人每月限领一款，<span style={{ color: "#ef4444" }}>同一账号同一IP每月限领一次</span>。
             </p>
 
             {trialStatus?.ok ? (
@@ -486,6 +486,7 @@ const Accelerate = () => {
                     <div className="mt-2 grid grid-cols-2 gap-2">
                       {(trialStatus.trials || []).map((t: any) => {
                         const out = t.slots_left <= 0;
+                        const resetDay = TRIAL_RESET_DAYS[t.label] || 4;
                         return (
                           <button
                             key={t.label}
@@ -495,6 +496,9 @@ const Accelerate = () => {
                           >
                             <div className="text-sm font-bold" style={{ color: "#a855f7" }}>{t.name}</div>
                             <div className="mt-1 text-[11px] text-muted-foreground">{t.traffic}</div>
+                            <div className="mt-1 text-[11px]" style={{ color: "#ef4444" }}>
+                              重置倒计时：<ResetCountdownText day={resetDay} />
+                            </div>
                             <div className="mt-1 text-[11px] text-muted-foreground">
                               {out ? "名额已领完" : <>剩余 <span className="font-bold" style={{ color: "#a855f7" }}>{t.slots_left}</span> / {t.slots_total}</>}
                             </div>
