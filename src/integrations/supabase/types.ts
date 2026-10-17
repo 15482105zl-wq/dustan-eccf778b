@@ -205,6 +205,7 @@ export type Database = {
           created_at: string
           id: string
           is_active: boolean
+          label: string | null
           month: string
           slots_claimed: number
           slots_total: number
@@ -214,6 +215,7 @@ export type Database = {
           created_at?: string
           id?: string
           is_active?: boolean
+          label?: string | null
           month: string
           slots_claimed?: number
           slots_total?: number
@@ -223,6 +225,7 @@ export type Database = {
           created_at?: string
           id?: string
           is_active?: boolean
+          label?: string | null
           month?: string
           slots_claimed?: number
           slots_total?: number
@@ -318,19 +321,25 @@ export type Database = {
         Row: {
           claimed_at: string
           id: string
+          ip_address: string | null
           month: string
+          trial_label: string | null
           user_id: string
         }
         Insert: {
           claimed_at?: string
           id?: string
+          ip_address?: string | null
           month: string
+          trial_label?: string | null
           user_id: string
         }
         Update: {
           claimed_at?: string
           id?: string
+          ip_address?: string | null
           month?: string
+          trial_label?: string | null
           user_id?: string
         }
         Relationships: []
@@ -426,7 +435,7 @@ export type Database = {
         }
         Returns: Json
       }
-      claim_trial: { Args: never; Returns: Json }
+      claim_trial: { Args: { p_label?: string }; Returns: Json }
       get_site_owner_profile: { Args: never; Returns: Json }
       has_role: {
         Args: {
