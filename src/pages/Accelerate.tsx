@@ -221,7 +221,7 @@ const Accelerate = () => {
       setTrialStatus(st);
       // 已领过的人直接取回链接，方便刷新后查看（不消耗名额）
       if (st?.ok && st.claimed) {
-        const { data: cdata } = await supabase.rpc("claim_trial");
+        const { data: cdata } = await supabase.rpc("claim_trial", { p_label: st.claimed_label || "main" });
         if ((cdata as any)?.ok) setTrialUrl((cdata as any).sub_url || "");
       } else {
         setTrialUrl("");
@@ -235,14 +235,17 @@ const Accelerate = () => {
     loadTrialStatus();
   }, [user]);
 
-  const handleClaim = async () => {
+  const [claimingLabel, setClaimingLabel] = useState<string>("");
+
+  const handleClaim = async (label: string = "main") => {
     if (!user) {
       setShowAuthGate(true);
       return;
     }
     setClaiming(true);
+    setClaimingLabel(label);
     try {
-      const { data } = await supabase.rpc("claim_trial");
+      const { data } = await supabase.rpc("claim_trial", { p_label: label });
       const r = data as any;
       if (!r?.ok) {
         toast({
@@ -478,18 +481,31 @@ const Accelerate = () => {
               <>
                 {!trialUrl ? (
                   <>
-                    <p className="mt-3 text-xs text-muted-foreground">
-                      本月剩余 <span style={{ color: "#a855f7" }} className="font-bold">{trialStatus.slots_left}</span> / {trialStatus.slots_total} 个名额
-                    </p>
-                    <button
-                      onClick={handleClaim}
-                      disabled={claiming || trialStatus.slots_left <= 0}
-                      className="mt-3 w-full rounded-full py-3 text-sm font-bold border border-white/10 bg-transparent transition-transform hover:scale-[1.02] disabled:opacity-50"
-                      style={{ color: "#a855f7" }}
-                    >
-                      {trialStatus.slots_left <= 0 ? "本月名额已领完" : claiming ? "领取中…" : "领取体验装"}
-                    </button>
+                    <p className="mt-3 text-xs text-muted-foreground">两款订阅二选一，每人每月限领一款：</p>
+                    <div className="mt-2 grid grid-cols-2 gap-2">
+                      {(trialStatus.trials || []).map((t: any) => {
+                        const out = t.slots_left <= 0;
+                        return (
+                          <button
+                            key={t.label}
+                            onClick={() => handleClaim(t.label)}
+                            disabled={claiming || out}
+                            className="rounded-2xl p-3 text-left border border-white/10 bg-transparent transition-transform hover:scale-[1.02] disabled:opacity-50"
+                          >
+                            <div className="text-sm font-bold" style={{ color: "#a855f7" }}>{t.name}</div>
+                            <div className="mt-1 text-[11px] text-muted-foreground">{t.traffic}</div>
+                            <div className="mt-1 text-[11px] text-muted-foreground">
+                              {out ? "名额已领完" : <>剩余 <span className="font-bold" style={{ color: "#a855f7" }}>{t.slots_left}</span> / {t.slots_total}</>}
+                            </div>
+                            <div className="mt-2 text-xs font-bold" style={{ color: "#a855f7" }}>
+                              {out ? "已领完" : claimingLabel === t.label ? "领取中…" : "领取"}
+                            </div>
+                          </button>
+                        );
+                      })}
+                    </div>
                   </>
+
                 ) : (
                   <div className="mt-3">
                     <p className="text-xs text-muted-foreground mb-2">本月已领取，教程里有客户端下载和订阅链接：</p>
