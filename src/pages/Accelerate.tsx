@@ -249,7 +249,7 @@ const Accelerate = () => {
       const r = data as any;
       if (!r?.ok) {
         toast({
-          title: r?.error === "sold_out" ? "本月名额已领完，下个月再来" : "领取失败，稍后再试",
+          title: r?.error === "sold_out" ? "该订阅本月名额已领完，可选另一款" : r?.error === "already_claimed" ? "本月已领取过体验装（同一网络限领一次）" : "领取失败，稍后再试",
           variant: "destructive",
         });
         loadTrialStatus();
@@ -264,6 +264,7 @@ const Accelerate = () => {
       toast({ title: "领取失败", description: err?.message || "网络异常", variant: "destructive" });
     } finally {
       setClaiming(false);
+      setClaimingLabel("");
     }
   };
 
@@ -474,7 +475,7 @@ const Accelerate = () => {
               </div>
             </div>
             <p className="text-[13px] leading-relaxed flex-1 text-muted-foreground">
-              追剧看片悠着用——流量烧完连不上不是坏了，是该升级了。每月15个名额，先到先得，每人每月限领一次，<span style={{ color: "#ef4444" }}>每月3日重置流量并重新开始活动</span>。
+              追剧看片悠着用——流量烧完连不上不是坏了，是该升级了。两款订阅二选一，名额有限先到先得，每人每月限领一款，<span style={{ color: "#ef4444" }}>每月3日重置流量并重新开始活动</span>。
             </p>
 
             {trialStatus?.ok ? (
