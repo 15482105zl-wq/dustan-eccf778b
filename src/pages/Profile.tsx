@@ -114,12 +114,12 @@ const Profile = () => {
 
   const handleSave = async () => {
     if (!user) return;
-    if (displayName.trim().length > 4) {
-      toast({ title: "昵称最多 4 个字", variant: "destructive" });
+    if (displayName.trim().length > 6) {
+      toast({ title: "昵称最多 6 个字", variant: "destructive" });
       return;
     }
-    if (bio.trim().length > 20) {
-      toast({ title: "简介最多 20 个字", variant: "destructive" });
+    if (bio.trim().length > 60) {
+      toast({ title: "简介最多 60 个字", variant: "destructive" });
       return;
     }
     setSaving(true);
@@ -223,11 +223,11 @@ const Profile = () => {
               <Input
                 value={displayName}
                 onChange={(e) => setDisplayName(e.target.value)}
-                maxLength={4}
+                maxLength={6}
                 className="bg-secondary/50 border-border/50"
                 placeholder="你的昵称"
               />
-              <p className="text-[10px] text-muted-foreground mt-1 text-right">{displayName.length}/4</p>
+              <p className="text-[10px] text-muted-foreground mt-1 text-right">{displayName.length}/6</p>
             </div>
             <div>
               <label className="text-xs text-muted-foreground mb-1 block">邮箱</label>
@@ -242,12 +242,12 @@ const Profile = () => {
               <Textarea
                 value={bio}
                 onChange={(e) => setBio(e.target.value)}
-                maxLength={20}
+                maxLength={60}
                 rows={2}
                 className="bg-secondary/50 border-border/50 resize-none"
                 placeholder="介绍一下自己..."
               />
-              <p className="text-[10px] text-muted-foreground mt-1 text-right">{bio.length}/20</p>
+              <p className="text-[10px] text-muted-foreground mt-1 text-right">{bio.length}/60</p>
             </div>
           </div>
 
