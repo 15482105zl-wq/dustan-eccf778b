@@ -14,7 +14,10 @@ import SiteStatsPanel from "@/components/SiteStatsPanel";
 import { ArrowLeft, Camera, Save, Loader2 } from "lucide-react";
 
 const Profile = () => {
-  const { user, isAdmin, loading: authLoading } = useAuth();
+  const { user, isAdmin, loading: authLoading, signOut } = useAuth();
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [confirmText, setConfirmText] = useState("");
+  const [deleting, setDeleting] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
   const [displayName, setDisplayName] = useState("");
@@ -146,6 +149,24 @@ const Profile = () => {
     }
   };
 
+  const handleDeleteAccount = async () => {
+    if (confirmText.trim() !== "确认注销") return;
+    setDeleting(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("delete-account", { body: {} });
+      if (error || !data?.ok) {
+        toast({ title: "注销失败", description: error?.message || data?.error || "请稍后再试", variant: "destructive" });
+        return;
+      }
+      try { localStorage.removeItem("dustan_my_profile"); } catch { /* 忽略 */ }
+      await signOut();
+      toast({ title: "账号已永久注销" });
+      navigate("/", { replace: true });
+    } finally {
+      setDeleting(false);
+    }
+  };
+
   if (authLoading || !loaded) {
     return (
       <div className="min-h-screen relative">
@@ -262,6 +283,51 @@ const Profile = () => {
         </motion.div>
 
         {isAdmin && <SiteStatsPanel />}
+
+        <div className="w-full max-w-sm glass rounded-xl p-6 mt-6 space-y-3 border border-destructive/30">
+          <h2 className="text-sm font-semibold text-destructive">永久注销账号</h2>
+          <p className="text-xs text-muted-foreground">
+            将永久删除你的账号、头像、昵称和所有留言，删除后不能恢复。
+          </p>
+          {!confirmOpen ? (
+            <Button
+              variant="outline"
+              onClick={() => setConfirmOpen(true)}
+              className="w-full border-destructive/40 text-destructive hover:bg-destructive/10"
+            >
+              注销账号
+            </Button>
+          ) : (
+            <div className="space-y-2">
+              <p className="text-xs text-destructive">请输入「确认注销」以继续：</p>
+              <Input
+                value={confirmText}
+                onChange={(e) => setConfirmText(e.target.value)}
+                placeholder="确认注销"
+                className="bg-secondary/50 border-destructive/40"
+              />
+              <div className="flex gap-2">
+                <Button
+                  variant="outline"
+                  className="flex-1"
+                  disabled={deleting}
+                  onClick={() => { setConfirmOpen(false); setConfirmText(""); }}
+                >
+                  取消
+                </Button>
+                <Button
+                  variant="destructive"
+                  className="flex-1"
+                  disabled={deleting || confirmText.trim() !== "确认注销"}
+                  onClick={handleDeleteAccount}
+                >
+                  {deleting ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : null}
+                  永久删除
+                </Button>
+              </div>
+            </div>
+          )}
+        </div>
       </main>
     </div>
   );
