@@ -24,15 +24,14 @@ const sections = [
           <li>返回"仪表盘"，点击"开始"即可使用</li>
         </ol>
         <p className="mt-3">免费体验装位于加速页底部，疾风版与流云版二选一，每款每月10个名额，登录后领取。</p>
-        <p className="mt-2 text-muted-foreground text-xs">FLClash 安卓版下载地址：</p>
         <a
           href={FLCLASH_APK_URL}
           target="_blank"
           rel="noopener noreferrer"
-          className="block mt-1 text-xs break-all"
-          style={{ color: "#38bdf8" }}
+          className="inline-block mt-3 px-5 py-2.5 rounded-xl text-sm font-semibold text-white transition-transform hover:scale-105"
+          style={{ background: "linear-gradient(135deg, #38bdf8, #6366f1)" }}
         >
-          {FLCLASH_APK_URL}
+          📲 下载 FLClash 安卓版
         </a>
       </>
     ),
