@@ -31,7 +31,7 @@ const sections = [
           className="inline-block mt-3 px-5 py-2.5 rounded-xl text-sm font-semibold text-white transition-transform hover:scale-105"
           style={{ background: "linear-gradient(135deg, #38bdf8, #6366f1)" }}
         >
-          📲 下载 FLClash 安卓版
+          下载 FLClash 安卓版
         </a>
       </>
     ),
