@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { ArrowLeft, Apple, BookOpen, ChevronRight, Film, Globe, Lock, Rocket, Search, type LucideIcon } from "lucide-react";
+import { ArrowLeft, Apple, BookOpen, ChevronRight, Download, Film, Globe, Lock, Rocket, Search, type LucideIcon } from "lucide-react";
 import ParticleBackground from "@/components/ParticleBackground";
 import GlassCard from "@/components/GlassCard";
 import SEO from "@/components/SEO";
@@ -244,9 +244,10 @@ const Vip = () => {
           rel="noopener noreferrer"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="mt-8 text-sm font-bold animate-app-link"
+          className="mt-8 text-sm font-bold animate-app-link inline-flex items-center gap-1.5"
           style={{ color: "#a855f7" }}
         >
+          <Download className="w-4 h-4" />
           下载官方APP
         </motion.a>
 
