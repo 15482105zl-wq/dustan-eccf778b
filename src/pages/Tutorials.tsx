@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import ParticleBackground from "@/components/ParticleBackground";
 import SEO from "@/components/SEO";
 import UserNav from "@/components/UserNav";
+import SiteFooter from "@/components/SiteFooter";
 
 const FLCLASH_APK_URL = "https://qxtecefxbtcukpuizvzb.supabase.co/storage/v1/object/public/downloads/FLClash-0.8.93-android-arm64-v8a.apk";
 
@@ -162,14 +163,7 @@ const Tutorials = () => {
           返回首页
         </button>
 
-        <footer
-          className="mt-8 mb-2 text-center text-xs text-muted-foreground"
-          style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
-        >
-          <span style={{ color: "#38bdf8" }}>Dustan Hub · 数字站</span>
-          <br />
-          dustan.lovable.app
-        </footer>
+        <SiteFooter />
       </main>
     </div>
   );

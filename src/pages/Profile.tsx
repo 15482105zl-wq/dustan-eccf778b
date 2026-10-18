@@ -10,6 +10,7 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { useToast } from "@/hooks/use-toast";
 import ParticleBackground from "@/components/ParticleBackground";
 import SEO from "@/components/SEO";
+import SiteFooter from "@/components/SiteFooter";
 import SiteStatsPanel from "@/components/SiteStatsPanel";
 import { ArrowLeft, Camera, Save, Loader2 } from "lucide-react";
 
@@ -328,6 +329,7 @@ const Profile = () => {
             </div>
           )}
         </div>
+        <SiteFooter />
       </main>
     </div>
   );

@@ -7,6 +7,7 @@ import GlassCard from "@/components/GlassCard";
 import SEO from "@/components/SEO";
 import UserNav from "@/components/UserNav";
 import VipResourceCard from "@/components/VipResourceCard";
+import SiteFooter from "@/components/SiteFooter";
 import UnlockForum from "@/components/UnlockForum";
 import AuthGateModal from "@/components/AuthGateModal";
 import AiChatModal from "@/components/AiChatModal";
@@ -251,14 +252,7 @@ const Vip = () => {
           下载官方APP
         </motion.a>
 
-        <footer
-          className="mt-6 mb-2 text-center text-xs text-muted-foreground"
-          style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
-        >
-          © 2020 - 2026 Dustan Hub · 用心运营每一天
-          <br />
-          All Rights Reserved.
-        </footer>
+        <SiteFooter />
       </main>
 
       <UnlockForum open={forumOpen} onOpenChange={setForumOpen} />

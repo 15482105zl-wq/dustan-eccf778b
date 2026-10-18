@@ -9,6 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 import AuthGateModal from "@/components/AuthGateModal";
+import SiteFooter from "@/components/SiteFooter";
 
 const YUETONG_URL = "https://app.xn--9kq451mn9g.com/#/register?code=OkGae8Qp";
 const NICE_URL = "https://dustan.mmmoyou.com/#/register?code=0lc8ncSH";
@@ -575,14 +576,7 @@ opacity: 0 }}
           下载官方APP
         </motion.a>
 
-        <footer
-          className="mt-6 mb-2 text-center text-xs text-muted-foreground"
-          style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
-        >
-          © 2020 - 2026 Dustan Hub · 用心运营每一天
-          <br />
-          All Rights Reserved.
-        </footer>
+        <SiteFooter />
       </main>
       <AuthGateModal open={showAuthGate} onOpenChange={setShowAuthGate} />
       {/* 免费体验装使用教程 */}
@@ -656,7 +650,7 @@ opacity: 0 }}
               <div className="flex-1">
                 <p className="text-sm font-semibold mb-1" style={{ color: "#f2f3fa" }}>选择节点并连接</p>
                 <p className="text-xs text-muted-foreground leading-relaxed">
-                  点下方"代理"，选一个节点，打开开关就能用了。流量烧完连不上是正常的——想要一直稳定，就去用星辰·云
+                  点下方"代理"，选一个节点，打开开关就能用了。流量烧完连不上是正常的——想要一直稳定，建议选择上方推荐的专线服务
                 </p>
               </div>
             </div>

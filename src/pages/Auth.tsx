@@ -9,6 +9,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
 import ParticleBackground from "@/components/ParticleBackground";
 import SEO from "@/components/SEO";
+import SiteFooter from "@/components/SiteFooter";
 import { ArrowLeft, Loader2 } from "lucide-react";
 import PasswordInput from "@/components/PasswordInput";
 import EmailInput from "@/components/EmailInput";
@@ -106,7 +107,7 @@ const Auth = () => {
         noindex
       />
       <ParticleBackground />
-      <main className="relative z-10 flex flex-col items-center px-4 py-12">
+      <main className="relative z-10 flex flex-col items-center px-4 py-12 min-h-screen overflow-y-auto" style={{ paddingBottom: "max(3rem, env(safe-area-inset-bottom))" }}>
         <div className="pointer-events-none fixed inset-0 opacity-40 bg-[radial-gradient(ellipse_at_top,#b026ff22,transparent_60%),radial-gradient(ellipse_at_bottom,#00f0ff22,transparent_60%)]" />
         <motion.button
           initial={{ opacity: 0, x: -20 }}
@@ -207,6 +208,7 @@ const Auth = () => {
             </button>
           </p>
         </motion.div>
+        <SiteFooter />
       </main>
     </div>
   );
