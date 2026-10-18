@@ -13,7 +13,6 @@ import ResetPassword from "./pages/ResetPassword";
 import Vip from "./pages/Vip";
 import Accelerate from "./pages/Accelerate";
 import Ai from "./pages/Ai";
-import Selfcheck from "./pages/Selfcheck";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -35,7 +34,6 @@ const App = () => (
             <Route path="/vip" element={<Vip />} />
             <Route path="/accelerate" element={<Accelerate />} />
             <Route path="/ai" element={<Ai />} />
-            <Route path="/selfcheck" element={<Selfcheck />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
           <FloatingAssistant />

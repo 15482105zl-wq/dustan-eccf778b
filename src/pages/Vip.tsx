@@ -188,38 +188,13 @@ const Vip = () => {
           </p>
         </motion.div>
 
-        <div className="w-full max-w-2xl grid grid-cols-2 gap-4 mb-4">
+        <div className="w-full max-w-2xl grid grid-cols-2 gap-4 mb-6">
           {primary.map((c, i) => (
             <VipResourceCard key={i} {...c} delay={i * 0.06} />
           ))}
           {secondary.map((c, i) => (
             <VipResourceCard key={i} {...c} delay={(i + 2) * 0.06} />
           ))}
-        </div>
-
-        {/* 人生自查问卷横版通栏卡（2026-10-18 新增） */}
-        <div className="w-full max-w-2xl mb-6">
-          <div
-            onClick={() => { track("vip_selfcheck", "人生自查问卷", "service"); navigate("/selfcheck"); }}
-            className="rounded-2xl p-4 cursor-pointer relative overflow-hidden transition-all duration-300 border-2 hover:scale-[1.01]"
-            style={{ borderColor: "#a855f7", background: "rgba(168,85,247,0.08)" }}
-          >
-            <div className="absolute top-2 right-3 px-2 py-0.5 rounded-md text-[10px] font-bold text-white" style={{ background: "#ef4444" }}>
-              NEW
-            </div>
-            <div className="flex items-center gap-3">
-              <div className="text-3xl">📋</div>
-              <div className="flex-1">
-                <h3 className="font-semibold text-base" style={{ color: "#f2f3fa" }}>
-                  人生自查问卷
-                </h3>
-                <p className="text-xs text-muted-foreground mt-0.5">
-                  81道题，测测你的人生地基牢不牢
-                </p>
-              </div>
-              <ChevronRight className="w-5 h-5" style={{ color: "#a855f7" }} />
-            </div>
-          </div>
         </div>
 
         <div className="w-full max-w-2xl">
