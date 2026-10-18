@@ -154,6 +154,14 @@ const Tutorials = () => {
           ))}
         </div>
 
+        <button
+          onClick={() => navigate("/")}
+          className="mt-8 px-8 py-3 rounded-xl text-sm font-semibold text-white transition-transform hover:scale-105"
+          style={{ background: "linear-gradient(135deg, #38bdf8, #6366f1)" }}
+        >
+          返回首页
+        </button>
+
         <footer
           className="mt-8 mb-2 text-center text-xs text-muted-foreground"
           style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
