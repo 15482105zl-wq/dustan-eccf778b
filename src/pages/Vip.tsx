@@ -247,7 +247,7 @@ const Vip = () => {
           className="mt-8 text-sm font-bold animate-app-link"
           style={{ color: "#a855f7" }}
         >
-          📲 下载 Dustan Hub App
+          下载官方APP
         </motion.a>
 
         <footer
