@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { ArrowLeft, Apple, ChevronRight, Film, Globe, Lock, Rocket, Search, type LucideIcon } from "lucide-react";
+import { ArrowLeft, Apple, BookOpen, ChevronRight, Film, Globe, Lock, Rocket, Search, type LucideIcon } from "lucide-react";
 import ParticleBackground from "@/components/ParticleBackground";
 import GlassCard from "@/components/GlassCard";
 import SEO from "@/components/SEO";
@@ -211,6 +211,26 @@ const Vip = () => {
               </h3>
               <p className="text-sm text-muted-foreground mt-1">
                 有问题直接问我
+              </p>
+            </div>
+            <ChevronRight className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
+          </div>
+        </div>
+
+        <div className="w-full max-w-2xl mt-4">
+          <div
+            onClick={() => { track("vip_tutorials", "教程与帮助", "service"); navigate("/tutorials"); }}
+            className="bg-transparent rounded-xl py-4 px-20 cursor-pointer relative overflow-hidden transition-colors duration-300 border border-glass-border/40 hover:border-primary/40 group"
+          >
+            <div className="absolute left-4 top-1/2 -translate-y-1/2 w-16 h-16 rounded-xl flex items-center justify-center group-hover:scale-105 transition-transform">
+              <BookOpen className="w-10 h-10 text-primary" />
+            </div>
+            <div className="text-center">
+              <h3 className="font-semibold text-lg whitespace-nowrap">
+                <span className="gradient-text glow-text">教程与帮助</span>
+              </h3>
+              <p className="text-sm text-muted-foreground mt-1">
+                从注册到使用，一步一步教您上手
               </p>
             </div>
             <ChevronRight className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
