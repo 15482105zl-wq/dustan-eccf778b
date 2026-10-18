@@ -212,6 +212,7 @@ const Accelerate = () => {
 
   // ---- 免费体验装 ----
   const [trialStatus, setTrialStatus] = useState<any>(null);
+  const [trialLoading, setTrialLoading] = useState(true);
   const [trialUrl, setTrialUrl] = useState<string>("");
   const [claiming, setClaiming] = useState(false);
   const [showAuthGate, setShowAuthGate] = useState(false);
@@ -231,6 +232,8 @@ const Accelerate = () => {
       }
     } catch {
       /* 接口异常时不打扰 */
+    } finally {
+      setTrialLoading(false);
     }
   };
 
@@ -309,7 +312,12 @@ const Accelerate = () => {
         <div className="w-full max-w-4xl flex flex-col gap-4">
           {/* 滚动公告：数据库有文案时才显示，清空即关闭 */}
           {noticeText && (
-          <div className="overflow-hidden rounded-2xl border border-amber-300/25 bg-amber-400/[0.07] py-2.5 -mt-3">
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            transition={{ duration: 0.4 }}
+            className="overflow-hidden rounded-2xl border border-amber-300/25 bg-amber-400/[0.07] py-2.5 -mt-3"
+          >
             <style>{`@keyframes dustanNoticeScroll { to { transform: translateX(-100%); } }`}</style>
             <div
               className="whitespace-nowrap"
@@ -317,7 +325,7 @@ const Accelerate = () => {
             >
               <span className="text-xs text-amber-100/90">{/^\p{Extended_Pictographic}/u.test(noticeText) ? noticeText : `${NOTICE_ICON} ${noticeText}`}</span>
             </div>
-          </div>
+          </motion.div>
           )}
           {isAdmin && !editingNotice && (
             <div className="flex justify-end -mt-2">
@@ -478,7 +486,22 @@ const Accelerate = () => {
               追剧看片悠着用——流量烧完连不上不是坏了，是该升级了。两款订阅二选一，名额有限先到先得，每人每月限领一款，<span style={{ color: "#ef4444" }}>同一账号同一IP每月限领一次</span>。
             </p>
 
-            {trialStatus?.ok ? (
+            {trialLoading ? (
+              <div className="mt-3 grid grid-cols-2 gap-2">
+                {[0, 1].map((i) => (
+                  <div
+                    key={i}
+                    className="rounded-2xl p-3 border border-white/10 animate-pulse"
+                    style={{ background: "rgba(255,255,255,0.03)" }}
+                  >
+                    <div className="h-4 w-16 rounded" style={{ background: "rgba(168,85,247,0.25)" }} />
+                    <div className="mt-2 h-3 w-24 rounded" style={{ background: "rgba(255,255,255,0.08)" }} />
+                    <div className="mt-2 h-3 w-20 rounded" style={{ background: "rgba(255,255,255,0.08)" }} />
+                    <div className="mt-3 h-8 rounded-full" style={{ background: "rgba(168,85,247,0.15)" }} />
+                  </div>
+                ))}
+              </div>
+            ) : trialStatus?.ok ? (
               <>
                 {!trialUrl ? (
                   <>
