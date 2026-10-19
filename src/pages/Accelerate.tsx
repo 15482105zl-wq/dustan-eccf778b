@@ -516,7 +516,7 @@ const Accelerate = () => {
                             key={t.label}
                             onClick={() => handleClaim(t.label)}
                             disabled={claiming || out}
-                            className="rounded-2xl p-3 text-left border border-white/10 bg-transparent transition-transform hover:scale-[1.02] disabled:opacity-50"
+                            className="rounded-2xl p-3 text-left border border-white/10 bg-transparent transition-transform hover:scale-[1.02]"
                           >
                             <div className="text-sm font-bold" style={{ color: "#a855f7" }}>{t.name}</div>
                             <div className="mt-1 text-[11px] text-muted-foreground">{t.traffic}</div>
