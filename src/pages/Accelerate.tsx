@@ -520,7 +520,7 @@ const Accelerate = () => {
                           >
                             <div className="text-sm font-bold" style={{ color: "#a855f7" }}>{t.name}</div>
                             <div className="mt-1 text-[11px] text-muted-foreground">{t.traffic}</div>
-                            <div className="mt-1 text-[11px]" style={{ color: "#ef4444" }}>
+                            <div className="mt-1 text-[11px] font-semibold" style={{ color: "#ff6b6b", textShadow: "0 0 8px rgba(255,107,107,0.5)" }}>
                               重置倒计时：<ResetCountdownText day={resetDay} />
                             </div>
                             <div className="mt-1 text-[11px] text-muted-foreground">
