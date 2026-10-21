@@ -553,11 +553,11 @@ const Accelerate = () => {
             )}
 
             <button
-              onClick={() => window.open(XINGCHEN_URL, "_blank", "noopener,noreferrer")}
+              onClick={() => window.open(NICE_URL, "_blank", "noopener,noreferrer")}
               className="mt-4 w-full rounded-full py-3 text-sm font-bold transition-transform hover:scale-[1.02]"
               style={{ background: "linear-gradient(135deg,#7c3aed,#a855f7)", color: "#fff" }}
             >
-              流量不够用？一步到位用星辰·云
+              流量不够用？一步到位用Nice·云
             </button>
           </motion.div>
         </div>
