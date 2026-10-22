@@ -43,6 +43,13 @@
       "when": 1792685527794,
       "tag": "0005_create_announcement_history_snapshots",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1792687290078,
+      "tag": "0006_update_snapshot_announcement_function",
+      "breakpoints": true
     }
   ]
 }
