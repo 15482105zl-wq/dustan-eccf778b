@@ -78,7 +78,6 @@ export default function AnnouncementModal() {
       const { data: result, error } = await supabase
         .from("site_announcements" as any)
         .select("*")
-        .order("issue_no", { ascending: false, nullsFirst: false })
         .limit(1)
         .maybeSingle();
 
