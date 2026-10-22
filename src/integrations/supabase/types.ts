@@ -240,6 +240,9 @@ export type Database = {
           download_url: string
           id: string
           is_active: boolean
+          issue_no: number | null
+          published_at: string | null
+          software_name: string | null
           tag: string
           title: string
           updated_at: string
@@ -251,6 +254,9 @@ export type Database = {
           download_url?: string
           id?: string
           is_active?: boolean
+          issue_no?: number | null
+          published_at?: string | null
+          software_name?: string | null
           tag?: string
           title?: string
           updated_at?: string
@@ -262,6 +268,9 @@ export type Database = {
           download_url?: string
           id?: string
           is_active?: boolean
+          issue_no?: number | null
+          published_at?: string | null
+          software_name?: string | null
           tag?: string
           title?: string
           updated_at?: string
