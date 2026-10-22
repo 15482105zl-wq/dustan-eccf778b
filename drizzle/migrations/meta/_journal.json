@@ -36,6 +36,13 @@
       "when": 1792297177372,
       "tag": "0004_profile_limits_6_60",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1792685527794,
+      "tag": "0005_create_announcement_history_snapshots",
+      "breakpoints": true
     }
   ]
 }

@@ -38,6 +38,45 @@ export type Database = {
         }
         Relationships: []
       }
+      announcement_history: {
+        Row: {
+          button_text: string | null
+          content: Json
+          download_url: string | null
+          id: string
+          published_at: string
+          seq: number
+          source_announcement_id: string | null
+          tag: string | null
+          title: string
+          version: string | null
+        }
+        Insert: {
+          button_text?: string | null
+          content?: Json
+          download_url?: string | null
+          id?: string
+          published_at?: string
+          seq?: never
+          source_announcement_id?: string | null
+          tag?: string | null
+          title: string
+          version?: string | null
+        }
+        Update: {
+          button_text?: string | null
+          content?: Json
+          download_url?: string | null
+          id?: string
+          published_at?: string
+          seq?: never
+          source_announcement_id?: string | null
+          tag?: string | null
+          title?: string
+          version?: string | null
+        }
+        Relationships: []
+      }
       app_config: {
         Row: {
           key: string
