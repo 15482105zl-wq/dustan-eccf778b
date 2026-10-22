@@ -69,6 +69,7 @@ export default function AnnouncementBell() {
         const { data, error } = await supabase
           .from("announcement_history" as any)
           .select("*")
+          .order("published_at", { ascending: false })
           .order("seq", { ascending: false });
         if (!error && Array.isArray(data)) {
           setRows(data as unknown as HistoryRow[]);
