@@ -7,6 +7,7 @@ import ParticleBackground from "@/components/ParticleBackground";
 import UserNav from "@/components/UserNav";
 import SEO from "@/components/SEO";
 import AnnouncementModal from "@/components/AnnouncementModal";
+import AnnouncementBell from "@/components/AnnouncementBell";
 import SiteFooter from "@/components/SiteFooter";
 import { track } from "@/lib/track";
 
@@ -39,7 +40,7 @@ const Index = () => {
             {shared ? <Check className="w-3.5 h-3.5" /> : <Share2 className="w-3.5 h-3.5" />}
             {shared ? "已复制" : "分享好友"}
           </button>
-          <div className="justify-self-end"><UserNav /></div>
+          <div className="justify-self-end flex flex-col items-end gap-2"><UserNav /><AnnouncementBell /></div>
         </div>
         <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-3 mt-6"><h1 className="font-heading text-3xl sm:text-4xl font-bold mb-2"><span className="gradient-text glow-text">Dustan Hub</span></h1><p className="text-muted-foreground text-sm max-w-md mx-auto">AI工具 · 软件资源 · 实用服务 · 精选分享</p></motion.div>
         <h2 className="sr-only">资源通道</h2><p className="text-center text-xs gradient-text font-medium mb-3">一个资源库 · 多种下载方式</p><div className="w-full max-w-2xl grid grid-cols-2 gap-3 sm:gap-4 mb-5">{resourceLinks.map((item, i) => <GlassCard key={item.label} delay={i * 0.1} onClick={() => { track(item.key, item.label, "netdisk"); window.open(item.url, "_blank", "noopener,noreferrer"); }} className="!bg-transparent !backdrop-blur-none !shadow-none p-5 flex flex-col items-center gap-3"><item.icon className={`w-7 h-7 ${item.color}`} /><span className="text-sm font-medium text-foreground/90 text-center">{item.label}</span></GlassCard>)}</div>
