@@ -3,36 +3,37 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Bell, X, Download, Sparkles, ChevronLeft, ChevronRight, CheckCheck } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
-interface AnnouncementRow {
+// 公告栏 = 原弹窗的历史存档：原弹窗每发布一版（版本号变化），数据库自动存一份快照到 announcement_history。
+// 本组件只读存档表，与原弹窗互不影响。
+interface HistoryRow {
   id: string;
   title: string;
-  tag: string;
+  tag: string | null;
   content: string[];
-  download_url: string;
-  button_text: string;
-  version: string;
-  issue_no: number | null;
-  software_name: string | null;
+  download_url: string | null;
+  button_text: string | null;
+  version: string | null;
   published_at: string | null;
+  seq: number;
 }
 
-const READ_KEY = "dustan_bell_read_issues";
+const READ_KEY = "dustan_bell_read_history";
 const PAGE_SIZE = 10;
 const DEFAULT_DOWNLOAD_URL =
   "https://pxyfbbohoazbslneagix.supabase.co/storage/v1/object/public/downloads/DustanHub.apk";
 
-function loadReadSet(): Set<number> {
+function loadReadSet(): Set<string> {
   try {
     const raw = localStorage.getItem(READ_KEY);
     if (!raw) return new Set();
     const arr = JSON.parse(raw);
-    return new Set(Array.isArray(arr) ? arr.filter((n) => typeof n === "number") : []);
+    return new Set(Array.isArray(arr) ? arr.filter((x) => typeof x === "string") : []);
   } catch {
     return new Set();
   }
 }
 
-function saveReadSet(set: Set<number>) {
+function saveReadSet(set: Set<string>) {
   try {
     localStorage.setItem(READ_KEY, JSON.stringify(Array.from(set)));
   } catch {
@@ -40,17 +41,15 @@ function saveReadSet(set: Set<number>) {
   }
 }
 
-// 日期显示：今年只标「M月D日」，往年的自动带上年份（按访客当前日期现算）
+// 日期显示：今年发布的只标「M月D日」，往年的自动带上年份（按访客当前日期现算）
 function formatDate(iso: string | null): string {
   if (!iso) return "";
-  const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(iso);
-  if (!m) return "";
-  const year = Number(m[1]);
-  const month = Number(m[2]);
-  const day = Number(m[3]);
-  return year === new Date().getFullYear()
-    ? `${month}月${day}日`
-    : `${year}年${month}月${day}日`;
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return "";
+  const now = new Date();
+  return d.getFullYear() === now.getFullYear()
+    ? `${d.getMonth() + 1}月${d.getDate()}日`
+    : `${d.getFullYear()}年${d.getMonth() + 1}月${d.getDate()}日`;
 }
 
 function stripNumbering(line: string): string {
@@ -58,41 +57,39 @@ function stripNumbering(line: string): string {
 }
 
 export default function AnnouncementBell() {
-  const [rows, setRows] = useState<AnnouncementRow[]>([]);
-  const [readSet, setReadSet] = useState<Set<number>>(() => loadReadSet());
+  const [rows, setRows] = useState<HistoryRow[]>([]);
+  const [readSet, setReadSet] = useState<Set<string>>(() => loadReadSet());
   const [isOpen, setIsOpen] = useState(false);
   const [page, setPage] = useState(1);
-  const [selected, setSelected] = useState<AnnouncementRow | null>(null);
+  const [selected, setSelected] = useState<HistoryRow | null>(null);
 
   useEffect(() => {
     void (async () => {
       try {
         const { data, error } = await supabase
-          .from("site_announcements" as any)
+          .from("announcement_history" as any)
           .select("*")
-          .not("issue_no", "is", null)
-          .order("issue_no", { ascending: false });
+          .order("seq", { ascending: false });
         if (!error && Array.isArray(data)) {
-          setRows(data as unknown as AnnouncementRow[]);
+          setRows(data as unknown as HistoryRow[]);
         }
       } catch {
-        // 铃铛数据加载失败时静默，不影响首页其他功能
+        // 存档加载失败时静默，不影响首页其他功能
       }
     })();
   }, []);
 
-  const hasUnread = rows.some((r) => r.issue_no != null && !readSet.has(r.issue_no));
+  const hasUnread = rows.some((r) => !readSet.has(r.id));
   const totalPages = Math.max(1, Math.ceil(rows.length / PAGE_SIZE));
   const currentPage = Math.min(page, totalPages);
   const pageRows = rows.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
   const latest = rows[0];
 
-  const markRead = (issueNo: number | null) => {
-    if (issueNo == null) return;
+  const markRead = (id: string) => {
     setReadSet((prev) => {
-      if (prev.has(issueNo)) return prev;
+      if (prev.has(id)) return prev;
       const next = new Set(prev);
-      next.add(issueNo);
+      next.add(id);
       saveReadSet(next);
       return next;
     });
@@ -100,15 +97,13 @@ export default function AnnouncementBell() {
 
   const markAllRead = () => {
     const next = new Set(readSet);
-    rows.forEach((r) => {
-      if (r.issue_no != null) next.add(r.issue_no);
-    });
+    rows.forEach((r) => next.add(r.id));
     setReadSet(next);
     saveReadSet(next);
   };
 
-  const openRow = (row: AnnouncementRow) => {
-    markRead(row.issue_no);
+  const openRow = (row: HistoryRow) => {
+    markRead(row.id);
     setSelected(row);
   };
 
@@ -121,7 +116,7 @@ export default function AnnouncementBell() {
 
   return (
     <>
-      {/* 小铃铛：首页右上角、登录按钮正下方；有未读时只挂红点、不带数字 */}
+      {/* 小铃铛：首页右上角、登录按钮正下方；有未读存档时只挂红点、不带数字 */}
       <button
         type="button"
         onClick={() => {
@@ -171,7 +166,7 @@ export default function AnnouncementBell() {
                     <div>
                       <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-accent/15 border border-accent/40 text-accent text-xs font-medium">
                         <Sparkles className="w-3 h-3" />
-                        {selected.tag}
+                        {selected.tag || "公告"}
                       </div>
                     </div>
                   </div>
@@ -242,7 +237,7 @@ export default function AnnouncementBell() {
                     <div>
                       <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-accent/15 border border-accent/40 text-accent text-xs font-medium">
                         <Sparkles className="w-3 h-3" />
-                        {latest?.tag || "开源软件上新"}
+                        {latest?.tag || "公告存档"}
                       </div>
                     </div>
                   </div>
@@ -272,13 +267,11 @@ export default function AnnouncementBell() {
 
                   <div className="space-y-2 py-1">
                     {pageRows.map((row) => {
-                      const unread = row.issue_no != null && !readSet.has(row.issue_no);
-                      const name =
-                        row.software_name ||
-                        row.title.replace(/^上新｜/, "").replace(/^[^\s｜]{0,4}\s/, "");
-                      const firstLine = Array.isArray(row.content) && row.content.length > 0
-                        ? stripNumbering(row.content[0])
-                        : "";
+                      const unread = !readSet.has(row.id);
+                      const firstLine =
+                        Array.isArray(row.content) && row.content.length > 0
+                          ? stripNumbering(row.content[0])
+                          : "";
                       return (
                         <button
                           key={row.id}
@@ -290,7 +283,7 @@ export default function AnnouncementBell() {
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-1.5">
                               <span className="text-sm font-medium text-foreground/95 truncate">
-                                第{row.issue_no}期｜{name}
+                                {row.title}
                               </span>
                               {unread && (
                                 <span className="w-2 h-2 rounded-full bg-rose-500 shrink-0" />
