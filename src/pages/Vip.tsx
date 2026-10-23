@@ -43,7 +43,8 @@ const SUBTITLE_MAP: Record<string, string> = {
   "海外账号": "账号服务",
   "苹果商店": "账号服务", // 兼容数据库旧 title，vip_resources 表更新后可删
   "免费订阅": "FLclash",
-  "BBS论坛": "会员社区",
+  "BBS论坛": "会员社区", // 兼容数据库旧 title，vip_resources 表更新后可删
+  "BBS留言": "会员社区",
 };
 
 // 3D 立体图标（图床直链）：按卡片 id 与标题硬编码映射，未命中的卡片回退 lucide 线条图标
@@ -57,6 +58,7 @@ const VIP_ICON_IMAGES: Record<string, string> = {
   "免费订阅": "https://qxtecefxbtcukpuizvzb.supabase.co/storage/v1/object/public/site-icons/earth-transparent-256.webp",
   f5: "https://qxtecefxbtcukpuizvzb.supabase.co/storage/v1/object/public/site-icons/bbs-transparent-256.webp",
   "BBS论坛": "https://qxtecefxbtcukpuizvzb.supabase.co/storage/v1/object/public/site-icons/bbs-transparent-256.webp",
+  "BBS留言": "https://qxtecefxbtcukpuizvzb.supabase.co/storage/v1/object/public/site-icons/bbs-transparent-256.webp",
 };
 
 const FALLBACK_ROWS: VipResourceRow[] = [
@@ -126,9 +128,9 @@ const Vip = () => {
   }, [user, forumOpen]);
 
   const toCard = (r: VipResourceRow): CardProps => {
-    const isBBS = r.title === "BBS" || r.title === "BBS论坛";
+    const isBBS = r.title === "BBS" || r.title === "BBS论坛" || r.title === "BBS留言";
     const isVpn = r.title.includes("VPN") || r.title.includes("V2PN") || r.title.includes("网络加速");
-    const title = isBBS ? "BBS论坛" : isVpn ? "网络加速" : r.title;
+    const title = isBBS ? "BBS留言" : isVpn ? "网络加速" : r.title;
     const href = isBBS || isVpn ? undefined : r.url ?? undefined;
     const base = isBBS
       ? () => (canInteract ? setForumOpen(true) : requireAuth())
