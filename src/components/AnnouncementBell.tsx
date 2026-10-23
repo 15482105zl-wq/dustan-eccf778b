@@ -58,6 +58,7 @@ function stripNumbering(line: string): string {
 
 export default function AnnouncementBell() {
   const [rows, setRows] = useState<HistoryRow[]>([]);
+  const [loaded, setLoaded] = useState(false);
   const [readSet, setReadSet] = useState<Set<string>>(() => loadReadSet());
   const [isOpen, setIsOpen] = useState(false);
   const [page, setPage] = useState(1);
@@ -76,6 +77,8 @@ export default function AnnouncementBell() {
         }
       } catch {
         // 存档加载失败时静默，不影响首页其他功能
+      } finally {
+        setLoaded(true);
       }
     })();
   }, []);
@@ -113,13 +116,19 @@ export default function AnnouncementBell() {
     setSelected(null);
   };
 
-  if (rows.length === 0) return null;
+  // 加载完成前先占住同尺寸位置，防止铃铛出现时把登录按钮和整页顶得跳动
+  if (!loaded || rows.length === 0) {
+    return <div className="w-10 h-10" aria-hidden="true" />;
+  }
 
   return (
     <>
       {/* 小铃铛：首页右上角、登录按钮正下方；有未读存档时只挂红点、不带数字 */}
-      <button
+      <motion.button
         type="button"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.3 }}
         onClick={() => {
           setPage(1);
           setSelected(null);
@@ -133,7 +142,7 @@ export default function AnnouncementBell() {
         {hasUnread && (
           <span className="absolute top-0.5 right-0.5 w-2.5 h-2.5 rounded-full bg-rose-500 ring-2 ring-background" />
         )}
-      </button>
+      </motion.button>
 
       <AnimatePresence>
         {isOpen && (
