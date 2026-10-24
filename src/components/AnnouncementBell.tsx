@@ -297,11 +297,6 @@ export default function AnnouncementBell() {
                               <span className="text-sm font-medium text-foreground/95 truncate">
                                 {row.title}
                               </span>
-                              {row.is_pinned && (
-                                <span className="shrink-0 px-1.5 py-px rounded bg-rose-500/15 border border-rose-500/30 text-rose-400 text-[10px] leading-tight">
-                                  置顶
-                                </span>
-                              )}
                               {unread && (
                                 <span className="w-2 h-2 rounded-full bg-rose-500 shrink-0" />
                               )}
