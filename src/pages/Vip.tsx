@@ -48,10 +48,10 @@ const SUBTITLE_MAP: Record<string, string> = {
 
 // 3D 立体图标（图床直链）：按卡片 id 与标题硬编码映射，未命中的卡片回退 lucide 线条图标
 const VIP_ICON_IMAGES: Record<string, string> = {
-  f1: "https://qxtecefxbtcukpuizvzb.supabase.co/storage/v1/object/public/site-icons/shadowrocket-color-256.webp?v=3",
-  "网络加速": "https://qxtecefxbtcukpuizvzb.supabase.co/storage/v1/object/public/site-icons/shadowrocket-color-256.webp?v=3",
-  f2: "https://qxtecefxbtcukpuizvzb.supabase.co/storage/v1/object/public/site-icons/appstore-color-256.webp?v=2",
-  "海外账号": "https://qxtecefxbtcukpuizvzb.supabase.co/storage/v1/object/public/site-icons/appstore-color-256.webp?v=2",
+  f1: "https://qxtecefxbtcukpuizvzb.supabase.co/storage/v1/object/public/site-icons/shadowrocket-color-256.webp?v=4",
+  "网络加速": "https://qxtecefxbtcukpuizvzb.supabase.co/storage/v1/object/public/site-icons/shadowrocket-color-256.webp?v=4",
+  f2: "https://qxtecefxbtcukpuizvzb.supabase.co/storage/v1/object/public/site-icons/appstore-color-256.webp?v=4",
+  "海外账号": "https://qxtecefxbtcukpuizvzb.supabase.co/storage/v1/object/public/site-icons/appstore-color-256.webp?v=4",
   "苹果商店": "https://qxtecefxbtcukpuizvzb.supabase.co/storage/v1/object/public/site-icons/apple-transparent-256.webp?v=2",
   f3: "https://qxtecefxbtcukpuizvzb.supabase.co/storage/v1/object/public/site-icons/earth-transparent-256.webp",
   "免费订阅": "https://qxtecefxbtcukpuizvzb.supabase.co/storage/v1/object/public/site-icons/earth-transparent-256.webp",
