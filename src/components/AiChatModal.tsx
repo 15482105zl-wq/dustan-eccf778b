@@ -8,6 +8,7 @@ import { supabase } from "@/integrations/supabase/client";
 const WORKER_URL = "https://qxtecefxbtcukpuizvzb.supabase.co/functions/v1/clever-service";
 const AI_AVATAR_URL = "https://pxyfbbohoazbslneagix.supabase.co/storage/v1/object/public/avatars/d-avatar.png";
 const SESSION_KEY = "dustan_ai_session";
+const SEEN_KEY = "dustan_ai_seen_id"; // 已读到的最大消息 id，与悬浮球的未读红点共用
 const MAX_LENGTH = 500;
 const POLL_INTERVAL = 5000;
 const WELCOME_TEXT = "你好，我是 D助手。网络加速、海外成品账号、Clash 每日订阅、应用软件下载，有问题直接问我就行。搞不定的疑难杂症，去站内 BBS 留言，站长会看到。\nhttps://dustan.lovable.app";
@@ -185,6 +186,16 @@ const AiChatModal = ({ open, onOpenChange }: AiChatModalProps) => {
   useEffect(() => {
     if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
   }, [messages, pending, notice, open]);
+
+  // 窗口开着看到的消息记为已读，供悬浮球判断关窗期间有没有新回复
+  useEffect(() => {
+    if (!open || messages.length === 0) return;
+    try {
+      localStorage.setItem(SEEN_KEY, String(Math.max(...messages.map((m) => m.id))));
+    } catch {
+      // 存不了就忽略，红点判断退化为下次打开时对齐
+    }
+  }, [open, messages]);
 
   const handleSend = async () => {
     const text = input.trim();
