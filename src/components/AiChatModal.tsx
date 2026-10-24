@@ -11,7 +11,7 @@ const SESSION_KEY = "dustan_ai_session";
 const SEEN_KEY = "dustan_ai_seen_id"; // 已读到的最大消息 id，与悬浮球的未读红点共用
 const MAX_LENGTH = 500;
 const POLL_INTERVAL = 5000;
-const WELCOME_TEXT = "你好，我是 D助手。网络加速、海外成品账号、Clash 每日订阅、应用软件下载，有问题直接问我就行。搞不定的疑难杂症，去站内 BBS 留言，站长会看到。\nhttps://dustan.lovable.app";
+const WELCOME_TEXT = "你好，我是 D助手。网络加速、海外成品账号、Clash 每日订阅、应用软件下载，有问题直接问我就行。搞不定的疑难杂症，去站内互助专区，站长会看到。\nhttps://dustan.lovable.app";
 
 type Role = "user" | "ai" | "owner";
 type ChatMessage = { id: number; role: Role; content: string; created_at: string };

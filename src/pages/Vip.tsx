@@ -43,7 +43,7 @@ const SUBTITLE_MAP: Record<string, string> = {
   "海外账号": "账号服务",
   "苹果商店": "账号服务", // 兼容数据库旧 title，vip_resources 表更新后可删
   "免费订阅": "FLclash",
-  "BBS留言": "会员社区",
+  "互助专区": "有问必答",
 };
 
 // 3D 立体图标（图床直链）：按卡片 id 与标题硬编码映射，未命中的卡片回退 lucide 线条图标
@@ -56,14 +56,14 @@ const VIP_ICON_IMAGES: Record<string, string> = {
   f3: "https://qxtecefxbtcukpuizvzb.supabase.co/storage/v1/object/public/site-icons/earth-transparent-256.webp",
   "免费订阅": "https://qxtecefxbtcukpuizvzb.supabase.co/storage/v1/object/public/site-icons/earth-transparent-256.webp",
   f5: "https://qxtecefxbtcukpuizvzb.supabase.co/storage/v1/object/public/site-icons/bbs-transparent-256.webp",
-  "BBS留言": "https://qxtecefxbtcukpuizvzb.supabase.co/storage/v1/object/public/site-icons/bbs-transparent-256.webp",
+  "互助专区": "https://qxtecefxbtcukpuizvzb.supabase.co/storage/v1/object/public/site-icons/bbs-transparent-256.webp",
 };
 
 const FALLBACK_ROWS: VipResourceRow[] = [
   { id: "f1", category: "primary", icon: "Rocket", title: "网络加速", url: null, highlight: true, sort_order: 1 },
   { id: "f2", category: "primary", icon: "Apple", title: "海外账号", url: "https://dustan.id666.me", highlight: false, sort_order: 2 },
   { id: "f3", category: "secondary", icon: "Globe", title: "免费订阅", url: "https://pan.xunlei.com/s/VOnGAtlOEyZgFgT8dYpo67d1A1?pwd=45tq#", highlight: false, sort_order: 1 },
-  { id: "f5", category: "secondary", icon: "Lock", title: "BBS", url: null, highlight: false, sort_order: 2 },
+  { id: "f5", category: "secondary", icon: "Lock", title: "互助专区", url: null, highlight: false, sort_order: 2 },
 ];
 
 const APP_DOWNLOAD_URL = "https://pxyfbbohoazbslneagix.supabase.co/storage/v1/object/public/downloads/DustanHub.apk";
@@ -126,9 +126,9 @@ const Vip = () => {
   }, [user, forumOpen]);
 
   const toCard = (r: VipResourceRow): CardProps => {
-    const isBBS = r.title === "BBS" || r.title === "BBS留言";
+    const isBBS = r.title === "互助专区";
     const isVpn = r.title.includes("VPN") || r.title.includes("V2PN") || r.title.includes("网络加速");
-    const title = isBBS ? "BBS留言" : isVpn ? "网络加速" : r.title;
+    const title = isBBS ? "互助专区" : isVpn ? "网络加速" : r.title;
     const href = isBBS || isVpn ? undefined : r.url ?? undefined;
     const base = isBBS
       ? () => (canInteract ? setForumOpen(true) : requireAuth())

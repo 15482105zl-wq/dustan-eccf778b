@@ -364,7 +364,7 @@ const UnlockForum = ({ open, onOpenChange }: Props) => {
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 font-heading">
             <Lock className="w-5 h-5 text-accent" />
-            <span className="gradient-text">BBS</span>
+            <span className="gradient-text">互助专区</span>
           </DialogTitle>
         </DialogHeader>
 

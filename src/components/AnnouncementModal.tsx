@@ -21,7 +21,7 @@ const DEFAULT_ANNOUNCEMENT: AnnouncementData = {
   tag: "安卓用户必看",
   content: [
     "资源路径：首页四大网盘 → 高价值资源包 → 海外应用 → 主流应用 → 谷歌全家桶",
-    "如有问题请前往【BBS留言】反馈。",
+    "如有问题请前往【互助专区】反馈。",
     "Google 服务包（支持 Android 12–17）已整理完成，四大组件按版本归档",
     "安装顺序：框架 → 账号管理器 → Play 服务 → 商店，安装后重启即可使用",
     "文件来源 APKMirror（Google LLC），20 余款官方正版应用，完全免费",
