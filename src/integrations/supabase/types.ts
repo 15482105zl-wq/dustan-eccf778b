@@ -44,6 +44,7 @@ export type Database = {
           content: Json
           download_url: string | null
           id: string
+          is_pinned: boolean
           published_at: string
           seq: number
           source_announcement_id: string | null
@@ -56,6 +57,7 @@ export type Database = {
           content?: Json
           download_url?: string | null
           id?: string
+          is_pinned?: boolean
           published_at?: string
           seq?: never
           source_announcement_id?: string | null
@@ -68,6 +70,7 @@ export type Database = {
           content?: Json
           download_url?: string | null
           id?: string
+          is_pinned?: boolean
           published_at?: string
           seq?: never
           source_announcement_id?: string | null
