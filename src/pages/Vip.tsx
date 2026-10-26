@@ -66,9 +66,8 @@ const VIP_ICON_IMAGES: Record<string, string> = {
 const FALLBACK_ROWS: VipResourceRow[] = [
   { id: "f1", category: "primary", icon: "Rocket", title: "网络加速", url: null, highlight: true, sort_order: 1 },
   { id: "f2", category: "primary", icon: "Apple", title: "海外账号", url: "https://dustan.id666.me", highlight: false, sort_order: 2 },
-  { id: "f3", category: "secondary", icon: "Globe", title: "免费订阅", url: "https://pan.xunlei.com/s/VOnGAtlOEyZgFgT8dYpo67d1A1?pwd=45tq#", highlight: false, sort_order: 1 },
   { id: "f5", category: "secondary", icon: "Lock", title: "互助专区", url: null, highlight: false, sort_order: 2 },
-  { id: "f6", category: "secondary", icon: "Zap", title: "游戏加速", url: null, highlight: false, sort_order: 3 },
+  { id: "f6", category: "secondary", icon: "Zap", title: "游戏加速", url: null, highlight: false, sort_order: 1 },
 ];
 
 const APP_DOWNLOAD_URL = "https://pxyfbbohoazbslneagix.supabase.co/storage/v1/object/public/downloads/DustanHub.apk";
