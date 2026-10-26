@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { ArrowLeft, Apple, BookOpen, ChevronRight, Download, Film, Globe, Lock, Rocket, Search, type LucideIcon } from "lucide-react";
+import { ArrowLeft, Apple, BookOpen, ChevronRight, Download, Film, Globe, Lock, Rocket, Search, Zap, type LucideIcon } from "lucide-react";
 import ParticleBackground from "@/components/ParticleBackground";
 import GlassCard from "@/components/GlassCard";
 import SEO from "@/components/SEO";
@@ -9,6 +9,7 @@ import UserNav from "@/components/UserNav";
 import VipResourceCard from "@/components/VipResourceCard";
 import SiteFooter from "@/components/SiteFooter";
 import UnlockForum from "@/components/UnlockForum";
+import GameAccelerateModal from "@/components/GameAccelerateModal";
 import AuthGateModal from "@/components/AuthGateModal";
 import AiChatModal from "@/components/AiChatModal";
 import AiIcon from "@/components/AiIcon";
@@ -16,7 +17,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { track } from "@/lib/track";
 
-const ICON_MAP: Record<string, LucideIcon> = { Rocket, Apple, Globe, Lock, Film, Search };
+const ICON_MAP: Record<string, LucideIcon> = { Rocket, Apple, Globe, Lock, Film, Search, Zap };
 
 type VipResourceRow = {
   id: string;
@@ -44,6 +45,7 @@ const SUBTITLE_MAP: Record<string, string> = {
   "苹果商店": "账号服务", // 兼容数据库旧 title，vip_resources 表更新后可删
   "免费订阅": "FLclash",
   "互助专区": "有问必答",
+  "游戏加速": "终身免费",
 };
 
 // 3D 立体图标（图床直链）：按卡片 id 与标题硬编码映射，未命中的卡片回退 lucide 线条图标
@@ -57,6 +59,8 @@ const VIP_ICON_IMAGES: Record<string, string> = {
   "免费订阅": "https://qxtecefxbtcukpuizvzb.supabase.co/storage/v1/object/public/site-icons/earth-transparent-256.webp",
   f5: "https://qxtecefxbtcukpuizvzb.supabase.co/storage/v1/object/public/site-icons/bbs-transparent-256.webp?v=5",
   "互助专区": "https://qxtecefxbtcukpuizvzb.supabase.co/storage/v1/object/public/site-icons/bbs-transparent-256.webp?v=5",
+  f6: "https://qxtecefxbtcukpuizvzb.supabase.co/storage/v1/object/public/site-icons/game-lightning-256.webp",
+  "游戏加速": "https://qxtecefxbtcukpuizvzb.supabase.co/storage/v1/object/public/site-icons/game-lightning-256.webp",
 };
 
 const FALLBACK_ROWS: VipResourceRow[] = [
@@ -64,6 +68,7 @@ const FALLBACK_ROWS: VipResourceRow[] = [
   { id: "f2", category: "primary", icon: "Apple", title: "海外账号", url: "https://dustan.id666.me", highlight: false, sort_order: 2 },
   { id: "f3", category: "secondary", icon: "Globe", title: "免费订阅", url: "https://pan.xunlei.com/s/VOnGAtlOEyZgFgT8dYpo67d1A1?pwd=45tq#", highlight: false, sort_order: 1 },
   { id: "f5", category: "secondary", icon: "Lock", title: "互助专区", url: null, highlight: false, sort_order: 2 },
+  { id: "f6", category: "secondary", icon: "Zap", title: "游戏加速", url: null, highlight: false, sort_order: 3 },
 ];
 
 const APP_DOWNLOAD_URL = "https://pxyfbbohoazbslneagix.supabase.co/storage/v1/object/public/downloads/DustanHub.apk";
@@ -77,6 +82,7 @@ const Vip = () => {
   const [authOpen, setAuthOpen] = useState(false);
   const [rows, setRows] = useState<VipResourceRow[]>(FALLBACK_ROWS);
   const [hasUnread, setHasUnread] = useState(false);
+  const [gameOpen, setGameOpen] = useState(false);
 
   const requireAuth = () => setAuthOpen(true);
   const canInteract = !!user?.email_confirmed_at;
@@ -128,16 +134,19 @@ const Vip = () => {
   const toCard = (r: VipResourceRow): CardProps => {
     const isBBS = r.title === "互助专区";
     const isVpn = r.title.includes("VPN") || r.title.includes("V2PN") || r.title.includes("网络加速");
+    const isGame = r.title === "游戏加速";
     const title = isBBS ? "互助专区" : isVpn ? "网络加速" : r.title;
-    const href = isBBS || isVpn ? undefined : r.url ?? undefined;
+    const href = isBBS || isVpn || isGame ? undefined : r.url ?? undefined;
     const base = isBBS
       ? () => (canInteract ? setForumOpen(true) : requireAuth())
       : isVpn
         ? () => navigate("/accelerate")
-        : href
-          ? () => window.open(href, "_blank", "noopener,noreferrer")
-          : undefined;
-    const ckey = "vip_" + (isBBS ? "bbs" : isVpn ? "accelerate" : (r.icon || "card").toLowerCase());
+        : isGame
+          ? () => setGameOpen(true)
+          : href
+            ? () => window.open(href, "_blank", "noopener,noreferrer")
+            : undefined;
+    const ckey = "vip_" + (isBBS ? "bbs" : isVpn ? "accelerate" : isGame ? "game" : (r.icon || "card").toLowerCase());
     return {
       icon: ICON_MAP[r.icon] ?? Rocket,
       title,
@@ -256,6 +265,7 @@ const Vip = () => {
       </main>
 
       <UnlockForum open={forumOpen} onOpenChange={setForumOpen} />
+      <GameAccelerateModal open={gameOpen} onOpenChange={setGameOpen} />
       <AiChatModal open={chatOpen} onOpenChange={handleChatOpenChange} />
       <AuthGateModal open={authOpen} onOpenChange={setAuthOpen} />
     </div>
