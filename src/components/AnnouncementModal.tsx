@@ -17,23 +17,21 @@ interface AnnouncementData {
 }
 
 const DEFAULT_ANNOUNCEMENT: AnnouncementData = {
-  title: "国内手机装不了谷歌？我帮你搞定了",
-  tag: "安卓用户必看",
+  title: "上新｜谷歌全家桶，一次装完",
+  tag: "热门应用上新",
   content: [
-    "资源路径：首页四大网盘 → 高价值资源包 → 海外应用 → 主流应用 → 谷歌全家桶",
-    "如有问题请前往【互助专区】反馈。",
-    "Google 服务包（支持 Android 12–17）已整理完成，四大组件按版本归档",
-    "安装顺序：框架 → 账号管理器 → Play 服务 → 商店，安装后重启即可使用",
-    "文件来源 APKMirror（Google LLC），20 余款官方正版应用，完全免费",
-    "安装官方应用，即可使用完整的谷歌服务",
+    "1. 服务框架、Play服务、Play商店一次装完，不用一个个找。",
+    "2. 装完就能用Play商店，不用到处找应用。",
+    "3. 华为手机有Gbox辅助＋教程，照着装就行。",
+    "4. 下载位置：四网盘 高价值资源包 → 热门应用 → Google全家桶。",
   ],
   download_url: "https://pxyfbbohoazbslneagix.supabase.co/storage/v1/object/public/downloads/DustanHub.apk",
   button_text: "立即下载官方APP",
-  version: "2.0.0",
+  version: "3.0.0",
   is_active: true,
 };
 
-const STORAGE_KEY = "dustan_seen_announcement_version";
+const SESSION_KEY = "dustan_announcement_seen_session";
 const INPUT_CLASS = "w-full mt-1 px-3 py-2 rounded-lg bg-zinc-900 border border-zinc-700 text-white text-xs outline-none focus:border-accent transition-colors";
 
 type EditForm = Omit<AnnouncementData, "id" | "content"> & { contentRaw: string };
@@ -65,8 +63,9 @@ export default function AnnouncementModal() {
   const checkShouldShow = (announcement: AnnouncementData) => {
     if (!announcement.is_active) return;
     try {
-      if (localStorage.getItem(STORAGE_KEY) !== announcement.version) {
+      if (!sessionStorage.getItem(SESSION_KEY)) {
         setIsOpen(true);
+        sessionStorage.setItem(SESSION_KEY, "1");
       }
     } catch {
       setIsOpen(true);
@@ -106,11 +105,6 @@ export default function AnnouncementModal() {
   };
 
   const close = () => {
-    try {
-      localStorage.setItem(STORAGE_KEY, data.version);
-    } catch {
-      // localStorage unavailable, ignore
-    }
     setIsOpen(false);
     setIsEditing(false);
   };
