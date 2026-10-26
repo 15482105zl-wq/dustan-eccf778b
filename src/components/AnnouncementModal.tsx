@@ -43,7 +43,7 @@ export default function AnnouncementModal() {
   const [isOpen, setIsOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editTab, setEditTab] = useState<"form" | "preview">("form");
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false); // 弹窗不等数据库：先按兜底显示，数据库回来再换内容
   const [saving, setSaving] = useState(false);
   const [editForm, setEditForm] = useState<EditForm>({
     ...DEFAULT_ANNOUNCEMENT,
@@ -51,6 +51,8 @@ export default function AnnouncementModal() {
   });
 
   useEffect(() => {
+    // 先按兜底立即判断，不等数据库回来（暂停期数据库回包要五六秒）
+    checkShouldShow(DEFAULT_ANNOUNCEMENT);
     void fetchAnnouncement();
   }, []);
 
@@ -93,6 +95,7 @@ export default function AnnouncementModal() {
           is_active: row.is_active ?? true,
         };
         setData(announcement);
+        if (!announcement.is_active) setIsOpen(false);
         checkShouldShow(announcement);
       } else {
         checkShouldShow(DEFAULT_ANNOUNCEMENT);
