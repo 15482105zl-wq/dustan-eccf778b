@@ -5,7 +5,8 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import ParticleBackground from "@/components/ParticleBackground";
 import { supabase } from "@/integrations/supabase/client";
 
-const WORKER_URL = "https://qxtecefxbtcukpuizvzb.supabase.co/functions/v1/clever-service";
+const WORKER_URL = "https://tg-dustan.15482105zl.workers.dev";
+// 2026-10-26 改直连 worker：绕过暂停的 Supabase Edge Function，数据库停时固定答案仍可显示（见 handleSend 的降级显示）
 const AI_AVATAR_URL = "https://pxyfbbohoazbslneagix.supabase.co/storage/v1/object/public/avatars/d-avatar.png";
 const SESSION_KEY = "dustan_ai_session";
 const SEEN_KEY = "dustan_ai_seen_id"; // 已读到的最大消息 id，与悬浮球的未读红点共用
@@ -132,6 +133,8 @@ const AiChatModal = ({ open, onOpenChange }: AiChatModalProps) => {
   const [input, setInput] = useState("");
   const [pending, setPending] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
+  // 降级显示：数据库暂停、轮询拉不到消息时，直接显示发送接口返回的固定答案；不进 messages，不动 lastIdRef 与已读进度
+  const [fallbackMessages, setFallbackMessages] = useState<string[]>([]);
   const [owner, setOwner] = useState<OwnerProfile | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const lastIdRef = useRef(0);
@@ -140,23 +143,25 @@ const AiChatModal = ({ open, onOpenChange }: AiChatModalProps) => {
   const sending = pending !== null;
   const ownerName = owner?.display_name || "站长";
 
-  const fetchNew = useCallback(async () => {
+  const fetchNew = useCallback(async (): Promise<boolean> => {
     const session = sessionRef.current;
-    if (!session) return;
+    if (!session) return false;
     try {
       const res = await fetch(`${WORKER_URL}/poll?session=${session}&after=${lastIdRef.current}`);
-      if (!res.ok) return;
+      if (!res.ok) return false;
       const data = await res.json();
       const incoming: ChatMessage[] = data.messages || [];
-      if (incoming.length === 0) return;
+      if (incoming.length === 0) return true;
       lastIdRef.current = Math.max(lastIdRef.current, ...incoming.map((m) => m.id));
       setMessages((prev) => {
         const seen = new Set(prev.map((m) => m.id));
         const fresh = incoming.filter((m) => !seen.has(m.id));
         return fresh.length ? [...prev, ...fresh] : prev;
       });
+      return true;
     } catch {
       // 网络波动，下一轮再试
+      return false;
     }
   }, []);
 
@@ -204,6 +209,7 @@ const AiChatModal = ({ open, onOpenChange }: AiChatModalProps) => {
     setPending(text);
     setInput("");
     setNotice(null);
+    let directReply: string | null = null;
     try {
       const res = await fetch(WORKER_URL, {
         method: "POST",
@@ -212,13 +218,21 @@ const AiChatModal = ({ open, onOpenChange }: AiChatModalProps) => {
       });
       if (!res.ok) {
         setNotice(res.status === 503 ? "AI 现在有点忙，稍后再试一下。" : res.status === 429 ? "发得太快了，稍等一下再试。" : "发送失败，请重试。");
+      } else {
+        const data = await res.json().catch(() => null);
+        if (data && typeof data.reply === "string" && data.reply.length > 0) directReply = data.reply;
       }
     } catch {
       setInput(text);
       setNotice("网络不太稳，消息没发出去，请重试。");
     } finally {
       // 先取回服务器上的消息，再收起“发送中”的气泡，避免重复显示
-      await fetchNew();
+      const polled = await fetchNew();
+      // 轮询没通（数据库暂停时）且发送接口直接给了回复：就地显示，不走轮询、不进消息记录
+      if (!polled && directReply) {
+        const reply = directReply;
+        setFallbackMessages((prev) => [...prev, reply]);
+      }
       sendingRef.current = false;
       setPending(null);
     }
@@ -270,6 +284,16 @@ const AiChatModal = ({ open, onOpenChange }: AiChatModalProps) => {
                   </div>
                 )
               )}
+
+              {fallbackMessages.map((text, i) => (
+                <div key={`fallback-${i}`} className="flex flex-col gap-1.5 min-w-0">
+                  <div className="flex items-center gap-2 px-1">
+                    <AiAvatar />
+                    <span className="text-xs text-muted-foreground">D助手</span>
+                  </div>
+                  <div className="w-full min-w-0 rounded-2xl rounded-tl-none px-4 py-3 text-sm leading-relaxed border text-foreground space-y-1 [overflow-wrap:anywhere] bg-secondary/60 border-border/40">{formatAiText(text)}</div>
+                </div>
+              ))}
 
               {pending !== null && (
                 <>
