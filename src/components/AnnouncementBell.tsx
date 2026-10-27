@@ -21,7 +21,7 @@ interface HistoryRow {
 const READ_KEY = "dustan_bell_read_history";
 const PAGE_SIZE = 10;
 const DEFAULT_DOWNLOAD_URL =
-  "https://pxyfbbohoazbslneagix.supabase.co/storage/v1/object/public/downloads/DustanHub.apk";
+  "https://fjtwrggmobbahknbcymt.supabase.co/storage/v1/object/public/downloads/DustanHub.apk";
 
 function loadReadSet(): Set<string> {
   try {

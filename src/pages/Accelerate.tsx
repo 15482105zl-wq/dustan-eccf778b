@@ -15,7 +15,7 @@ const YUETONG_URL = "https://app.xn--9kq451mn9g.com/#/register?code=OkGae8Qp";
 const NICE_URL = "https://dustan.mmmoyou.com/#/register?code=0lc8ncSH";
 const XINGCHEN_URL = "https://xc1.luniu8.com/?code=qm8A2dss";
 const FLCLASH_APK_URL = "https://qxtecefxbtcukpuizvzb.supabase.co/storage/v1/object/public/downloads/FLClash-0.8.93-android-arm64-v8a.apk";
-const APP_DOWNLOAD_URL = "https://pxyfbbohoazbslneagix.supabase.co/storage/v1/object/public/downloads/DustanHub.apk";
+const APP_DOWNLOAD_URL = "https://fjtwrggmobbahknbcymt.supabase.co/storage/v1/object/public/downloads/DustanHub.apk";
 
 const NOTICE_SLOT = "accelerate_marquee";
 // 公告图标默认📢；文案开头自带 emoji 时用文案自带的

@@ -70,7 +70,7 @@ const FALLBACK_ROWS: VipResourceRow[] = [
   { id: "f5", category: "secondary", icon: "Lock", title: "互助专区", url: null, highlight: false, sort_order: 2 },
 ];
 
-const APP_DOWNLOAD_URL = "https://pxyfbbohoazbslneagix.supabase.co/storage/v1/object/public/downloads/DustanHub.apk";
+const APP_DOWNLOAD_URL = "https://fjtwrggmobbahknbcymt.supabase.co/storage/v1/object/public/downloads/DustanHub.apk";
 
 const Vip = () => {
   const navigate = useNavigate();

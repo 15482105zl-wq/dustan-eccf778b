@@ -17,7 +17,7 @@ const resourceLinks = [
   { icon: Globe, key: "netdisk_quark", label: "夸克网盘", color: "text-primary", url: "https://pan.quark.cn/s/29e2744b31f1" },
   { icon: Shield, key: "netdisk_uc", label: "UC网盘", color: "text-primary", url: "https://drive.uc.cn/s/b2243269454c4" },
 ];
-const APP_DOWNLOAD_URL = "https://pxyfbbohoazbslneagix.supabase.co/storage/v1/object/public/downloads/DustanHub.apk";
+const APP_DOWNLOAD_URL = "https://fjtwrggmobbahknbcymt.supabase.co/storage/v1/object/public/downloads/DustanHub.apk";
 
 const Index = () => {
   const navigate = useNavigate();

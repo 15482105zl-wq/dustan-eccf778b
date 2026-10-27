@@ -25,7 +25,7 @@ const DEFAULT_ANNOUNCEMENT: AnnouncementData = {
     "3. 华为手机有Gbox辅助＋教程，照着装就行。",
     "4. 下载位置：四网盘 高价值资源包 → 热门应用 → Google全家桶。",
   ],
-  download_url: "https://pxyfbbohoazbslneagix.supabase.co/storage/v1/object/public/downloads/DustanHub.apk",
+  download_url: "https://fjtwrggmobbahknbcymt.supabase.co/storage/v1/object/public/downloads/DustanHub.apk",
   button_text: "立即下载官方APP",
   version: "3.0.0",
   is_active: true,
