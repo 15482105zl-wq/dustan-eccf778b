@@ -118,7 +118,7 @@ const UserNav = () => {
         </>
       ) : (
         <button
-          onClick={() => navigate("/auth")}
+          onClick={() => { try { sessionStorage.setItem("auth_return_to", window.location.pathname + window.location.search); } catch {} navigate("/auth"); }}
           className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary/10 hover:bg-primary/20 text-primary text-xs font-medium transition-colors"
         >
           <LogIn className="w-3.5 h-3.5" />
