@@ -6,13 +6,13 @@ import { useToast } from "@/hooks/use-toast";
 import AuthGateModal from "@/components/AuthGateModal";
 
 const CLAIM_URL =
-  "https://itjzihpbuodcdkmyssrk.supabase.co/functions/v1/free-sub/claim";
+  "https://fjtwrggmobbahknbcymt.supabase.co/functions/v1/free-sub/claim";
 const STATUS_URL =
-  "https://itjzihpbuodcdkmyssrk.supabase.co/functions/v1/free-sub/status";
+  "https://fjtwrggmobbahknbcymt.supabase.co/functions/v1/free-sub/status";
 const COPY_URL =
-  "https://itjzihpbuodcdkmyssrk.supabase.co/functions/v1/free-sub/copy";
+  "https://fjtwrggmobbahknbcymt.supabase.co/functions/v1/free-sub/copy";
 const STATS_URL =
-  "https://itjzihpbuodcdkmyssrk.supabase.co/functions/v1/free-sub/stats";
+  "https://fjtwrggmobbahknbcymt.supabase.co/functions/v1/free-sub/stats";
 const FLCLASH_APK_URL =
   "https://wwwa.qyshare.com:2083/s/nujcn8";
 const FLCLASH_FOLDER_URL = "https://wwwa.qyshare.com/s/3vfjoi";
