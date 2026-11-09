@@ -12,6 +12,7 @@ interface EmailInputProps extends Omit<React.ComponentProps<"input">, "type" | "
 
 const EmailInput = ({ value, onChange, className, placeholder = "邮箱", ...rest }: EmailInputProps) => {
   const [open, setOpen] = useState(false);
+  const [focused, setFocused] = useState(false);
   const wrapRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -27,7 +28,9 @@ const EmailInput = ({ value, onChange, className, placeholder = "邮箱", ...res
   const typedDomain = atIndex >= 0 ? value.slice(atIndex).toLowerCase() : "";
 
   const suggestions = DOMAINS.filter((d) => !typedDomain || d.startsWith(typedDomain));
-  const showList = open && prefix.length > 0 && suggestions.length > 0;
+  // 只在输入框聚焦时才显示联想列表；失焦（比如切到密码框）立刻收起，
+  // 否则下拉框会盖住下面的密码框，导致密码填不进去。
+  const showList = open && focused && prefix.length > 0 && suggestions.length > 0;
 
   const pickDomain = (domain: string) => {
     onChange(`${prefix}${domain}`);
@@ -45,7 +48,8 @@ const EmailInput = ({ value, onChange, className, placeholder = "邮箱", ...res
         placeholder={placeholder}
         value={value}
         onChange={(e) => { onChange(e.target.value); setOpen(true); }}
-        onFocus={() => setOpen(true)}
+        onFocus={() => { setFocused(true); setOpen(true); }}
+        onBlur={() => { setFocused(false); setOpen(false); }}
         className={cn("pl-9", className)}
       />
       {showList && (

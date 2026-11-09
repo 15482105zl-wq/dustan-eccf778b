@@ -5,7 +5,7 @@ const SiteFooter = () => {
       className="mt-6 mb-2 text-center text-xs text-muted-foreground"
       style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
     >
-      © 2020 - {year} Dustan Hub · 用心运营每一天
+      © 2020 - {year} JoyRx · 用心运营每一天
       <br />
       All Rights Reserved.
     </footer>

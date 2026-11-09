@@ -83,9 +83,10 @@ const JifengIcon = () => (
 );
 
 const FreeSubSection = () => {
-  const { user, session } = useAuth();
+  const { user, session, loading: authLoading } = useAuth();
   const { toast } = useToast();
   const [claiming, setClaiming] = useState(false);
+  const [statusLoading, setStatusLoading] = useState(false);
   const [showAuthGate, setShowAuthGate] = useState(false);
   const [subLink, setSubLink] = useState("");
   const [subLinkJifeng, setSubLinkJifeng] = useState("");
@@ -96,15 +97,18 @@ const FreeSubSection = () => {
 
   // 下次访问直接显示已领内容: 登录后查当月领取状态, 已领就直接显示链接, 不再显示领取按钮.
   // 换号登录时先清掉旧链接, 再按新号状态显示, 不串号.
+  // 查状态是异步的, 查完之前不显示领取按钮, 改显示加载中, 避免按钮闪一下又消失.
   useEffect(() => {
     const token = session?.access_token;
     if (!user || !token) {
       setSubLink("");
       setSubLinkJifeng("");
       setAlreadyClaimed(false);
+      setStatusLoading(false);
       return;
     }
     let cancelled = false;
+    setStatusLoading(true);
     void (async () => {
       try {
         const res = await fetch(STATUS_URL, {
@@ -118,6 +122,8 @@ const FreeSubSection = () => {
         }
       } catch {
         // 状态读不到就留在领取按钮, 不报错挡路
+      } finally {
+        if (!cancelled) setStatusLoading(false);
       }
     })();
     return () => {
@@ -261,9 +267,12 @@ const FreeSubSection = () => {
           <br />
           {NOTICE_LINE_2}
         </p>
-        <p className="mt-2 w-full text-[13px] leading-relaxed font-semibold text-center" style={{ background: "linear-gradient(90deg,#22d3ee,#6d7bff,#d946ef)", WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent", filter: "drop-shadow(0 0 8px rgba(109,123,255,0.4))" }}>
-          {LIMIT_LINE}
-        </p>
+        {/* 已领过就不再显示“登录即可免费领取”, 避免和“本月已领取过”自相矛盾 */}
+        {!subLink && (
+          <p className="mt-2 w-full text-[13px] leading-relaxed font-semibold text-center" style={{ background: "linear-gradient(90deg,#22d3ee,#6d7bff,#d946ef)", WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent", filter: "drop-shadow(0 0 8px rgba(109,123,255,0.4))" }}>
+            {LIMIT_LINE}
+          </p>
+        )}
         {displayCount !== null && (
           <p className="mt-2 w-full text-[13px] font-semibold text-center" style={{ color: "#7c3aed" }}>
             已有 {displayCount} 人领取
@@ -272,14 +281,24 @@ const FreeSubSection = () => {
 
         {!subLink ? (
           <>
-            <button
-              onClick={() => void handleClaim()}
-              disabled={claiming}
-              className="mt-4 w-full rounded-full py-3 text-sm font-bold text-center border border-white/10 bg-transparent transition-transform hover:scale-[1.02] disabled:opacity-50"
-              style={{ color: "#a855f7" }}
-            >
-              {claiming ? "领取中…" : "领取本月订阅链接"}
-            </button>
+            {(authLoading || statusLoading) ? (
+              <button
+                disabled
+                className="mt-4 w-full rounded-full py-3 text-sm font-bold text-center border border-white/10 bg-transparent disabled:opacity-50"
+                style={{ color: "#a855f7" }}
+              >
+                加载中…
+              </button>
+            ) : (
+              <button
+                onClick={() => void handleClaim()}
+                disabled={claiming}
+                className="mt-4 w-full rounded-full py-3 text-sm font-bold text-center border border-white/10 bg-transparent transition-transform hover:scale-[1.02] disabled:opacity-50"
+                style={{ color: "#a855f7" }}
+              >
+                {claiming ? "领取中…" : "领取本月订阅链接"}
+              </button>
+            )}
             {errorText && (
               <p className="mt-3 text-xs leading-relaxed text-muted-foreground">
                 {errorText}

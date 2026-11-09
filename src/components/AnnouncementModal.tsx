@@ -373,7 +373,7 @@ export default function AnnouncementModal() {
                   <div className="flex items-center gap-3">
                     <img
                       src="/logo.png"
-                      alt="Dustan Hub"
+                      alt="JoyRx"
                       className="w-10 h-10 rounded-full object-cover ring-2 ring-primary/40 shadow-md shadow-primary/20"
                     />
                     <div>
@@ -441,7 +441,7 @@ export default function AnnouncementModal() {
               <div className="flex items-center gap-3">
                 <img
                   src="/logo.png"
-                  alt="Dustan Hub"
+                  alt="JoyRx"
                   className="w-10 h-10 rounded-full object-cover ring-2 ring-primary/40 shadow-md shadow-primary/20"
                 />
                 <div>

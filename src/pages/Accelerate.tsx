@@ -20,7 +20,9 @@ const FLCLASH_FOLDER_URL = "https://wwwa.qyshare.com/s/3vfjoi";
 const NOTICE_SLOT = "accelerate_marquee";
 // 公告图标默认📢；文案开头自带 emoji 时用文案自带的
 const NOTICE_ICON = "📢";
-const DEFAULT_NOTICE = "免费订阅已上线：每月 1 号到期，登录后滑到页面底部即可领取。";
+// 默认消息已清空（boss 2026-11-10 令：滚动条暂时不显示）；
+// 数据库 site_notices 有文案时仍会显示，管理员在页面上编辑公告也可重新打开。
+const DEFAULT_NOTICE = "";
 
 // 3D 玻璃质感发光 - Nice·云 圆形图标
 const NiceCloudIcon = () => (
