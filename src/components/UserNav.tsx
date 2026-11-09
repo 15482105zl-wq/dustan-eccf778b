@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { LogIn, LogOut, User } from "lucide-react";
+import { LogOut, User } from "lucide-react";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -89,42 +89,35 @@ const UserNav = () => {
     return <div className="w-8 h-8 rounded-full" aria-hidden="true" />;
   }
 
+  // 未登录时右上角什么都不显示；登录入口只走互助专区（点卡片弹登录框）
+  if (!isAuthenticated) {
+    return null;
+  }
+
   return (
     <div className="flex items-center gap-2 relative">
-      {isAuthenticated ? (
-        <>
-          {/* 用户个人中心按钮（只显示头像） */}
-          <button
-            onClick={() => navigate("/profile")}
-            className="rounded-full hover:ring-2 hover:ring-primary/50 transition-all shrink-0"
-            title={displayName || "个人中心"}
-          >
-            <Avatar className="w-7 h-7 ring-1 ring-border/50">
-              {myProfile?.avatar_url && <AvatarImage src={myProfile.avatar_url} />}
-              <AvatarFallback className="text-[10px] bg-primary/20 text-primary">
-                {displayName.slice(0, 1).toUpperCase() || <User className="w-3 h-3" />}
-              </AvatarFallback>
-            </Avatar>
-          </button>
+      {/* 用户个人中心按钮（只显示头像） */}
+      <button
+        onClick={() => navigate("/profile")}
+        className="rounded-full hover:ring-2 hover:ring-primary/50 transition-all shrink-0"
+        title={displayName || "个人中心"}
+      >
+        <Avatar className="w-7 h-7 ring-1 ring-border/50">
+          {myProfile?.avatar_url && <AvatarImage src={myProfile.avatar_url} />}
+          <AvatarFallback className="text-[10px] bg-primary/20 text-primary">
+            {displayName.slice(0, 1).toUpperCase() || <User className="w-3 h-3" />}
+          </AvatarFallback>
+        </Avatar>
+      </button>
 
-          {/* 退出登录按钮 */}
-          <button
-            onClick={handleLogout}
-            className="p-1.5 rounded-full hover:bg-white/10 transition-colors text-muted-foreground hover:text-foreground shrink-0"
-            title="退出登录"
-          >
-            <LogOut className="w-4 h-4" />
-          </button>
-        </>
-      ) : (
-        <button
-          onClick={() => { try { sessionStorage.setItem("auth_return_to", window.location.pathname + window.location.search); } catch {} navigate("/auth"); }}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary/10 hover:bg-primary/20 text-primary text-xs font-medium transition-colors"
-        >
-          <LogIn className="w-3.5 h-3.5" />
-          <span>登录</span>
-        </button>
-      )}
+      {/* 退出登录按钮 */}
+      <button
+        onClick={handleLogout}
+        className="p-1.5 rounded-full hover:bg-white/10 transition-colors text-muted-foreground hover:text-foreground shrink-0"
+        title="退出登录"
+      >
+        <LogOut className="w-4 h-4" />
+      </button>
     </div>
   );
 };
