@@ -7,8 +7,8 @@ export function Toaster() {
   return (
     <ToastProvider>
       {toasts.map(function ({ id, title, description, action, ...props }) {
-        // 只有标题的普通提示（如登录成功、已退出登录）显示 0.5 秒，错误提示和带说明文字的提示保持 5 秒
-        const duration = props.variant === "destructive" || description ? 5000 : 500;
+        // 所有提示统一 0.5 秒（登录成功、错误提示、带说明的提示都一样）
+        const duration = 500;
         return (
           <Toast key={id} duration={duration} {...props}>
             <div className="grid gap-1">
