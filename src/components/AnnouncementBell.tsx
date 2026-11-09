@@ -20,8 +20,7 @@ interface HistoryRow {
 
 const READ_KEY = "dustan_bell_read_history";
 const PAGE_SIZE = 10;
-const DEFAULT_DOWNLOAD_URL =
-  "https://pxyfbbohoazbslneagix.supabase.co/storage/v1/object/public/downloads/DustanHub.apk";
+const DEFAULT_DOWNLOAD_URL = "";
 
 function loadReadSet(): Set<string> {
   try {
@@ -209,16 +208,18 @@ export default function AnnouncementBell() {
                   </div>
 
                   <div className="space-y-2.5 pt-2">
-                    <button
-                      type="button"
-                      onClick={() =>
-                        window.open(selected.download_url || DEFAULT_DOWNLOAD_URL, "_blank", "noopener,noreferrer")
-                      }
-                      className="w-full py-3.5 rounded-xl bg-gradient-to-r from-primary via-accent to-accent hover:opacity-95 text-white font-heading font-bold text-sm flex items-center justify-center gap-2 shadow-lg shadow-accent/25 hover:shadow-accent/40 transition-all hover:scale-[1.01]"
-                    >
-                      <Download className="w-4 h-4" />
-                      {selected.button_text || "立即下载官方APP"}
-                    </button>
+                    {selected.download_url ? (
+                      <button
+                        type="button"
+                        onClick={() =>
+                          window.open(selected.download_url || DEFAULT_DOWNLOAD_URL, "_blank", "noopener,noreferrer")
+                        }
+                        className="w-full py-3.5 rounded-xl bg-gradient-to-r from-primary via-accent to-accent hover:opacity-95 text-white font-heading font-bold text-sm flex items-center justify-center gap-2 shadow-lg shadow-accent/25 hover:shadow-accent/40 transition-all hover:scale-[1.01]"
+                      >
+                        <Download className="w-4 h-4" />
+                        {selected.button_text || "立即查看"}
+                      </button>
+                    ) : null}
                     <div className="flex gap-2">
                       <button
                         type="button"
@@ -341,16 +342,18 @@ export default function AnnouncementBell() {
                   </div>
 
                   <div className="space-y-2.5 pt-1">
-                    <button
-                      type="button"
-                      onClick={() =>
-                        window.open(latest?.download_url || DEFAULT_DOWNLOAD_URL, "_blank", "noopener,noreferrer")
-                      }
-                      className="w-full py-3.5 rounded-xl bg-gradient-to-r from-primary via-accent to-accent hover:opacity-95 text-white font-heading font-bold text-sm flex items-center justify-center gap-2 shadow-lg shadow-accent/25 hover:shadow-accent/40 transition-all hover:scale-[1.01]"
-                    >
-                      <Download className="w-4 h-4" />
-                      {latest?.button_text || "立即下载官方APP"}
-                    </button>
+                    {latest?.download_url ? (
+                      <button
+                        type="button"
+                        onClick={() =>
+                          window.open(latest?.download_url || DEFAULT_DOWNLOAD_URL, "_blank", "noopener,noreferrer")
+                        }
+                        className="w-full py-3.5 rounded-xl bg-gradient-to-r from-primary via-accent to-accent hover:opacity-95 text-white font-heading font-bold text-sm flex items-center justify-center gap-2 shadow-lg shadow-accent/25 hover:shadow-accent/40 transition-all hover:scale-[1.01]"
+                      >
+                        <Download className="w-4 h-4" />
+                        {latest?.button_text || "立即查看"}
+                      </button>
+                    ) : null}
                     <button
                       type="button"
                       onClick={closeAll}

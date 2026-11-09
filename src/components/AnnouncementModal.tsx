@@ -25,8 +25,8 @@ const DEFAULT_ANNOUNCEMENT: AnnouncementData = {
     "3. 华为手机有Gbox辅助＋教程，照着装就行。",
     "4. 下载位置：四网盘 高价值资源包 → 热门应用 → Google全家桶。",
   ],
-  download_url: "https://pxyfbbohoazbslneagix.supabase.co/storage/v1/object/public/downloads/DustanHub.apk",
-  button_text: "立即下载官方APP",
+  download_url: "",
+  button_text: "",
   version: "3.0.0",
   is_active: true,
 };
@@ -469,14 +469,16 @@ export default function AnnouncementModal() {
               </div>
 
               <div className="space-y-2.5 pt-2">
-                <button
-                  type="button"
-                  onClick={() => window.open(data.download_url, "_blank", "noopener,noreferrer")}
-                  className="w-full py-3.5 rounded-xl bg-gradient-to-r from-primary via-accent to-accent hover:opacity-95 text-white font-heading font-bold text-sm flex items-center justify-center gap-2 shadow-lg shadow-accent/25 hover:shadow-accent/40 transition-all hover:scale-[1.01]"
-                >
-                  <Download className="w-4 h-4" />
-                  {data.button_text}
-                </button>
+                {data.download_url ? (
+                  <button
+                    type="button"
+                    onClick={() => window.open(data.download_url, "_blank", "noopener,noreferrer")}
+                    className="w-full py-3.5 rounded-xl bg-gradient-to-r from-primary via-accent to-accent hover:opacity-95 text-white font-heading font-bold text-sm flex items-center justify-center gap-2 shadow-lg shadow-accent/25 hover:shadow-accent/40 transition-all hover:scale-[1.01]"
+                  >
+                    <Download className="w-4 h-4" />
+                    {data.button_text}
+                  </button>
+                ) : null}
                 <button
                   type="button"
                   onClick={close}

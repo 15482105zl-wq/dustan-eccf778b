@@ -157,8 +157,8 @@ const Vip = () => {
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-8"
         >
-          <h1 className="font-heading text-3xl sm:text-4xl font-bold mb-2"><span className="gradient-text glow-text">全球数字服务</span></h1>
-          <p className="text-muted-foreground text-sm max-w-md mx-auto">
+          <h1 className="text-3xl sm:text-4xl font-bold mb-2 bg-gradient-to-r from-primary via-blue-400 to-primary/70 bg-clip-text text-transparent">全球数字服务</h1>
+          <p className="text-muted-foreground text-base max-w-md mx-auto">
             尊享节点 · 独享账号 · 极速体验
           </p>
         </motion.div>

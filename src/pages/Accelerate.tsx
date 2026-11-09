@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Download } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import ParticleBackground from "@/components/ParticleBackground";
@@ -10,8 +10,6 @@ import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 import SiteFooter from "@/components/SiteFooter";
 import FreeSubSection from "@/components/FreeSubSection";
-
-const APP_DOWNLOAD_URL = "https://wwwa.qyshare.com:2083/s/dustin";
 
 const YUETONG_URL = "https://app.xn--9kq451mn9g.com/#/register?code=OkGae8Qp";
 const NICE_URL = "https://dustan.mmmoyou.com/#/register?code=0lc8ncSH";
@@ -378,20 +376,6 @@ const Accelerate = () => {
           {/* 免费订阅领取区：付费卡片之下，主列容器内 */}
           <FreeSubSection />
         </div>
-
-        <motion.a
-          href={APP_DOWNLOAD_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          initial={{
-opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="mt-8 text-sm font-bold animate-app-link inline-flex items-center gap-1.5"
-          style={{ color: "#a855f7" }}
-        >
-          <Download className="w-4 h-4" />
-          下载官方APP
-        </motion.a>
 
         {showTutorial && (
           <div
