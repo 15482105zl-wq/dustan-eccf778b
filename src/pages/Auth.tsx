@@ -24,9 +24,15 @@ const Auth = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
   const { user } = useAuth();
+  const goBack = () => {
+    let to = "/";
+    try { to = sessionStorage.getItem("auth_return_to") || "/"; sessionStorage.removeItem("auth_return_to"); } catch {}
+    if (to.startsWith("/auth")) to = "/";
+    navigate(to, { replace: true });
+  };
 
   useEffect(() => {
-    if (user) navigate("/");
+    if (user) goBack();
   }, [user, navigate]);
 
   const handleEmailAuth = async (e: React.FormEvent) => {
@@ -51,7 +57,7 @@ const Auth = () => {
           toast({ title: "登录失败", description: translateAuthError(error.message), variant: "destructive" });
         } else {
           toast({ title: "登录成功 ✨" });
-          navigate("/");
+          goBack();
         }
       } else {
         const { data, error } = await supabase.auth.signUp({
@@ -63,7 +69,7 @@ const Auth = () => {
           toast({ title: "注册失败", description: translateAuthError(error.message), variant: "destructive" });
         } else if (data.session) {
           toast({ title: "注册成功 ✨ 已自动登录" });
-          navigate("/");
+          goBack();
         } else {
           // Fallback: auto sign-in if session wasn't returned
           const { error: signInErr } = await supabase.auth.signInWithPassword({ email, password });
@@ -71,7 +77,7 @@ const Auth = () => {
             toast({ title: "注册成功", description: "请手动登录", variant: "destructive" });
           } else {
             toast({ title: "注册成功 ✨ 已自动登录" });
-            navigate("/");
+            goBack();
           }
         }
       }
@@ -92,7 +98,7 @@ const Auth = () => {
         return;
       }
       if (result.redirected) return;
-      navigate("/");
+      goBack();
     } catch (e: any) {
       toast({ title: "Google 登录失败", description: e?.message, variant: "destructive" });
     }
