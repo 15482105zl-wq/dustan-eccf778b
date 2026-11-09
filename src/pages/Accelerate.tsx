@@ -183,7 +183,7 @@ const Accelerate = () => {
       <main className="relative z-10 flex flex-col items-center px-4 pt-5 pb-10 sm:py-10">
         <div className="w-full max-w-4xl flex items-center justify-between mb-6">
           <button
-            onClick={() => navigate("/vip")}
+            onClick={() => navigate("/")}
             className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-primary transition-colors"
           >
             <ArrowLeft className="w-4 h-4" /> 返回

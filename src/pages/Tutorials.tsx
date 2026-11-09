@@ -120,7 +120,7 @@ const Tutorials = () => {
       <main className="relative z-10 px-4 pt-5 pb-8 sm:py-8 flex flex-col items-center min-h-screen">
         <div className="w-full max-w-2xl flex items-center justify-between mb-6">
           <button
-            onClick={() => navigate("/vip")}
+            onClick={() => navigate("/")}
             className="p-2 rounded-full bg-secondary/50 hover:bg-secondary text-muted-foreground hover:text-foreground transition-all"
             aria-label="返回"
           >
@@ -129,7 +129,7 @@ const Tutorials = () => {
           <div className="flex items-center gap-2">
             <UserNav />
             <button
-              onClick={() => navigate("/vip")}
+              onClick={() => navigate("/")}
               className="p-2 rounded-full bg-secondary/50 hover:bg-secondary text-muted-foreground hover:text-foreground transition-all"
               aria-label="关闭"
             >
@@ -180,7 +180,7 @@ const Tutorials = () => {
         </div>
 
         <button
-          onClick={() => navigate("/vip")}
+          onClick={() => navigate("/")}
           className="mt-8 px-8 py-3 rounded-xl text-sm font-semibold text-white transition-transform hover:scale-105"
           style={{ background: "linear-gradient(135deg, #38bdf8, #6366f1)" }}
         >
