@@ -37,3 +37,8 @@
 - JoyRx 同时也是站长新社交账号的备选名，两边共用一个名字。
 - 标题“全球数字服务”用青紫渐变（from-primary to-accent）加发光效果，是站长定的，不用改回蓝色。
 - 不要把站名改回 Dustan Hub。
+
+## 8. 数据库是老库 fjtwrggmobbahknbcymt，不是 Lovable Cloud
+- `.env` 里的 VITE_SUPABASE_URL 必须是 https://fjtwrggmobbahknbcymt.supabase.co（老库）。
+- 不要改回 pxyfbbohoazbslneagix（Lovable Cloud）：那个库的帖子删不掉、登录后免费订阅也领不了，2026-11-10 已由人工切回老库。
+- 老库是空库（用户、帖子已按站长要求清零），论坛显示“暂无主贴”是正常的。
