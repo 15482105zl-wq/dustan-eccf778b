@@ -45,6 +45,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       if (s?.user) {
         // defer to avoid deadlock
         setTimeout(() => checkAdmin(s.user.id), 0);
+        // 刚从谷歌登录回跳回来：整页重载一次。实测只有谷歌登录会让手机 Chrome
+        // 锁在电脑版宽度（手动登录不会），刷新才恢复；这里重载就等于刷新。
+        try {
+          if (sessionStorage.getItem("oauth_return") === "1") {
+            sessionStorage.removeItem("oauth_return");
+            window.location.replace(window.location.pathname + window.location.search);
+            return;
+          }
+        } catch {}
       } else {
         setIsAdmin(false);
       }
