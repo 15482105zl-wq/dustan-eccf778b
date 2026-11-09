@@ -31,3 +31,8 @@
 - 老库 PostgREST、Auth 接口实测都是通的。Lovable 后台显示的“暂停”状态与实测不符，不要发起“唤醒/恢复”操作。
 
 如有疑问，先问站长，不要擅自改。
+
+## 7. JoyRx 不是本站名字，绝不改名
+- JoyRx 只是站长给**新社交账号**（X/YouTube/TikTok 搞笑治愈号）准备的备选名字之一，**不是本站的新名字**。
+- 本站永远叫 Dustan Hub · 数字站，标题、index.html、favicon、SEO 全部用 Dustan Hub，不许改成 JoyRx，不许加 joyrx-icon.png。
+- 2026-11-10 凌晨已有一次误改（整站改成 JoyRx、标题改成青紫渐变），已由人工改回。
