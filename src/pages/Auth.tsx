@@ -27,7 +27,9 @@ const Auth = () => {
     let to = "/";
     try { to = sessionStorage.getItem("auth_return_to") || "/"; sessionStorage.removeItem("auth_return_to"); } catch {}
     if (to.startsWith("/auth")) to = "/";
-    navigate(to, { replace: true });
+    // 登录后整页重载（不用 SPA 内跳转）：实测登录后 SPA 跳转会让手机 Chrome 锁在电脑版宽度，
+    // 刷新才恢复；整页重载就等于刷新，回来就是正常手机版
+    window.location.replace(to);
   };
 
   useEffect(() => {
