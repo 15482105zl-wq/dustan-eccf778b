@@ -1,12 +1,13 @@
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, BookOpen } from "lucide-react";
+import { ArrowLeft, BookOpen, X } from "lucide-react";
 import { motion } from "framer-motion";
 import ParticleBackground from "@/components/ParticleBackground";
 import SEO from "@/components/SEO";
 import UserNav from "@/components/UserNav";
 import SiteFooter from "@/components/SiteFooter";
 
-const FLCLASH_APK_URL = "https://qxtecefxbtcukpuizvzb.supabase.co/storage/v1/object/public/downloads/FLClash-0.8.93-android-arm64-v8a.apk";
+const FLCLASH_APK_URL = "https://wwwa.qyshare.com:2083/s/nujcn8";
+const FLCLASH_FOLDER_URL = "https://wwwa.qyshare.com/s/3vfjoi";
 
 const sections = [
   {
@@ -19,12 +20,11 @@ const sections = [
           <li>注册账号</li>
           <li>选择套餐</li>
           <li>完成付款</li>
-          <li>返回首页，找到订阅链接，一键复制</li>
+          <li>复制订阅链接：付费套餐的订阅链接在机场官网首页里复制</li>
           <li>打开 FLClash，进入"配置"→点击"+"→"从 URL 导入"，粘贴订阅链接并提交</li>
           <li>进入"代理"页面，点击"测速"，选择延迟最低或想要的国家节点</li>
           <li>返回"仪表盘"，点击"开始"即可使用</li>
         </ol>
-        <p className="mt-3">免费体验装位于加速页底部，疾风版与流云版二选一，每款每月10个名额，登录后领取。</p>
         <a
           href={FLCLASH_APK_URL}
           target="_blank"
@@ -32,8 +32,22 @@ const sections = [
           className="inline-block mt-3 px-5 py-2.5 rounded-xl text-sm font-semibold text-white transition-transform hover:scale-105"
           style={{ background: "linear-gradient(135deg, #38bdf8, #6366f1)" }}
         >
-          下载 FLClash 安卓版
+          下载 FLClash 0.9.3 安卓版
         </a>
+        <p className="text-sm text-muted-foreground mt-2">
+          桌面版也有：
+          <a
+            href={FLCLASH_FOLDER_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline underline-offset-2"
+            style={{ color: "#38bdf8" }}
+          >
+            点这里下载
+          </a>
+          （电脑 41.27MB、Mac 56.41MB、Linux 38.61MB）
+        </p>
+        <p className="text-sm text-muted-foreground mt-2">如果下载速度不稳，请使用备用下载：打开分享链接，分享页里面就有备用下载，不用另外找链接。</p>
       </>
     ),
   },
@@ -51,16 +65,21 @@ const sections = [
   },
   {
     num: "3",
-    title: "免费订阅",
+    title: "游戏加速",
     content: (
-      <p>点击"免费订阅"卡片，下载订阅包，复制订阅链接后，按第一部分第5-7步导入 FLClash 即可。</p>
+      <ol>
+        <li>点击"游戏加速"卡片，查看详情并复制兑换码</li>
+        <li>去官网下载给梨加速器，注册登录账号</li>
+        <li>在 App 内找到兑换入口，输入兑换码，领终身免费</li>
+        <li>选好游戏，开始加速</li>
+      </ol>
     ),
   },
   {
     num: "4",
     title: "互助专区",
     content: (
-      <p>如 D助手未能解决您的问题，或需要寻找特定软件，欢迎前往互助专区求助。客服将第一时间回复，站长看到后也会第一时间处理。</p>
+      <p>如需寻找特定软件或遇到问题，欢迎前往互助专区求助。客服将第一时间回复，站长看到后也会第一时间处理。</p>
     ),
   },
   {
@@ -68,10 +87,6 @@ const sections = [
     title: "常见问题",
     content: (
       <ul className="space-y-3">
-        <li>
-          <div className="font-semibold text-foreground">免费体验装在哪里领取？</div>
-          <div className="text-muted-foreground text-sm mt-0.5">→ 加速页最底部，疾风版与流云版二选一</div>
-        </li>
         <li>
           <div className="font-semibold text-foreground">订阅链接如何导入？</div>
           <div className="text-muted-foreground text-sm mt-0.5">→ FLClash → 配置 → + → 从 URL 导入</div>
@@ -111,7 +126,16 @@ const Tutorials = () => {
           >
             <ArrowLeft className="w-5 h-5" />
           </button>
-          <UserNav />
+          <div className="flex items-center gap-2">
+            <UserNav />
+            <button
+              onClick={() => navigate("/vip")}
+              className="p-2 rounded-full bg-secondary/50 hover:bg-secondary text-muted-foreground hover:text-foreground transition-all"
+              aria-label="关闭"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
         </div>
 
         <motion.div
@@ -156,11 +180,11 @@ const Tutorials = () => {
         </div>
 
         <button
-          onClick={() => navigate("/")}
+          onClick={() => navigate("/vip")}
           className="mt-8 px-8 py-3 rounded-xl text-sm font-semibold text-white transition-transform hover:scale-105"
           style={{ background: "linear-gradient(135deg, #38bdf8, #6366f1)" }}
         >
-          返回首页
+          返回
         </button>
 
         <SiteFooter />

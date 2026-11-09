@@ -8,19 +8,21 @@ import UserNav from "@/components/UserNav";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
-import AuthGateModal from "@/components/AuthGateModal";
 import SiteFooter from "@/components/SiteFooter";
+import FreeSubSection from "@/components/FreeSubSection";
+
+const APP_DOWNLOAD_URL = "https://wwwa.qyshare.com:2083/s/dustin";
 
 const YUETONG_URL = "https://app.xn--9kq451mn9g.com/#/register?code=OkGae8Qp";
 const NICE_URL = "https://dustan.mmmoyou.com/#/register?code=0lc8ncSH";
 const XINGCHEN_URL = "https://xc1.luniu8.com/?code=qm8A2dss";
-const FLCLASH_APK_URL = "https://qxtecefxbtcukpuizvzb.supabase.co/storage/v1/object/public/downloads/FLClash-0.8.93-android-arm64-v8a.apk";
-const APP_DOWNLOAD_URL = "https://pxyfbbohoazbslneagix.supabase.co/storage/v1/object/public/downloads/DustanHub.apk";
+const FLCLASH_APK_URL = "https://wwwa.qyshare.com:2083/s/nujcn8";
+const FLCLASH_FOLDER_URL = "https://wwwa.qyshare.com/s/3vfjoi";
 
 const NOTICE_SLOT = "accelerate_marquee";
 // 公告图标默认📢；文案开头自带 emoji 时用文案自带的
 const NOTICE_ICON = "📢";
-const DEFAULT_NOTICE = "";
+const DEFAULT_NOTICE = "免费订阅已上线：每月 1 号到期，登录后滑到页面底部即可领取。";
 
 // 3D 玻璃质感发光 - Nice·云 圆形图标
 const NiceCloudIcon = () => (
@@ -88,82 +90,47 @@ const YuetongIcon = () => (
   </div>
 );
 
-// 星辰·云图标（3D 立体星空，保持原尺寸与辉光阴影）
+// 星辰·云图标（黑夜星星：深夜底 + 发光大星，boss 2026-10-29 批预览版）
 const XingchenIcon = () => (
   <div
     className="w-14 h-14 rounded-full relative flex items-center justify-center flex-shrink-0 overflow-hidden"
     style={{
-      background: "radial-gradient(100% 100% at 30% 25%, #5eead4 0%, #0d9488 55%, #042f2e 100%)",
-      boxShadow: "0 0 20px rgba(20, 184, 166, 0.55), inset 0 1.5px 2px rgba(255, 255, 255, 0.75), inset 0 -3px 6px rgba(0, 0, 0, 0.45)",
+      background: "radial-gradient(100% 100% at 30% 25%, #1e293b 0%, #0f172a 55%, #020617 100%)",
+      boxShadow: "0 0 20px rgba(250, 204, 21, 0.45), inset 0 1.5px 2px rgba(255, 255, 255, 0.75), inset 0 -3px 6px rgba(0, 0, 0, 0.45)",
       border: "1px solid rgba(255, 255, 255, 0.4)",
     }}
   >
     <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 56 56">
       <defs>
-        <linearGradient id="xingchenStarShine" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#ffffff" stopOpacity="0.95" />
-          <stop offset="50%" stopColor="#ccfbf1" stopOpacity="0.85" />
-          <stop offset="100%" stopColor="#5eead4" stopOpacity="0.55" />
+        <linearGradient id="xingchenNightStar" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#ffffff" stopOpacity="0.98" />
+          <stop offset="50%" stopColor="#fef3c7" stopOpacity="0.95" />
+          <stop offset="100%" stopColor="#facc15" stopOpacity="0.9" />
         </linearGradient>
       </defs>
       <circle cx="28" cy="28" r="20" fill="none" stroke="rgba(255,255,255,0.22)" strokeWidth="0.8" strokeDasharray="3 3" />
-      <circle cx="12" cy="20" r="1.3" fill="#ffffff" filter="drop-shadow(0 0 2px #fff)" />
-      <circle cx="43" cy="16" r="1.5" fill="#ffffff" filter="drop-shadow(0 0 2px #fff)" />
-      <circle cx="45" cy="38" r="1.2" fill="#ffffff" filter="drop-shadow(0 0 2px #fff)" />
-      <circle cx="16" cy="40" r="1" fill="#ffffff" opacity="0.8" />
-      <g filter="drop-shadow(0 4px 8px rgba(4, 47, 46, 0.5))">
-        <path
-          d="M28 13c1.6 7.5 4.6 10.5 12.1 12.1-7.5 1.6-10.5 4.6-12.1 12.1-1.6-7.5-4.6-10.5-12.1-12.1 7.5-1.6 10.5-4.6 12.1-12.1z"
-          fill="url(#xingchenStarShine)"
-        />
+      <polygon points="15,14 16.2,16.8 19,18 16.2,19.2 15,22 13.8,19.2 11,18 13.8,16.8" fill="#ffffff" opacity="0.9" />
+      <polygon points="42,12 43.4,15.6 47,17 43.4,18.4 42,22 40.6,18.4 37,17 40.6,15.6" fill="#ffffff" opacity="0.85" />
+      <polygon points="40,36 41,38.5 43.5,39.5 41,40.5 40,43 39,40.5 36.5,39.5 39,38.5" fill="#ffffff" opacity="0.8" />
+      <circle cx="16" cy="38" r="1" fill="#ffffff" opacity="0.8" />
+      <circle cx="22" cy="14" r="1" fill="#ffffff" opacity="0.7" />
+      <g filter="drop-shadow(0 0 4px rgba(250, 204, 21, 0.9))">
+        <polygon points="28,12 31.2,24.8 44,28 31.2,31.2 28,44 24.8,31.2 12,28 24.8,24.8" fill="url(#xingchenNightStar)" />
+        <polygon points="28,18 29.8,26.2 38,28 29.8,29.8 28,38 26.2,29.8 18,28 26.2,26.2" fill="#fef3c7" opacity="0.9" />
       </g>
-      <path
-        d="M40 34c.8 3.6 2.2 5 5.8 5.8-3.6.8-5 2.2-5.8 5.8-.8-3.6-2.2-5-5.8-5.8 3.6-.8 5-2.2 5.8-5.8z"
-        fill="#ffffff"
-        opacity="0.75"
-      />
     </svg>
   </div>
 );
 
-
-
-
-// 小倒计时：按指定日期（每月X日 00:00）重置，小字显示
-const ResetCountdownText = ({ day }: { day: number }) => {
-  const [txt, setTxt] = useState("");
-  useEffect(() => {
-    const tick = () => {
-      const now = new Date();
-      let target = new Date(now.getFullYear(), now.getMonth(), day, 0, 0, 0);
-      if (now.getTime() >= target.getTime()) {
-        target = new Date(now.getFullYear(), now.getMonth() + 1, day, 0, 0, 0);
-      }
-      const diff = Math.max(0, target.getTime() - now.getTime());
-      const d = Math.floor(diff / 86400000);
-      const h = String(Math.floor((diff % 86400000) / 3600000)).padStart(2, "0");
-      const m = String(Math.floor((diff % 3600000) / 60000)).padStart(2, "0");
-      const sec = String(Math.floor((diff % 60000) / 1000)).padStart(2, "0");
-      setTxt(`${d}天 ${h}:${m}:${sec}`);
-    };
-    tick();
-    const t = setInterval(tick, 1000);
-    return () => clearInterval(t);
-  }, [day]);
-  return <span className="font-bold tabular-nums">{txt}</span>;
-};
-
-// 每款订阅的重置日期：疾风版每月4日，流云版每月10日
-const TRIAL_RESET_DAYS: Record<string, number> = { main: 4, kitty: 10 };
-
 const Accelerate = () => {
   const navigate = useNavigate();
-  const { isAdmin, user } = useAuth();
+  const { isAdmin } = useAuth();
   const { toast } = useToast();
   const [noticeText, setNoticeText] = useState(DEFAULT_NOTICE);
   const [editingNotice, setEditingNotice] = useState(false);
   const [noticeDraft, setNoticeDraft] = useState("");
   const [savingNotice, setSavingNotice] = useState(false);
+  const [showTutorial, setShowTutorial] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -208,79 +175,6 @@ const Accelerate = () => {
       toast({ title: "保存失败", description: err?.message || "网络异常", variant: "destructive" });
     } finally {
       setSavingNotice(false);
-    }
-  };
-
-  // ---- 免费体验装 ----
-  const [trialStatus, setTrialStatus] = useState<any>(null);
-  const [trialLoading, setTrialLoading] = useState(true);
-  const [trialUrl, setTrialUrl] = useState<string>("");
-  const [claiming, setClaiming] = useState(false);
-  const [showAuthGate, setShowAuthGate] = useState(false);
-  const [showTutorial, setShowTutorial] = useState(false);
-
-  const loadTrialStatus = async () => {
-    try {
-      const { data } = await supabase.rpc("trial_status");
-      const st = data as any;
-      setTrialStatus(st);
-      // 已领过的人直接取回链接，方便刷新后查看（不消耗名额）
-      if (st?.ok && st.claimed) {
-        const { data: cdata } = await supabase.rpc("claim_trial", { p_label: st.claimed_label || "main" });
-        if ((cdata as any)?.ok) setTrialUrl((cdata as any).sub_url || "");
-      } else {
-        setTrialUrl("");
-      }
-    } catch {
-      /* 接口异常时不打扰 */
-    } finally {
-      setTrialLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    loadTrialStatus();
-  }, [user]);
-
-  const [claimingLabel, setClaimingLabel] = useState<string>("");
-
-  const handleClaim = async (label: string = "main") => {
-    if (!user) {
-      setShowAuthGate(true);
-      return;
-    }
-    setClaiming(true);
-    setClaimingLabel(label);
-    try {
-      const { data } = await supabase.rpc("claim_trial", { p_label: label });
-      const r = data as any;
-      if (!r?.ok) {
-        toast({
-          title: r?.error === "sold_out" ? "该订阅本月名额已领完，可选另一款" : r?.error === "already_claimed" ? "本月已领取过体验装（同一网络限领一次）" : "领取失败，稍后再试",
-          variant: "destructive",
-        });
-        loadTrialStatus();
-        return;
-      }
-      setTrialUrl(r.sub_url || "");
-      toast({ title: r.already ? "本月已领取" : "领取成功 🎉" });
-      loadTrialStatus();
-      // 领取成功（或已领过）直接弹出教程
-      setShowTutorial(true);
-    } catch (err: any) {
-      toast({ title: "领取失败", description: err?.message || "网络异常", variant: "destructive" });
-    } finally {
-      setClaiming(false);
-      setClaimingLabel("");
-    }
-  };
-
-  const copyTrialUrl = async () => {
-    try {
-      await navigator.clipboard.writeText(trialUrl);
-      toast({ title: "订阅链接已复制" });
-    } catch {
-      toast({ title: "复制失败，请手动长按复制", variant: "destructive" });
     }
   };
 
@@ -379,26 +273,36 @@ const Accelerate = () => {
           >
             <div className="flex items-center gap-3.5 mb-3 mt-1">
               <XingchenIcon />
-              <div>
-                <h2 className="font-heading text-lg font-semibold" style={{ color: "#f2f3fa" }}>
-                  星辰·云
-                </h2>
+              <div className="flex-1">
+                <div className="flex items-center gap-2">
+                  <h2 className="font-heading text-lg font-semibold" style={{ color: "#f2f3fa" }}>
+                    星辰·云
+                  </h2>
+                  <button
+                    type="button"
+                    onClick={() => setShowTutorial(true)}
+                    className="text-sm font-semibold hover:opacity-80 transition-opacity"
+                    style={{ color: "#a855f7" }}
+                  >
+                    教程
+                  </button>
+                </div>
                 <p className="text-[11px] text-muted-foreground">
-                  IEPL专线 · 套餐亲民 · 不限设备
+                  老牌机场 · IEPL专线 · 套餐亲民
                 </p>
               </div>
             </div>
             <p className="text-[13px] leading-relaxed flex-1 text-muted-foreground">
-              专线是看家本领——IEPL 高速专线，月付 9.9 元起，不限设备，流媒体一键解锁，适合追求性价比的用户。
+              专线是看家本领——IEPL 高速专线，月付 8 元起，不限设备，流媒体一键解锁，适合追求性价比的重度用户。
             </p>
 
-            <button
-              onClick={() => window.open(XINGCHEN_URL, "_blank", "noopener,noreferrer")}
-              className="mt-4 w-full rounded-full py-3 text-sm font-bold border border-white/10 bg-transparent transition-transform hover:scale-[1.02]"
+            <a
+              href={XINGCHEN_URL} target="_blank" rel="noopener noreferrer"
+              className="mt-4 w-full rounded-full py-3 text-center text-sm font-bold border border-white/10 bg-transparent transition-transform hover:scale-[1.02]"
               style={{ color: "#a855f7" }}
             >
               立即开始
-            </button>
+            </a>
           </motion.div>
           <motion.div
             initial={{ opacity: 0, y: 18 }}
@@ -408,26 +312,36 @@ const Accelerate = () => {
           >
             <div className="flex items-center gap-3.5 mb-3 mt-1">
               <NiceCloudIcon />
-              <div>
-                <h2 className="font-heading text-lg font-semibold" style={{ color: "#f2f3fa" }}>
-                  Nice·云
-                </h2>
+              <div className="flex-1">
+                <div className="flex items-center gap-2">
+                  <h2 className="font-heading text-lg font-semibold" style={{ color: "#f2f3fa" }}>
+                    Nice·云
+                  </h2>
+                  <button
+                    type="button"
+                    onClick={() => setShowTutorial(true)}
+                    className="text-sm font-semibold hover:opacity-80 transition-opacity"
+                    style={{ color: "#a855f7" }}
+                  >
+                    教程
+                  </button>
+                </div>
                 <p className="text-[11px] text-muted-foreground">
-                  老牌机场 · 线路稳定 · 全球直连
+                  防失联 · 全球直连 · 峰值10Gbps
                 </p>
               </div>
             </div>
             <p className="text-[13px] leading-relaxed flex-1 text-muted-foreground">
-              防失联是看家本领——内置备用节点，主线路波动无感快速切换。SS/Hy2/Vmess协议，峰值10Gbps，流媒体一键解锁，适合追求速度和稳定的重度用户。
+              防失联是看家本领——内置备用节点，主线路波动无感快速切换。SS/Hy2/Vmess协议，峰值10Gbps，流媒体一键解锁，适合追求速度和不断线的用户。
             </p>
 
-            <button
-              onClick={() => window.open(NICE_URL, "_blank", "noopener,noreferrer")}
-              className="mt-4 w-full rounded-full py-3 text-sm font-bold border border-white/10 bg-transparent transition-transform hover:scale-[1.02]"
+            <a
+              href={NICE_URL} target="_blank" rel="noopener noreferrer"
+              className="mt-4 w-full rounded-full py-3 text-center text-sm font-bold border border-white/10 bg-transparent transition-transform hover:scale-[1.02]"
               style={{ color: "#a855f7" }}
             >
               立即开始
-            </button>
+            </a>
           </motion.div>
           {/* 2026-10-14 隐藏悦通：只推星辰·云和Nice·云（恢复时取消本注释块即可）
           <motion.div
@@ -451,115 +365,18 @@ const Accelerate = () => {
               主打一个"稳"字——56 个国家和地区、112 个节点覆盖全球，自有 YueLink 客户端三步上手，流媒体一键解锁，适合追求长期稳定的用户。
             </p>
 
-            <button
-              onClick={() => window.open(YUETONG_URL, "_blank", "noopener,noreferrer")}
-              className="mt-4 w-full rounded-full py-3 text-sm font-bold border border-white/10 bg-transparent transition-transform hover:scale-[1.02]"
+            <a
+              href={YUETONG_URL} target="_blank" rel="noopener noreferrer"
+              className="mt-4 w-full rounded-full py-3 text-center text-sm font-bold border border-white/10 bg-transparent transition-transform hover:scale-[1.02]"
               style={{ color: "#a855f7" }}
             >
               立即开始
-            </button>
+            </a>
           </motion.div>
           */}
-          {/* 免费体验装 */}
-          <motion.div
-            initial={{ opacity: 0, y: 18 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.45, delay: 0.08 }}
-            className="rounded-[38px] p-6 flex flex-col relative bg-transparent border border-glass-border/40"
-          >
-            <div className="flex items-center gap-3.5 mb-3 mt-1">
-              <div
-                className="w-14 h-14 rounded-full flex-shrink-0 flex items-center justify-center text-[28px]"
-                style={{ background: "rgba(168,85,247,0.14)", boxShadow: "0 0 20px rgba(168,85,247,0.35)" }}
-              >
-                🎁
-              </div>
-              <div>
-                <h2 className="font-heading text-lg font-semibold" style={{ color: "#f2f3fa" }}>
-                  免费体验装
-                </h2>
-                <p className="text-[11px] text-muted-foreground">
-                  两款订阅 · 二选一 · 每月重置
-                </p>
-              </div>
-            </div>
-            <p className="text-[13px] leading-relaxed flex-1 text-muted-foreground">
-              追剧看片悠着用——流量烧完连不上不是坏了，是该升级了。两款订阅二选一，名额有限先到先得，每人每月限领一款，<span style={{ color: "#ef4444" }}>同一账号同一IP每月限领一次</span>。
-            </p>
 
-            {trialLoading ? (
-              <div className="mt-3 grid grid-cols-2 gap-2">
-                {[0, 1].map((i) => (
-                  <div
-                    key={i}
-                    className="rounded-2xl p-3 border border-white/10 animate-pulse"
-                    style={{ background: "rgba(255,255,255,0.03)" }}
-                  >
-                    <div className="h-4 w-16 rounded" style={{ background: "rgba(168,85,247,0.25)" }} />
-                    <div className="mt-2 h-3 w-24 rounded" style={{ background: "rgba(255,255,255,0.08)" }} />
-                    <div className="mt-2 h-3 w-20 rounded" style={{ background: "rgba(255,255,255,0.08)" }} />
-                    <div className="mt-3 h-8 rounded-full" style={{ background: "rgba(168,85,247,0.15)" }} />
-                  </div>
-                ))}
-              </div>
-            ) : trialStatus?.ok ? (
-              <>
-                {!trialUrl ? (
-                  <>
-                    <p className="mt-3 text-xs text-muted-foreground">两款订阅二选一，每人每月限领一款：</p>
-                    <div className="mt-2 grid grid-cols-2 gap-2">
-                      {(trialStatus.trials || []).map((t: any) => {
-                        const out = t.slots_left <= 0;
-                        const resetDay = TRIAL_RESET_DAYS[t.label] || 4;
-                        return (
-                          <button
-                            key={t.label}
-                            onClick={() => handleClaim(t.label)}
-                            disabled={claiming || out}
-                            className="rounded-2xl p-3 text-left border border-white/10 bg-transparent transition-transform hover:scale-[1.02]"
-                          >
-                            <div className="text-sm font-bold" style={{ color: "#a855f7" }}>{t.name}</div>
-                            <div className="mt-1 text-[11px] text-muted-foreground">{t.traffic}</div>
-                            <div className="mt-1 text-[11px] font-semibold" style={{ color: "#ff6b6b", textShadow: "0 0 8px rgba(255,107,107,0.5)" }}>
-                              重置倒计时：<ResetCountdownText day={resetDay} />
-                            </div>
-                            <div className="mt-1 text-[11px] text-muted-foreground">
-                              {out ? "名额已领完" : <>剩余 <span className="font-bold" style={{ color: "#a855f7" }}>{t.slots_left}</span> / {t.slots_total}</>}
-                            </div>
-                            <div className="mt-2 text-xs font-bold" style={{ color: "#a855f7" }}>
-                              {out ? "已领完" : claimingLabel === t.label ? "领取中…" : "领取"}
-                            </div>
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </>
-
-                ) : (
-                  <div className="mt-3">
-                    <p className="text-xs text-muted-foreground mb-2">本月已领取，教程里有客户端下载和订阅链接：</p>
-                    <button
-                      onClick={() => setShowTutorial(true)}
-                      className="w-full rounded-full py-3 text-sm font-bold border border-white/10 bg-transparent transition-transform hover:scale-[1.02]"
-                      style={{ color: "#a855f7" }}
-                    >
-                      查看使用教程
-                    </button>
-                  </div>
-                )}
-              </>
-            ) : (
-              <p className="mt-3 text-xs text-muted-foreground">本月体验装筹备中，敬请期待</p>
-            )}
-
-            <button
-              onClick={() => window.open(NICE_URL, "_blank", "noopener,noreferrer")}
-              className="mt-4 w-full rounded-full py-3 text-sm font-bold transition-transform hover:scale-[1.02]"
-              style={{ background: "linear-gradient(135deg,#7c3aed,#a855f7)", color: "#fff" }}
-            >
-              流量不够用？一步到位用Nice·云
-            </button>
-          </motion.div>
+          {/* 免费订阅领取区：付费卡片之下，主列容器内 */}
+          <FreeSubSection />
         </div>
 
         <motion.a
@@ -576,87 +393,131 @@ opacity: 0 }}
           下载官方APP
         </motion.a>
 
-        <SiteFooter />
-      </main>
-      <AuthGateModal open={showAuthGate} onOpenChange={setShowAuthGate} />
-      {/* 免费体验装使用教程 */}
-      {showTutorial && (
-        <div
-          className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/70 backdrop-blur-sm p-4"
-          onClick={() => setShowTutorial(false)}
-        >
+        {showTutorial && (
           <div
-            className="w-full max-w-md rounded-[28px] border border-white/10 p-6 max-h-[85vh] overflow-y-auto"
-            style={{ background: "#14141c" }}
-            onClick={(e) => e.stopPropagation()}
+            className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/70 backdrop-blur-sm p-4"
+            onClick={() => setShowTutorial(false)}
           >
-            <div className="flex items-center justify-between mb-5">
-              <h3 className="font-heading text-base font-semibold" style={{ color: "#f2f3fa" }}>
-                使用教程
-              </h3>
-              <button
-                onClick={() => setShowTutorial(false)}
-                className="text-muted-foreground text-2xl leading-none px-2"
-                aria-label="关闭"
-              >
-                ×
-              </button>
-            </div>
-
-            <div className="flex gap-3 mb-5">
-              <div className="w-6 h-6 rounded-full shrink-0 flex items-center justify-center text-xs font-bold" style={{ background: "#a855f7", color: "#fff" }}>1</div>
-              <div className="flex-1">
-                <p className="text-sm font-semibold mb-1" style={{ color: "#f2f3fa" }}>下载客户端</p>
-                <p className="text-xs text-muted-foreground mb-2">FLClash（安卓版约50MB），安装时允许"安装未知应用"</p>
-                <a
-                  href={FLCLASH_APK_URL}
-                  className="inline-block rounded-full px-5 py-2.5 text-sm font-bold"
-                  style={{ background: "linear-gradient(135deg,#7c3aed,#a855f7)", color: "#fff" }}
-                >
-                  下载 FLClash
-                </a>
-              </div>
-            </div>
-
-            <div className="flex gap-3 mb-5">
-              <div className="w-6 h-6 rounded-full shrink-0 flex items-center justify-center text-xs font-bold" style={{ background: "#a855f7", color: "#fff" }}>2</div>
-              <div className="flex-1">
-                <p className="text-sm font-semibold mb-1" style={{ color: "#f2f3fa" }}>复制订阅链接</p>
-                <div className="rounded-2xl border border-white/10 bg-black/30 px-3 py-2.5 mb-2">
-                  <code className="block text-[11px] text-muted-foreground break-all select-all">{trialUrl}</code>
-                </div>
+            <div
+              className="w-full max-w-md rounded-[28px] border border-white/10 p-6 max-h-[85vh] overflow-y-auto"
+              style={{ background: "#14141c" }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex items-center justify-between mb-5">
+                <h3 className="font-heading text-base font-semibold" style={{ color: "#f2f3fa" }}>
+                  使用教程
+                </h3>
                 <button
-                  onClick={copyTrialUrl}
-                  className="w-full rounded-full py-2.5 text-sm font-bold"
-                  style={{ background: "rgba(168,85,247,0.15)", color: "#a855f7" }}
+                  onClick={() => setShowTutorial(false)}
+                  className="text-muted-foreground text-2xl leading-none px-2"
+                  aria-label="关闭"
                 >
-                  复制订阅链接
+                  ×
                 </button>
               </div>
-            </div>
 
-            <div className="flex gap-3 mb-5">
-              <div className="w-6 h-6 rounded-full shrink-0 flex items-center justify-center text-xs font-bold" style={{ background: "#a855f7", color: "#fff" }}>3</div>
-              <div className="flex-1">
-                <p className="text-sm font-semibold mb-1" style={{ color: "#f2f3fa" }}>导入订阅</p>
-                <p className="text-xs text-muted-foreground leading-relaxed">
-                  打开 FLClash，点下方"配置" → 点"+"添加配置 → 选"URL" → 粘贴订阅链接 → 点提交
-                </p>
+              <div className="flex gap-3 mb-5">
+                <div className="w-6 h-6 rounded-full shrink-0 flex items-center justify-center text-xs font-bold" style={{ background: "#a855f7", color: "#fff" }}>
+                  1
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm font-semibold mb-1" style={{ color: "#f2f3fa" }}>
+                    选一家买套餐
+                  </p>
+                  <p className="text-xs text-muted-foreground leading-relaxed">
+                    星辰、Nice任选一家，点卡片上的立即开始，注册账号，按用量选个套餐付款，开通后就能用。
+                  </p>
+                </div>
               </div>
-            </div>
 
-            <div className="flex gap-3">
-              <div className="w-6 h-6 rounded-full shrink-0 flex items-center justify-center text-xs font-bold" style={{ background: "#a855f7", color: "#fff" }}>4</div>
-              <div className="flex-1">
-                <p className="text-sm font-semibold mb-1" style={{ color: "#f2f3fa" }}>选择节点并连接</p>
-                <p className="text-xs text-muted-foreground leading-relaxed">
-                  点下方"代理"，选一个节点，打开开关就能用了。流量烧完连不上是正常的——想要一直稳定，建议选择上方推荐的专线服务
-                </p>
+              <div className="flex gap-3 mb-5">
+                <div className="w-6 h-6 rounded-full shrink-0 flex items-center justify-center text-xs font-bold" style={{ background: "#a855f7", color: "#fff" }}>
+                  2
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm font-semibold mb-1" style={{ color: "#f2f3fa" }}>
+                    复制订阅链接
+                  </p>
+                  <p className="text-xs text-muted-foreground leading-relaxed">
+                    付费套餐的订阅链接在机场官网首页里复制。
+                  </p>
+                </div>
               </div>
+
+              <div className="flex gap-3 mb-5">
+                <div className="w-6 h-6 rounded-full shrink-0 flex items-center justify-center text-xs font-bold" style={{ background: "#a855f7", color: "#fff" }}>
+                  3
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm font-semibold mb-1" style={{ color: "#f2f3fa" }}>
+                    下载客户端
+                  </p>
+                  <p className="text-xs text-muted-foreground mb-2">
+                    如果下载速度不稳，请使用备用下载：打开分享链接，分享页里面就有备用下载，不用另外找链接。
+                  </p>
+                  <a
+                    href={FLCLASH_APK_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-block rounded-full px-5 py-2.5 text-sm font-bold"
+                    style={{ background: "linear-gradient(135deg,#7c3aed,#a855f7)", color: "#fff" }}
+                  >
+                    下载 FLClash 0.9.3 安卓版
+                  </a>
+                  <p className="text-xs text-muted-foreground mt-2 leading-relaxed">
+                    桌面版也有：
+                    <a
+                      href={FLCLASH_FOLDER_URL}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="underline underline-offset-2"
+                      style={{ color: "#c4b5fd" }}
+                    >
+                      点这里下载
+                    </a>
+                    （电脑 41.27MB、Mac 56.41MB、Linux 38.61MB）
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex gap-3 mb-5">
+                <div className="w-6 h-6 rounded-full shrink-0 flex items-center justify-center text-xs font-bold" style={{ background: "#a855f7", color: "#fff" }}>
+                  4
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm font-semibold mb-1" style={{ color: "#f2f3fa" }}>
+                    导入订阅并更新
+                  </p>
+                  <p className="text-xs text-muted-foreground leading-relaxed">
+                    打开 FLClash，点下方“配置” → 点“+”添加配置 → 选“URL” → 粘贴订阅链接 → 点提交，然后点“更新”刷新订阅
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex gap-3">
+                <div className="w-6 h-6 rounded-full shrink-0 flex items-center justify-center text-xs font-bold" style={{ background: "#a855f7", color: "#fff" }}>
+                  5
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm font-semibold mb-1" style={{ color: "#f2f3fa" }}>
+                    选节点并启动
+                  </p>
+                  <p className="text-xs text-muted-foreground leading-relaxed">
+                    点下方“代理”，点测速，看各节点延迟，自动选最快的就行，想自己挑就切手动选一个延迟低的，回到“仪表盘”点启动，显示已连接就能用了。
+                  </p>
+                </div>
+              </div>
+
+              <p className="mt-5 text-xs text-muted-foreground leading-relaxed">
+                连不上先回“配置”点更新同步最新节点，再重选一个延迟低的节点，实在不行去互助专区问。
+              </p>
             </div>
           </div>
-        </div>
-      )}
+        )}
+
+        <SiteFooter />
+      </main>
+
     </div>
   );
 };

@@ -5,14 +5,11 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/hooks/useAuth";
 import SwipeBackHandler from "@/components/SwipeBackHandler";
-import FloatingAssistant from "@/components/FloatingAssistant";
-import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import Profile from "./pages/Profile";
 import ResetPassword from "./pages/ResetPassword";
 import Vip from "./pages/Vip";
 import Accelerate from "./pages/Accelerate";
-import Ai from "./pages/Ai";
 import Tutorials from "./pages/Tutorials";
 import NotFound from "./pages/NotFound";
 
@@ -27,18 +24,15 @@ const App = () => (
         <AuthProvider>
           <SwipeBackHandler />
           <Routes>
-            <Route path="/" element={<Index />} />
-            
+            <Route path="/" element={<Vip />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/vip" element={<Vip />} />
             <Route path="/accelerate" element={<Accelerate />} />
-            <Route path="/ai" element={<Ai />} />
             <Route path="/tutorials" element={<Tutorials />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
-          <FloatingAssistant />
         </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>
