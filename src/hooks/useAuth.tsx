@@ -45,8 +45,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       if (s?.user) {
         // defer to avoid deadlock
         setTimeout(() => checkAdmin(s.user.id), 0);
-        // 刚从谷歌登录回跳回来：整页重载一次。实测只有谷歌登录会让手机 Chrome
-        // 锁在电脑版宽度（手动登录不会），刷新才恢复；这里重载就等于刷新。
+        // 刚从谷歌登录回跳回来：整页重载一次。实测 maximum-scale 不是根子
+        // （新站本来就没有它也一样跳），只有谷歌登录会让手机 Chrome 锁在
+        // 电脑版宽度，刷新才恢复；这里重载就等于自动刷新一次。
         try {
           if (sessionStorage.getItem("oauth_return") === "1") {
             sessionStorage.removeItem("oauth_return");
