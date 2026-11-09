@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
-import { lovable } from "@/integrations/lovable/index";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
@@ -90,15 +89,16 @@ const Auth = () => {
 
   const handleGoogleLogin = async () => {
     try {
-      const result = await lovable.auth.signInWithOAuth("google", {
-        redirect_uri: window.location.origin,
+      // 用本站自己的 Supabase Google 授权（老库已开 Google 登录）。
+      // 之前走 Lovable 云授权，令牌是云库签发的，本站客户端认不了，
+      // 回跳后带 access_token 也建不起会话，所以一直登不上。
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: { redirectTo: window.location.origin },
       });
-      if (result.error) {
-        toast({ title: "Google 登录失败", variant: "destructive" });
-        return;
+      if (error) {
+        toast({ title: "Google 登录失败", description: translateAuthError(error.message), variant: "destructive" });
       }
-      if (result.redirected) return;
-      goBack();
     } catch (e: any) {
       toast({ title: "Google 登录失败", description: e?.message, variant: "destructive" });
     }
