@@ -140,7 +140,7 @@ const Vip = () => {
   return (
     <div className="min-h-screen relative">
       <SEO
-        title="全球数字服务"
+        title="JoyRx"
         description="尊享节点 · 独享账号 · 极速体验"
         path={location.pathname}
         noindex
