@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
-import { Apple, ArrowLeft, BookOpen, ChevronRight, Download, Film, Globe, Lock, Rocket, Search, Zap, type LucideIcon } from "lucide-react";
+import { Apple, BookOpen, ChevronRight, Film, Globe, Lock, Rocket, Search, Zap, type LucideIcon } from "lucide-react";
 import ParticleBackground from "@/components/ParticleBackground";
 import GlassCard from "@/components/GlassCard";
 import SEO from "@/components/SEO";
@@ -11,13 +11,10 @@ import VipResourceCard from "@/components/VipResourceCard";
 import SiteFooter from "@/components/SiteFooter";
 import UnlockForum from "@/components/UnlockForum";
 import GameAccelerateModal from "@/components/GameAccelerateModal";
-import AppDownloadModal from "@/components/AppDownloadModal";
 import AuthGateModal from "@/components/AuthGateModal";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { track } from "@/lib/track";
-
-const APP_DOWNLOAD_URL = "https://wwwa.qyshare.com:2083/s/dustin";
 
 const ICON_MAP: Record<string, LucideIcon> = { Rocket, Apple, Globe, Lock, Film, Search, Zap };
 
@@ -82,35 +79,6 @@ const Vip = () => {
   const [rows, setRows] = useState<VipResourceRow[]>(FALLBACK_ROWS);
   const [hasUnread, setHasUnread] = useState(false);
   const [gameOpen, setGameOpen] = useState(false);
-  const [appPopupOpen, setAppPopupOpen] = useState(false);
-
-  // VIP 页下载 APP 弹窗：APP 里不弹；浏览器里每次重新打开页面就弹一次，
-  // 同个页面里来回走（站内跳转不刷新）不重复弹。
-  // 不用 sessionStorage：安卓浏览器关掉重开会恢复标签页，会话标记还在，导致重开不弹。
-  useEffect(() => {
-    try {
-      // ?app_popup=1 强制弹一次，方便复查；正常访客不受影响
-      const force = new URLSearchParams(window.location.search).get("app_popup") === "1";
-      const win = window as unknown as { __dustanAppPopupShown?: boolean; Capacitor?: { isNativePlatform?: () => boolean } };
-      if (!force && win.__dustanAppPopupShown) return;
-      // 注意：网页里也会加载 Capacitor 的网页版，window.Capacitor 存在不代表在 APP 里，
-      // 必须用 isNativePlatform() 判断，原生 APP 才返回 true
-      const cap = win.Capacitor;
-      const inApp =
-        (typeof cap?.isNativePlatform === "function" && cap.isNativePlatform()) ||
-        /DustanHub/i.test(navigator.userAgent || "");
-      if (!force && inApp) return;
-      win.__dustanAppPopupShown = true;
-      const t = setTimeout(() => setAppPopupOpen(true), 500);
-      return () => clearTimeout(t);
-    } catch {
-      return;
-    }
-  }, []);
-
-  const handleAppPopupChange = (open: boolean) => {
-    setAppPopupOpen(open);
-  };
 
   const requireAuth = () => setAuthOpen(true);
   const canInteract = !!user?.email_confirmed_at;
@@ -180,13 +148,7 @@ const Vip = () => {
       <ParticleBackground />
 
       <main className="relative z-10 px-4 pt-5 pb-8 sm:py-8 flex flex-col items-center min-h-screen">
-        <div className="w-full max-w-2xl flex items-center justify-between mb-6">
-          <button
-            onClick={() => navigate("/")}
-            className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-primary transition-colors"
-          >
-            <ArrowLeft className="w-4 h-4" /> 返回
-          </button>
+        <div className="w-full max-w-2xl flex items-center justify-end mb-6">
           <UserNav />
         </div>
 
@@ -195,10 +157,8 @@ const Vip = () => {
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-8"
         >
-          <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-primary via-blue-400 to-primary/70 bg-clip-text text-transparent">
-            全球数字服务
-          </h1>
-          <p className="text-xs sm:text-sm text-muted-foreground mt-1">
+          <h1 className="font-heading text-3xl sm:text-4xl font-bold mb-2"><span className="gradient-text glow-text">全球数字服务</span></h1>
+          <p className="text-muted-foreground text-sm max-w-md mx-auto">
             尊享节点 · 独享账号 · 极速体验
           </p>
         </motion.div>
@@ -238,26 +198,11 @@ const Vip = () => {
           </div>
         </div>
 
-        <motion.a
-          href={APP_DOWNLOAD_URL}
-          onClick={() => track("app_download_vip", "APP下载（VIP页）", "app")}
-          target="_blank"
-          rel="noopener noreferrer"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="mt-8 text-sm font-bold animate-app-link inline-flex items-center gap-1.5"
-          style={{ color: "#a855f7" }}
-        >
-          <Download className="w-4 h-4" />
-          下载官方APP
-        </motion.a>
-
         <SiteFooter />
       </main>
 
       <UnlockForum open={forumOpen} onOpenChange={setForumOpen} />
       <GameAccelerateModal open={gameOpen} onOpenChange={setGameOpen} />
-      <AppDownloadModal open={appPopupOpen} onOpenChange={handleAppPopupChange} />
       <AuthGateModal open={authOpen} onOpenChange={setAuthOpen} />
     </div>
   );
