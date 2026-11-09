@@ -140,7 +140,7 @@ const Vip = () => {
   return (
     <div className="min-h-screen relative">
       <SEO
-        title="全球数字服务"
+        title="JoyRx"
         description="尊享节点 · 独享账号 · 极速体验"
         path={location.pathname}
         noindex
@@ -157,7 +157,7 @@ const Vip = () => {
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-8"
         >
-          <h1 className="text-3xl sm:text-4xl font-bold mb-2 bg-gradient-to-r from-primary via-blue-400 to-primary/70 bg-clip-text text-transparent">全球数字服务</h1>
+          <h1 className="text-3xl sm:text-4xl font-bold mb-2"><span className="bg-gradient-to-r from-primary from-10% to-accent to-90% bg-clip-text text-transparent [filter:drop-shadow(0_0_12px_hsl(var(--glow-primary)/0.45))]">全球数字服务</span></h1>
           <p className="text-muted-foreground text-base max-w-md mx-auto">
             尊享节点 · 独享账号 · 极速体验
           </p>

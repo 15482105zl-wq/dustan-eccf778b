@@ -32,7 +32,8 @@
 
 如有疑问，先问站长，不要擅自改。
 
-## 7. JoyRx 不是本站名字，绝不改名
-- JoyRx 只是站长给**新社交账号**（X/YouTube/TikTok 搞笑治愈号）准备的备选名字之一，**不是本站的新名字**。
-- 本站永远叫 Dustan Hub · 数字站，标题、index.html、favicon、SEO 全部用 Dustan Hub，不许改成 JoyRx，不许加 joyrx-icon.png。
-- 2026-11-10 凌晨已有一次误改（整站改成 JoyRx、标题改成青紫渐变），已由人工改回。
+## 7. 站名已改成 JoyRx（站长亲定）
+- 2026-11-10 凌晨站长亲令：本站改名 **JoyRx**（标题、index.html、favicon、SEO 全部用 JoyRx，图标 joyrx-icon.png）。
+- JoyRx 同时也是站长新社交账号的备选名，两边共用一个名字。
+- 标题“全球数字服务”用青紫渐变（from-primary to-accent）加发光效果，是站长定的，不用改回蓝色。
+- 不要把站名改回 Dustan Hub。
