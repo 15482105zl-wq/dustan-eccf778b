@@ -82,6 +82,36 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     return () => subscription.unsubscribe();
   }, []);
 
+  // 回到页面时主动重读会话（弹窗登录完回主标签页、切标签页回来时同步
+  // 用户态）。只同步不清除：有会话就同步，没会话不清除本地状态。
+  useEffect(() => {
+    const refreshSession = async () => {
+      try {
+        const { data: { session: s } } = await supabase.auth.getSession();
+        if (s?.user) {
+          setSession(s);
+          setUser(s.user);
+          setTimeout(() => checkAdmin(s.user.id), 0);
+        }
+      } catch {
+        /* ignore */
+      }
+    };
+    const onVisibility = () => {
+      if (document.visibilityState === "visible") void refreshSession();
+    };
+    const onFocus = () => void refreshSession();
+    const onPageShow = () => void refreshSession();
+    document.addEventListener("visibilitychange", onVisibility);
+    window.addEventListener("focus", onFocus);
+    window.addEventListener("pageshow", onPageShow);
+    return () => {
+      document.removeEventListener("visibilitychange", onVisibility);
+      window.removeEventListener("focus", onFocus);
+      window.removeEventListener("pageshow", onPageShow);
+    };
+  }, []);
+
   const signOut = async () => {
     // Optimistically clear local state so UI never freezes
     setUser(null);

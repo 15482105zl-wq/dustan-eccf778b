@@ -89,9 +89,24 @@ export function useGooglePopupLogin(opts?: UseGooglePopupLoginOpts) {
       popup.location.href = data.url;
       popupRef.current = popup;
 
-      // 每 500ms 轮询：用户手动关弹窗就恢复按钮；登录成功由 user 变化接住
+      // 每 500ms 轮询：用户手动关弹窗就恢复按钮；登录成功由 user 变化接住。
+      // 最长 2 分钟：超时清定时器、关弹窗、恢复按钮。
+      const startTime = Date.now();
       timerRef.current = window.setInterval(() => {
         const p = popupRef.current;
+        if (Date.now() - startTime > 120000) {
+          stopPolling();
+          if (pendingRef.current) {
+            pendingRef.current = false;
+            setLoading(false);
+            try {
+              p?.close();
+            } catch {
+              /* ignore */
+            }
+          }
+          return;
+        }
         if (!p || p.closed) {
           stopPolling();
           // 弹窗关了：查一下是不是已登录（登完弹窗自己关的，localStorage
