@@ -49,8 +49,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         // Chrome 从谷歌带过来的桌面版宽度；只有 location.reload() 真刷新才行。
         // 顺序：先清标记 → 用 replaceState 把 code/state/hash 从地址栏清掉
         // （不清 code 直接 reload 会重复换码）→ 再 reload。
+        // 例外：在 /auth-callback 回跳页里不重载、不清标记：弹窗流程靠关弹窗
+        // 完成；弹窗被拦截整页跳回时，回调页回首页后 INITIAL_SESSION 再触发
+        // 重载兜底。
         try {
-          if (sessionStorage.getItem("oauth_return") === "1") {
+          if (sessionStorage.getItem("oauth_return") === "1" && window.location.pathname !== "/auth-callback") {
             sessionStorage.removeItem("oauth_return");
             try {
               const url = new URL(window.location.href);

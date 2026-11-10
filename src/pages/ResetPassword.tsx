@@ -197,7 +197,7 @@ const ResetPassword = () => {
       }
       toast({ title: "密码已重置 ✨" });
       await supabase.auth.signOut();
-      navigate("/auth");
+      navigate("/");
     } catch (err: any) {
       toast({
         title: "重置失败",
@@ -339,10 +339,10 @@ const ResetPassword = () => {
 
               <Button
                 variant="outline"
-                onClick={() => navigate("/auth")}
+                onClick={() => navigate("/")}
                 className="w-full"
               >
-                <ArrowLeft className="w-4 h-4 mr-2" /> 返回登录
+                <ArrowLeft className="w-4 h-4 mr-2" /> 返回首页
               </Button>
             </div>
           )}

@@ -29,7 +29,7 @@ const Profile = () => {
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
-    if (!authLoading && !user) navigate("/auth");
+    if (!authLoading && !user) navigate("/");
   }, [user, authLoading, navigate]);
 
   useEffect(() => {

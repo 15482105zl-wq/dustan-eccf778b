@@ -5,7 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/hooks/useAuth";
 import SwipeBackHandler from "@/components/SwipeBackHandler";
-import Auth from "./pages/Auth";
+import AuthCallback from "./pages/AuthCallback";
 import Profile from "./pages/Profile";
 import ResetPassword from "./pages/ResetPassword";
 import Vip from "./pages/Vip";
@@ -25,7 +25,7 @@ const App = () => (
           <SwipeBackHandler />
           <Routes>
             <Route path="/" element={<Vip />} />
-            <Route path="/auth" element={<Auth />} />
+            <Route path="/auth-callback" element={<AuthCallback />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/vip" element={<Vip />} />
