@@ -50,11 +50,9 @@ const AuthCallback = () => {
         sessionStorage.removeItem("oauth_return");
       } catch {}
       try {
-        const url = new URL(window.location.href);
-        url.searchParams.delete("code");
-        url.searchParams.delete("state");
-        url.hash = "";
-        window.history.replaceState(null, "", url.pathname + url.search);
+        // 直接把地址改成 "/" 再刷新：不能用 url.pathname，它还是
+        // "/auth-callback"，刷新后又回到这个分支，会无限重载。
+        window.history.replaceState(null, "", "/");
       } catch {}
       window.location.reload();
     }
