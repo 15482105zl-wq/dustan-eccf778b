@@ -51,12 +51,17 @@ export function useGooglePopupLogin(opts?: UseGooglePopupLoginOpts) {
   useEffect(() => stopPolling, [stopPolling]);
 
   const loginWithGoogle = useCallback(async () => {
-    // APP 内（Capacitor 原生）仍走原深链流程不变
+    // APP 内（Capacitor 原生）仍走原深链流程不变（老站目前没有 APP，
+    // com.dustan.hub 读的是新站；这条是以后 JoyRx 打包 APP 时用的）。
+    // prompt=select_account：以后 APP 里退出再登能换账号。
     if (Capacitor.isNativePlatform()) {
       try {
         const { error } = await supabase.auth.signInWithOAuth({
           provider: "google",
-          options: { redirectTo: window.location.origin },
+          options: {
+            redirectTo: window.location.origin,
+            queryParams: { prompt: "select_account" },
+          },
         });
         if (error) toast({ title: translateAuthError(error.message), variant: "destructive" });
       } catch (err: unknown) {

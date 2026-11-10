@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -34,6 +35,17 @@ const AuthGateModal = ({ open, onOpenChange }: Props) => {
   const { loginWithGoogle, loading: googleLoading } = useGooglePopupLogin({
     onSuccess: () => onOpenChange(false),
   });
+  // 登录成功自动关登录框（带 prevUserRef guard，只在 user 从无到有时才关）。
+  // 以后有 APP 时，APP 里谷歌登录走深链回跳，hook 的 onSuccess 靠
+  // googleLoading 触发，APP 分支没置 googleLoading 就不会关框——这条
+  // effect 兜底。浏览器里无害（登录成功本来就要关框）。已登录时打开的
+  // 弹窗不会被关掉（prevUserRef 已是非空）。
+  const { user } = useAuth();
+  const prevUserRef = useRef(user);
+  useEffect(() => {
+    if (open && user && !prevUserRef.current) onOpenChange(false);
+    prevUserRef.current = user;
+  }, [open, user, onOpenChange]);
 
   const fail = (msg: string) => toast({ title: msg, variant: "destructive" });
 
