@@ -18,6 +18,48 @@ const MAX_REPLY = 200;
 const MAX_IMAGES = 2;
 const MAX_IMAGE_SIZE = 2 * 1024 * 1024; // 2MB
 
+/**
+ * 发帖图片自动压缩：长边超过 1280 等比缩小，质量 0.8；PNG 保持 PNG，
+ * 其余转 JPEG。长边已在 1280 内直接返回原图。压缩失败返回原图（宽松版），
+ * 2MB 上限在压缩后照样卡。
+ */
+const compressImage = async (file: File): Promise<File> => {
+  try {
+    const url = URL.createObjectURL(file);
+    try {
+      const img = await new Promise<HTMLImageElement>((resolve, reject) => {
+        const image = new Image();
+        image.onload = () => resolve(image);
+        image.onerror = () => reject(new Error("图片加载失败"));
+        image.src = url;
+      });
+      const maxEdge = 1280;
+      const longEdge = Math.max(img.width, img.height);
+      if (longEdge <= maxEdge) return file;
+      const scale = maxEdge / longEdge;
+      const canvas = document.createElement("canvas");
+      canvas.width = Math.max(1, Math.round(img.width * scale));
+      canvas.height = Math.max(1, Math.round(img.height * scale));
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return file;
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      const isPng = file.type === "image/png";
+      const mime = isPng ? "image/png" : "image/jpeg";
+      const blob = await new Promise<Blob | null>((resolve) =>
+        canvas.toBlob(resolve, mime, 0.8)
+      );
+      if (!blob) return file;
+      const ext = isPng ? "png" : "jpg";
+      const name = file.name.replace(/\.[^.]+$/, `.${ext}`);
+      return new File([blob], name, { type: mime });
+    } finally {
+      URL.revokeObjectURL(url);
+    }
+  } catch {
+    return file;
+  }
+};
+
 interface Thread {
   id: string;
   user_id: string;
@@ -191,7 +233,7 @@ const UnlockForum = ({ open, onOpenChange }: Props) => {
 
   const nameOf = (uid: string) => profiles[uid]?.display_name || "匿名用户";
 
-  const handlePickImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handlePickImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     e.target.value = "";
     if (!file) return;
@@ -200,11 +242,13 @@ const UnlockForum = ({ open, onOpenChange }: Props) => {
       toast({ title: "文件类型不对", description: "只能上传图片", variant: "destructive" });
       return;
     }
-    if (file.size > MAX_IMAGE_SIZE) {
-      toast({ title: "图片太大", description: "单张图片不能超过 2MB，请压缩后重试", variant: "destructive" });
+    // 先自动压缩再卡 2MB 上限：大图压完就能传，不用用户自己压
+    const compressed = await compressImage(file);
+    if (compressed.size > MAX_IMAGE_SIZE) {
+      toast({ title: "图片太大", description: "单张图片不能超过 2MB，请换一张更小的", variant: "destructive" });
       return;
     }
-    setComposeImages((prev) => [...prev, file]);
+    setComposeImages((prev) => [...prev, compressed]);
   };
 
   const removeComposeImage = (idx: number) => {

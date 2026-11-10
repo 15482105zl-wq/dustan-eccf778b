@@ -14,6 +14,45 @@ import SiteFooter from "@/components/SiteFooter";
 import SiteStatsPanel from "@/components/SiteStatsPanel";
 import { ArrowLeft, Camera, Save, Loader2 } from "lucide-react";
 
+/**
+ * 头像自动压缩：长边 256，转 JPEG 质量 0.75。宽松版：能压先压、
+ * 压不了传原图、只按 2MB 上限卡（严格版做过又撤了，别走严格版）。
+ * 长边已在 256 内直接返回原图。
+ */
+const compressAvatar = async (file: File): Promise<File> => {
+  try {
+    const url = URL.createObjectURL(file);
+    try {
+      const img = await new Promise<HTMLImageElement>((resolve, reject) => {
+        const image = new Image();
+        image.onload = () => resolve(image);
+        image.onerror = () => reject(new Error("图片加载失败"));
+        image.src = url;
+      });
+      const maxEdge = 256;
+      const longEdge = Math.max(img.width, img.height);
+      if (longEdge <= maxEdge) return file;
+      const scale = maxEdge / longEdge;
+      const canvas = document.createElement("canvas");
+      canvas.width = Math.max(1, Math.round(img.width * scale));
+      canvas.height = Math.max(1, Math.round(img.height * scale));
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return file;
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      const blob = await new Promise<Blob | null>((resolve) =>
+        canvas.toBlob(resolve, "image/jpeg", 0.75)
+      );
+      if (!blob) return file;
+      const name = file.name.replace(/\.[^.]+$/, ".jpg");
+      return new File([blob], name, { type: "image/jpeg" });
+    } finally {
+      URL.revokeObjectURL(url);
+    }
+  } catch {
+    return file;
+  }
+};
+
 const Profile = () => {
   const { user, isAdmin, loading: authLoading, signOut } = useAuth();
   const [confirmOpen, setConfirmOpen] = useState(false);
@@ -57,10 +96,6 @@ const Profile = () => {
   const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file || !user) return;
-    if (file.size > 2 * 1024 * 1024) {
-      toast({ title: "头像不能超过 2MB", variant: "destructive" });
-      return;
-    }
     const ALLOWED_MIME: Record<string, string> = {
       "image/jpeg": "jpg",
       "image/jpg": "jpg",
@@ -68,11 +103,18 @@ const Profile = () => {
       "image/gif": "gif",
       "image/webp": "webp",
     };
-    const ext = ALLOWED_MIME[file.type];
-    if (!ext) {
+    if (!ALLOWED_MIME[file.type]) {
       toast({ title: "仅支持 JPG / PNG / GIF / WEBP 格式", variant: "destructive" });
       return;
     }
+    // 先自动压缩（宽松版：压不了传原图），再卡 2MB 上限
+    const uploadFile = await compressAvatar(file);
+    if (uploadFile.size > 2 * 1024 * 1024) {
+      toast({ title: "头像不能超过 2MB", variant: "destructive" });
+      return;
+    }
+    // 压缩后可能是 JPEG，按压缩后的类型定后缀
+    const ext = ALLOWED_MIME[uploadFile.type] || "jpg";
     setUploading(true);
     try {
       const path = `${user.id}/avatar.${ext}`;
@@ -89,7 +131,7 @@ const Profile = () => {
 
       const { error: uploadError } = await supabase.storage
         .from("avatars")
-        .upload(path, file, { upsert: true, contentType: file.type });
+        .upload(path, uploadFile, { upsert: true, contentType: uploadFile.type });
       if (uploadError) {
         toast({ title: "上传失败", description: uploadError.message, variant: "destructive" });
         return;
