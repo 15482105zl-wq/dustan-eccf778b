@@ -45,13 +45,21 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       if (s?.user) {
         // defer to avoid deadlock
         setTimeout(() => checkAdmin(s.user.id), 0);
-        // 刚从谷歌登录回跳回来：整页重载一次。实测 maximum-scale 不是根子
-        // （新站本来就没有它也一样跳），只有谷歌登录会让手机 Chrome 锁在
-        // 电脑版宽度，刷新才恢复；这里重载就等于自动刷新一次。
+        // 刚从谷歌登录回跳回来：真刷新一次。location.replace 是导航，清不掉
+        // Chrome 从谷歌带过来的桌面版宽度；只有 location.reload() 真刷新才行。
+        // 顺序：先清标记 → 用 replaceState 把 code/state/hash 从地址栏清掉
+        // （不清 code 直接 reload 会重复换码）→ 再 reload。
         try {
           if (sessionStorage.getItem("oauth_return") === "1") {
             sessionStorage.removeItem("oauth_return");
-            window.location.replace(window.location.pathname + window.location.search);
+            try {
+              const url = new URL(window.location.href);
+              url.searchParams.delete("code");
+              url.searchParams.delete("state");
+              url.hash = "";
+              window.history.replaceState(null, "", url.pathname + url.search);
+            } catch {}
+            window.location.reload();
             return;
           }
         } catch {}

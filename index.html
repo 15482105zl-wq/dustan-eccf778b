@@ -9,10 +9,12 @@
     <link rel="manifest" href="/manifest.json" />
     <meta name="theme-color" content="#05050a" />
     <script>
-      // 谷歌登录回跳时 URL 带 access_token，先打个标记（Supabase 随后会把 hash 清掉，
-      // 应用里检测到标记就整页重载一次，否则手机 Chrome 会锁在电脑版宽度）
+      // 谷歌登录回跳打标记：同时查 ?code=（PKCE 回跳）和 #access_token=（隐式流回跳），
+      // Supabase 随后会把 code/hash 清掉，应用里检测到标记就真刷新一次。
+      // 注意：location.replace 导航清不掉 Chrome 从谷歌带过来的桌面版宽度，
+      // 只有 location.reload() 真刷新才行。
       try {
-        if (window.location.hash.indexOf("access_token=") !== -1) {
+        if (window.location.hash.indexOf("access_token=") !== -1 || window.location.search.indexOf("code=") !== -1) {
           sessionStorage.setItem("oauth_return", "1");
         }
       } catch (e) {}
