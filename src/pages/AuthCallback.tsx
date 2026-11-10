@@ -11,7 +11,9 @@ import { useAuth } from "@/hooks/useAuth";
  * 拿到会话后：是弹窗就 window.close()，等 500ms 页面还在且有 opener
  * 就显示“登录成功，请返回”加一个“返回”按钮（点返回再试一次 close，
  * 还关不掉就跳回首页）；无 opener（弹窗被拦截、整页跳回的主标签页）
- * 则跳回首页，useAuth 的重载兜底在首页触发。
+ * 则清掉 oauth_return 标记 → 把地址改成 "/"（去掉 code 和 state）
+ * → window.location.reload() 真刷新一次，清掉 Chrome 从谷歌带过来的
+ * 桌面版宽度。弹窗分支不动。
  * 8 秒超时显示失败，不循环重载。
  */
 const AuthCallback = () => {
@@ -39,8 +41,22 @@ const AuthCallback = () => {
       }, 500);
       return () => window.clearTimeout(t);
     } else {
-      // 整页跳回的主标签页：回首页（useAuth 重载兜底在首页触发）
-      navigate("/", { replace: true });
+      // 整页跳回的主标签页：清标记 → 把地址改成 "/"（去掉 code 和 state）
+      // → 真刷新一次，清掉 Chrome 从谷歌带过来的桌面版宽度。
+      // 注意：这里不能只用 navigate("/")，那是前端路由跳转，AuthProvider
+      // 不重新挂载，onAuthStateChange 不会再触发，useAuth 的重载兜底
+      // 永远执行不到，oauth_return 标记也会一直留在 sessionStorage。
+      try {
+        sessionStorage.removeItem("oauth_return");
+      } catch {}
+      try {
+        const url = new URL(window.location.href);
+        url.searchParams.delete("code");
+        url.searchParams.delete("state");
+        url.hash = "";
+        window.history.replaceState(null, "", url.pathname + url.search);
+      } catch {}
+      window.location.reload();
     }
   }, [user, loading, navigate]);
 

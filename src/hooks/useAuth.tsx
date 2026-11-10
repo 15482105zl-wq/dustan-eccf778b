@@ -50,8 +50,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         // 顺序：先清标记 → 用 replaceState 把 code/state/hash 从地址栏清掉
         // （不清 code 直接 reload 会重复换码）→ 再 reload。
         // 例外：在 /auth-callback 回跳页里不重载、不清标记：弹窗流程靠关弹窗
-        // 完成；弹窗被拦截整页跳回时，回调页回首页后 INITIAL_SESSION 再触发
-        // 重载兜底。
+        // 完成；弹窗被拦截整页跳回时，回调页自己在无 opener 分支里清标记、
+        // 改地址、真刷新（AuthCallback.tsx），这里不替它做。
         try {
           if (sessionStorage.getItem("oauth_return") === "1" && window.location.pathname !== "/auth-callback") {
             sessionStorage.removeItem("oauth_return");
