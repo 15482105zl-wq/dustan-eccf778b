@@ -18,7 +18,7 @@ interface Props {
 }
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-type View = "auth" | "forgot" | "sent-signup" | "sent-reset";
+type View = "auth" | "forgot" | "sent-reset";
 
 const AuthGateModal = ({ open, onOpenChange }: Props) => {
   const [tab, setTab] = useState<"login" | "signup">("login");
@@ -88,7 +88,7 @@ const AuthGateModal = ({ open, onOpenChange }: Props) => {
     e.preventDefault();
     if (!validEmail()) return;
     if (password.length < 6) return fail("密码至少 6 位");
-    if (password !== confirmPassword) return fail("[错误：两次输入的密码不一致，请重新检查]");
+    if (password !== confirmPassword) return fail("两次输入的密码不一致");
     setLoading(true);
     try {
       const { data, error } = await supabase.auth.signUp({
@@ -102,7 +102,11 @@ const AuthGateModal = ({ open, onOpenChange }: Props) => {
       }
       if (!data.session) {
         // auto sign-in fallback
-        await supabase.auth.signInWithPassword({ email, password });
+        const { error: signInError } = await supabase.auth.signInWithPassword({ email, password });
+        if (signInError) {
+          fail(translateAuthError(signInError.message));
+          return;
+        }
       }
       toast({ title: "注册成功 ✨ 已自动登录" });
       onOpenChange(false);
@@ -172,19 +176,19 @@ const AuthGateModal = ({ open, onOpenChange }: Props) => {
       }}
     >
       <DialogContent className="glass border-primary/20 sm:max-w-md">
-        {view === "sent-signup" || view === "sent-reset" ? (
+        {view === "sent-reset" ? (
           <div className="flex flex-col items-center text-center py-4 gap-4">
             <div className="w-14 h-14 rounded-full bg-primary/15 flex items-center justify-center">
               <MailCheck className="w-7 h-7 text-primary" />
             </div>
             <DialogHeader>
               <DialogTitle className="gradient-text">
-                {view === "sent-signup" ? "验证邮件已发送" : "重置链接已发送"}
+                {"重置链接已发送"}
               </DialogTitle>
               <DialogDescription>
                 我们已向 <span className="text-primary">{sentTo}</span> 发送了邮件。
                 <br />
-                {view === "sent-signup" ? "请点击邮件中的链接完成验证，然后回到这里登录。" : "请点击邮件中的链接重置密码。"}
+                {"请点击邮件中的链接重置密码。"}
               </DialogDescription>
             </DialogHeader>
             <Button onClick={() => setView("auth")} variant="outline" className="w-full">
