@@ -35,13 +35,9 @@ jobs:
       - name: Sync icons to native project
         run: npx cap sync android
 
-      - name: Generate signing key
+      - name: Restore signing key from Secrets
         run: |
-          keytool -genkeypair -v -keystore release.keystore -alias dustanhub \
-            -keyalg RSA -keysize 2048 -validity 10000 \
-            -storepass dustanhub123 -keypass dustanhub123 \
-            -dname "CN=Dustan, OU=DustanHub, O=DustanHub, L=Inner Mongolia, ST=Inner Mongolia, C=CN"
-          cp release.keystore android/app/release.keystore
+          echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 -d > android/app/release.keystore
 
       - name: Configure signing in build.gradle
         run: |
@@ -52,9 +48,9 @@ jobs:
               signingConfigs {
                   release {
                       storeFile file("release.keystore")
-                      storePassword "dustanhub123"
-                      keyAlias "dustanhub"
-                      keyPassword "dustanhub123"
+                      storePassword "${{ secrets.ANDROID_KEYSTORE_PASSWORD }}"
+                      keyAlias "${{ secrets.ANDROID_KEY_ALIAS }}"
+                      keyPassword "${{ secrets.ANDROID_KEY_PASSWORD }}"
                   }
               }
               buildTypes {
