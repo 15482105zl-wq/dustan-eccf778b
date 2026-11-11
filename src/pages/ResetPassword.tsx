@@ -76,6 +76,22 @@ const ResetPassword = () => {
       setErrorMsg(msg ?? "重置链接无效或已过期");
     };
 
+    // 换码/setSession/verifyOtp 失败不等于链接无效：SDK 的 detectSessionInUrl
+    // 可能已经先把同一个凭证消费掉了（自动处理和这里手动处理抢同一个凭证），
+    // 先探一下会话，有会话就直接进表单，只有没会话才判无效。
+    const markInvalidUnlessSession = async (msg?: string) => {
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (session) {
+          markReady();
+          return;
+        }
+      } catch {
+        /* 读会话失败，当作没有会话，走下面的无效提示 */
+      }
+      markInvalid(msg);
+    };
+
     // Listen for Supabase auth events. PASSWORD_RECOVERY fires once the
     // recovery token has been consumed and a temporary session is active.
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
@@ -100,26 +116,13 @@ const ResetPassword = () => {
         try {
           const { error } = await supabase.auth.exchangeCodeForSession(params.code);
           if (error) {
-            // 换码失败不等于链接无效：SDK 的 detectSessionInUrl 可能已经
-            // 先把同一个 code 换掉了（自动换码和这里手动换码抢同一个 code），
-            // 先探一下会话，有会话就直接进表单，只有没会话才判无效。
-            const { data: { session } } = await supabase.auth.getSession();
-            if (session) {
-              markReady();
-              return;
-            }
-            markInvalid(translateAuthError(error.message));
+            await markInvalidUnlessSession(translateAuthError(error.message));
             return;
           }
           markReady();
           return;
         } catch (e: any) {
-          const { data: { session } } = await supabase.auth.getSession();
-          if (session) {
-            markReady();
-            return;
-          }
-          markInvalid(translateAuthError(e?.message));
+          await markInvalidUnlessSession(translateAuthError(e?.message));
           return;
         }
       }
@@ -133,24 +136,14 @@ const ResetPassword = () => {
               refresh_token: params.refresh_token,
             });
             if (error) {
-              const { data: { session } } = await supabase.auth.getSession();
-              if (session) {
-                markReady();
-                return;
-              }
-              markInvalid(translateAuthError(error.message));
+              await markInvalidUnlessSession(translateAuthError(error.message));
               return;
             }
           }
           markReady();
           return;
         } catch (e: any) {
-          const { data: { session } } = await supabase.auth.getSession();
-          if (session) {
-            markReady();
-            return;
-          }
-          markInvalid(translateAuthError(e?.message));
+          await markInvalidUnlessSession(translateAuthError(e?.message));
           return;
         }
       }
@@ -163,23 +156,13 @@ const ResetPassword = () => {
             token_hash: params.token_hash,
           });
           if (error) {
-            const { data: { session } } = await supabase.auth.getSession();
-            if (session) {
-              markReady();
-              return;
-            }
-            markInvalid(translateAuthError(error.message));
+            await markInvalidUnlessSession(translateAuthError(error.message));
             return;
           }
           markReady();
           return;
         } catch (e: any) {
-          const { data: { session } } = await supabase.auth.getSession();
-          if (session) {
-            markReady();
-            return;
-          }
-          markInvalid(translateAuthError(e?.message));
+          await markInvalidUnlessSession(translateAuthError(e?.message));
           return;
         }
       }
