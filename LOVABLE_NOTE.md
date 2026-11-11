@@ -25,7 +25,7 @@
 - 老库（fjtwrggmobbahknbcymt）2026-11-09 已由站长下令清零：用户、帖子、公告全部清空，只剩 `vip_resources` 4 行（网络加速、游戏加速、海外账号、互助专区）。
 - 空表不是故障，不要“恢复”数据。
 - 互助专区直接读老库 `forum_threads` / `forum_replies` / `forum_notifications`，不要改成走 Worker 或新库。
-- 免费订阅走新库的 Edge Function（free-sub v5），老站前端直接调它，不要改成走 Worker。
+- 免费订阅已搬到老库（2026-11-10）：free-sub 函数部署在老库上，老站前端直接调老库的 free-sub，不要改成走新库或 Worker。
 
 ## 6. 数据库没有暂停
 - 老库 PostgREST、Auth 接口实测都是通的。Lovable 后台显示的“暂停”状态与实测不符，不要发起“唤醒/恢复”操作。
@@ -42,3 +42,7 @@
 - `.env` 里的 VITE_SUPABASE_URL 必须是 https://fjtwrggmobbahknbcymt.supabase.co（老库）。
 - 不要改回 pxyfbbohoazbslneagix（Lovable Cloud）：那个库的帖子删不掉、登录后免费订阅也领不了，2026-11-10 已由人工切回老库。
 - 老库是空库（用户、帖子已按站长要求清零），论坛显示“暂无主贴”是正常的。
+
+## 9. 免费订阅已搬到老库，不要改回新库
+- free-sub 函数（slug free-sub，verify_jwt=false）部署在老库 fjtwrggmobbahknbcymt 上，前端 FreeSubSection 四个接口地址全指老库。
+- 新站那份 free-sub 各用各的，不要混在一起；老站不要调新库的 free-sub。
