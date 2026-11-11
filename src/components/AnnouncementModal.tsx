@@ -4,7 +4,6 @@ import { Download, X, Edit3, Check, Sparkles, RefreshCw, Eye } from "lucide-reac
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
-import { translateAuthError } from "@/lib/authErrors";
 
 interface AnnouncementData {
   id?: string;
@@ -174,7 +173,7 @@ export default function AnnouncementModal() {
     } catch (err: any) {
       toast({
         title: "保存失败",
-        description: translateAuthError(err?.message),
+        description: "请稍后再试",
         variant: "destructive",
       });
     } finally {

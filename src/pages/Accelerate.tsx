@@ -8,7 +8,6 @@ import UserNav from "@/components/UserNav";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
-import { translateAuthError } from "@/lib/authErrors";
 import SiteFooter from "@/components/SiteFooter";
 import FreeSubSection from "@/components/FreeSubSection";
 
@@ -173,7 +172,7 @@ const Accelerate = () => {
         toast({ title: "公告已更新，全站即刻同步" });
       }
     } catch (err: any) {
-      toast({ title: "保存失败", description: translateAuthError(err?.message), variant: "destructive" });
+      toast({ title: "保存失败", description: "网络异常", variant: "destructive" });
     } finally {
       setSavingNotice(false);
     }

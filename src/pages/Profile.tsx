@@ -157,7 +157,7 @@ const Profile = () => {
       await supabase.auth.updateUser({ data: { avatar_url: cacheBusted } });
       toast({ title: "头像已更新 ✨" });
     } catch (err: any) {
-      toast({ title: "上传失败", description: translateAuthError(err?.message), variant: "destructive" });
+      toast({ title: "上传失败", description: "请稍后再试", variant: "destructive" });
     } finally {
       setUploading(false);
     }
@@ -186,12 +186,12 @@ const Profile = () => {
           { onConflict: "user_id" }
         );
       if (error) {
-        toast({ title: "保存失败", description: translateAuthError(error.message), variant: "destructive" });
+        toast({ title: "保存失败", description: "请稍后再试", variant: "destructive" });
       } else {
         toast({ title: "资料已更新 ✨" });
       }
     } catch (err: any) {
-      toast({ title: "保存失败", description: translateAuthError(err?.message), variant: "destructive" });
+      toast({ title: "保存失败", description: "请稍后再试", variant: "destructive" });
     } finally {
       setSaving(false);
     }
@@ -229,7 +229,7 @@ const Profile = () => {
     try {
       const { data, error } = await supabase.functions.invoke("delete-account", { body: {} });
       if (error || !data?.ok) {
-        toast({ title: "注销失败", description: translateAuthError(error?.message) || translateAuthError(data?.error), variant: "destructive" });
+        toast({ title: "注销失败", description: "请稍后再试", variant: "destructive" });
         return;
       }
       try { localStorage.removeItem("dustan_my_profile"); } catch { /* 忽略 */ }
