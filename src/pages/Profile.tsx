@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { Input } from "@/components/ui/input";
+import PasswordInput from "@/components/PasswordInput";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
@@ -361,26 +362,23 @@ const Profile = () => {
           className="w-full max-w-sm glass rounded-xl p-6 mt-6 space-y-3"
         >
           <h2 className="text-sm font-semibold">重置密码</h2>
-          <div>
-            <label className="text-xs text-muted-foreground mb-1 block">新密码</label>
-            <Input
-              type="password"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-              className="bg-secondary/50 border-border/50"
-              placeholder="至少 6 位"
-            />
-          </div>
-          <div>
-            <label className="text-xs text-muted-foreground mb-1 block">确认新密码</label>
-            <Input
-              type="password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              className="bg-secondary/50 border-border/50"
-              placeholder="再输一次新密码"
-            />
-          </div>
+          <PasswordInput
+            placeholder="新密码 (至少 6 位)"
+            value={newPassword}
+            onChange={(e) => setNewPassword(e.target.value)}
+            autoComplete="new-password"
+            minLength={6}
+          />
+          <PasswordInput
+            placeholder="确认新密码"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            autoComplete="new-password"
+            minLength={6}
+          />
+          {confirmPassword.length > 0 && newPassword !== confirmPassword && (
+            <p className="text-xs text-destructive">两次输入的密码不一致</p>
+          )}
           <Button
             onClick={handleChangePassword}
             disabled={changingPassword}
