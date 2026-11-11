@@ -13,6 +13,7 @@ import ParticleBackground from "@/components/ParticleBackground";
 import SEO from "@/components/SEO";
 import SiteFooter from "@/components/SiteFooter";
 import SiteStatsPanel from "@/components/SiteStatsPanel";
+import { translateAuthError } from "@/lib/authErrors";
 import { ArrowLeft, Camera, Save, Loader2 } from "lucide-react";
 
 /**
@@ -156,7 +157,7 @@ const Profile = () => {
       await supabase.auth.updateUser({ data: { avatar_url: cacheBusted } });
       toast({ title: "头像已更新 ✨" });
     } catch (err: any) {
-      toast({ title: "上传失败", description: err?.message || "未知错误", variant: "destructive" });
+      toast({ title: "上传失败", description: translateAuthError(err?.message), variant: "destructive" });
     } finally {
       setUploading(false);
     }
@@ -185,12 +186,12 @@ const Profile = () => {
           { onConflict: "user_id" }
         );
       if (error) {
-        toast({ title: "保存失败", description: error.message, variant: "destructive" });
+        toast({ title: "保存失败", description: translateAuthError(error.message), variant: "destructive" });
       } else {
         toast({ title: "资料已更新 ✨" });
       }
     } catch (err: any) {
-      toast({ title: "保存失败", description: err?.message || "未知错误", variant: "destructive" });
+      toast({ title: "保存失败", description: translateAuthError(err?.message), variant: "destructive" });
     } finally {
       setSaving(false);
     }
@@ -209,14 +210,14 @@ const Profile = () => {
     try {
       const { error } = await supabase.auth.updateUser({ password: newPassword });
       if (error) {
-        toast({ title: "修改失败", description: error.message, variant: "destructive" });
+        toast({ title: "修改失败", description: translateAuthError(error.message), variant: "destructive" });
       } else {
         toast({ title: "密码已修改 ✨" });
         setNewPassword("");
         setConfirmPassword("");
       }
     } catch (err: any) {
-      toast({ title: "修改失败", description: err?.message || "未知错误", variant: "destructive" });
+      toast({ title: "修改失败", description: translateAuthError(err?.message), variant: "destructive" });
     } finally {
       setChangingPassword(false);
     }
@@ -228,7 +229,7 @@ const Profile = () => {
     try {
       const { data, error } = await supabase.functions.invoke("delete-account", { body: {} });
       if (error || !data?.ok) {
-        toast({ title: "注销失败", description: error?.message || data?.error || "请稍后再试", variant: "destructive" });
+        toast({ title: "注销失败", description: translateAuthError(error?.message) || translateAuthError(data?.error), variant: "destructive" });
         return;
       }
       try { localStorage.removeItem("dustan_my_profile"); } catch { /* 忽略 */ }

@@ -19,7 +19,7 @@ export function translateAuthError(message: string | undefined | null): string {
     return "操作过于频繁，请稍后再试";
   if (m.includes("invalid email") || m.includes("email address") && m.includes("invalid"))
     return "邮箱格式不正确";
-  if (m.includes("same as") || m.includes("same password"))
+  if (m.includes("same as") || m.includes("same password") || m.includes("different from the old password") || m.includes("should be different"))
     return "新密码不能与旧密码相同";
   if (m.includes("expired") || m.includes("invalid token") || m.includes("token has expired"))
     return "链接已失效，请重新发起请求";

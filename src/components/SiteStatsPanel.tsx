@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
+import { translateAuthError } from "@/lib/authErrors";
 import { BarChart3, Loader2, RefreshCw, RotateCcw } from "lucide-react";
 
 type Row = { key: string; label: string; category: string; count: number };
@@ -23,7 +24,7 @@ const SiteStatsPanel = () => {
   const load = async () => {
     setLoading(true);
     const { data, error } = await supabase.from("site_counters").select("key,label,category,count");
-    if (error) toast({ title: "读取失败", description: error.message, variant: "destructive" });
+    if (error) toast({ title: "读取失败", description: translateAuthError(error.message), variant: "destructive" });
     setRows((data as Row[]) || []);
     setLoading(false);
   };
@@ -35,7 +36,7 @@ const SiteStatsPanel = () => {
     const { error } = await supabase.from("site_counters").update({ count: 0, updated_at: new Date().toISOString() }).neq("key", "");
     setResetting(false);
     setConfirming(false);
-    if (error) toast({ title: "重置失败", description: error.message, variant: "destructive" });
+    if (error) toast({ title: "重置失败", description: translateAuthError(error.message), variant: "destructive" });
     else { toast({ title: "已清零" }); load(); }
   };
 

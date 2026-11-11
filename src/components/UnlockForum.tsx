@@ -8,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { useToast } from "@/hooks/use-toast";
+import { translateAuthError } from "@/lib/authErrors";
 import { Bell, ImagePlus, Loader2, Lock, Pencil, Pin, Plus, Reply as ReplyIcon, Send, Trash2, User as UserIcon, X } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -198,7 +199,7 @@ const UnlockForum = ({ open, onOpenChange }: Props) => {
         await fetchProfiles(ids);
       }
     } catch (e: any) {
-      toast({ title: "加载失败", description: e.message, variant: "destructive" });
+      toast({ title: "加载失败", description: translateAuthError(e.message), variant: "destructive" });
     } finally {
       setLoading(false);
     }
@@ -288,7 +289,7 @@ const UnlockForum = ({ open, onOpenChange }: Props) => {
       toast({ title: "主贴已发布 ✨" });
     } catch (e: any) {
       console.error("post thread error", e);
-      toast({ title: "发布失败", description: e.message || "请稍后重试", variant: "destructive" });
+      toast({ title: "发布失败", description: translateAuthError(e.message) || "请稍后重试", variant: "destructive" });
     } finally {
       setPosting(false);
     }
@@ -316,7 +317,7 @@ const UnlockForum = ({ open, onOpenChange }: Props) => {
       setReplyTarget((prev) => ({ ...prev, [threadId]: null }));
       await fetchProfiles([user.id]);
     } catch (e: any) {
-      toast({ title: "回帖失败", description: e.message, variant: "destructive" });
+      toast({ title: "回帖失败", description: translateAuthError(e.message), variant: "destructive" });
     } finally {
       setReplying(null);
     }
@@ -341,13 +342,13 @@ const UnlockForum = ({ open, onOpenChange }: Props) => {
       if (error) throw error;
       setThreads((prev) => prev.filter((th) => th.id !== t.id));
     } catch (e: any) {
-      toast({ title: "删除失败", description: e.message, variant: "destructive" });
+      toast({ title: "删除失败", description: translateAuthError(e.message), variant: "destructive" });
     }
   };
 
   const handleDeleteReply = async (rid: string, tid: string) => {
     const { error } = await supabase.from("forum_replies").delete().eq("id", rid);
-    if (error) return toast({ title: "删除失败", description: error.message, variant: "destructive" });
+    if (error) return toast({ title: "删除失败", description: translateAuthError(error.message), variant: "destructive" });
     setReplies((prev) => ({ ...prev, [tid]: (prev[tid] || []).filter((r) => r.id !== rid) }));
   };
 
@@ -380,7 +381,7 @@ const UnlockForum = ({ open, onOpenChange }: Props) => {
       handleCancelEdit();
       toast({ title: "已保存修改 ✨" });
     } catch (e: any) {
-      toast({ title: "保存失败", description: e.message, variant: "destructive" });
+      toast({ title: "保存失败", description: translateAuthError(e.message), variant: "destructive" });
     } finally {
       setSavingEdit(false);
     }
@@ -393,7 +394,7 @@ const UnlockForum = ({ open, onOpenChange }: Props) => {
       .update({ pinned: next })
       .eq("id", t.id);
     if (error) {
-      toast({ title: "操作失败", description: error.message, variant: "destructive" });
+      toast({ title: "操作失败", description: translateAuthError(error.message), variant: "destructive" });
       return;
     }
     setThreads((prev) =>
