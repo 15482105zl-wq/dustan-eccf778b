@@ -121,7 +121,9 @@ const Vip = () => {
       ? () => (canInteract ? setForumOpen(true) : requireAuth())
       : isGame
         ? () => setGameOpen(true)
-        : undefined;
+        : href
+          ? () => window.open(href, "_blank", "noopener,noreferrer")
+          : undefined;
     const ckey = "vip_" + (isBBS ? "bbs" : isVpn ? "accelerate" : isGame ? "game" : (r.icon || "card").toLowerCase());
     return {
       icon: ICON_MAP[r.icon] ?? Rocket,
