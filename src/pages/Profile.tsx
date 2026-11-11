@@ -66,6 +66,9 @@ const Profile = () => {
   const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [loaded, setLoaded] = useState(false);
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [changingPassword, setChangingPassword] = useState(false);
 
   useEffect(() => {
     if (!authLoading && !user) navigate("/");
@@ -189,6 +192,32 @@ const Profile = () => {
       toast({ title: "保存失败", description: err?.message || "未知错误", variant: "destructive" });
     } finally {
       setSaving(false);
+    }
+  };
+
+  const handleChangePassword = async () => {
+    if (newPassword.length < 6) {
+      toast({ title: "密码至少 6 位", variant: "destructive" });
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      toast({ title: "两次输入的密码不一致", variant: "destructive" });
+      return;
+    }
+    setChangingPassword(true);
+    try {
+      const { error } = await supabase.auth.updateUser({ password: newPassword });
+      if (error) {
+        toast({ title: "修改失败", description: error.message, variant: "destructive" });
+      } else {
+        toast({ title: "密码已修改 ✨" });
+        setNewPassword("");
+        setConfirmPassword("");
+      }
+    } catch (err: any) {
+      toast({ title: "修改失败", description: err?.message || "未知错误", variant: "destructive" });
+    } finally {
+      setChangingPassword(false);
     }
   };
 
@@ -322,6 +351,43 @@ const Profile = () => {
           >
             {saving ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Save className="w-4 h-4 mr-2" />}
             {saving ? "保存中..." : "保存资料"}
+          </Button>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.15 }}
+          className="w-full max-w-sm glass rounded-xl p-6 mt-6 space-y-3"
+        >
+          <h2 className="text-sm font-semibold">重置密码</h2>
+          <div>
+            <label className="text-xs text-muted-foreground mb-1 block">新密码</label>
+            <Input
+              type="password"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+              className="bg-secondary/50 border-border/50"
+              placeholder="至少 6 位"
+            />
+          </div>
+          <div>
+            <label className="text-xs text-muted-foreground mb-1 block">确认新密码</label>
+            <Input
+              type="password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              className="bg-secondary/50 border-border/50"
+              placeholder="再输一次新密码"
+            />
+          </div>
+          <Button
+            onClick={handleChangePassword}
+            disabled={changingPassword}
+            className="w-full bg-primary/20 text-primary border border-primary/30 hover:bg-primary/30"
+          >
+            {changingPassword ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : null}
+            {changingPassword ? "修改中..." : "修改密码"}
           </Button>
         </motion.div>
 
