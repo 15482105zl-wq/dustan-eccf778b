@@ -100,12 +100,25 @@ const ResetPassword = () => {
         try {
           const { error } = await supabase.auth.exchangeCodeForSession(params.code);
           if (error) {
+            // 换码失败不等于链接无效：SDK 的 detectSessionInUrl 可能已经
+            // 先把同一个 code 换掉了（自动换码和这里手动换码抢同一个 code），
+            // 先探一下会话，有会话就直接进表单，只有没会话才判无效。
+            const { data: { session } } = await supabase.auth.getSession();
+            if (session) {
+              markReady();
+              return;
+            }
             markInvalid(translateAuthError(error.message));
             return;
           }
           markReady();
           return;
         } catch (e: any) {
+          const { data: { session } } = await supabase.auth.getSession();
+          if (session) {
+            markReady();
+            return;
+          }
           markInvalid(translateAuthError(e?.message));
           return;
         }
@@ -120,6 +133,11 @@ const ResetPassword = () => {
               refresh_token: params.refresh_token,
             });
             if (error) {
+              const { data: { session } } = await supabase.auth.getSession();
+              if (session) {
+                markReady();
+                return;
+              }
               markInvalid(translateAuthError(error.message));
               return;
             }
@@ -127,6 +145,11 @@ const ResetPassword = () => {
           markReady();
           return;
         } catch (e: any) {
+          const { data: { session } } = await supabase.auth.getSession();
+          if (session) {
+            markReady();
+            return;
+          }
           markInvalid(translateAuthError(e?.message));
           return;
         }
@@ -140,12 +163,22 @@ const ResetPassword = () => {
             token_hash: params.token_hash,
           });
           if (error) {
+            const { data: { session } } = await supabase.auth.getSession();
+            if (session) {
+              markReady();
+              return;
+            }
             markInvalid(translateAuthError(error.message));
             return;
           }
           markReady();
           return;
         } catch (e: any) {
+          const { data: { session } } = await supabase.auth.getSession();
+          if (session) {
+            markReady();
+            return;
+          }
           markInvalid(translateAuthError(e?.message));
           return;
         }
