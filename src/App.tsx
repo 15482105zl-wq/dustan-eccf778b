@@ -11,6 +11,7 @@ import ResetPassword from "./pages/ResetPassword";
 import Vip from "./pages/Vip";
 import Accelerate from "./pages/Accelerate";
 import Tutorials from "./pages/Tutorials";
+import GoogleTutorial from "./pages/GoogleTutorial";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -31,6 +32,7 @@ const App = () => (
             <Route path="/vip" element={<Vip />} />
             <Route path="/accelerate" element={<Accelerate />} />
             <Route path="/tutorials" element={<Tutorials />} />
+            <Route path="/google-tutorial" element={<GoogleTutorial />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AuthProvider>
