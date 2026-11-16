@@ -18,7 +18,7 @@ interface Props {
 }
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-type View = "auth" | "forgot" | "sent-reset";
+type View = "auth" | "forgot" | "sent-reset" | "nickname";
 
 const AuthGateModal = ({ open, onOpenChange }: Props) => {
   const [tab, setTab] = useState<"login" | "signup">("login");
@@ -26,16 +26,39 @@ const AuthGateModal = ({ open, onOpenChange }: Props) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [nickname, setNickname] = useState("");
+  const [savingName, setSavingName] = useState(false);
   const [loading, setLoading] = useState(false);
   const [needsVerify, setNeedsVerify] = useState(false);
   const [sentTo, setSentTo] = useState("");
   const { toast } = useToast();
+  // 登录成功后查昵称：没有昵称进强制昵称页，有就关弹窗，查不到就放行关弹窗不困住人。
+  const checkNameAndClose = async (uid: string) => {
+    try {
+      const { data, error } = await supabase.from("profiles").select("display_name").eq("user_id", uid).maybeSingle();
+      if (error) {
+        onOpenChange(false);
+        return;
+      }
+      if (!data?.display_name) {
+        setView("nickname");
+        return;
+      }
+      onOpenChange(false);
+    } catch {
+      onOpenChange(false);
+    }
+  };
   // 谷歌登录走弹窗：主标签页不离站、不刷新，Chrome 不会锁桌面版宽度；
-  // 登录成功自动关弹窗。
+  // 登录成功查昵称，没昵称进强制昵称页。
   const { loginWithGoogle, loading: googleLoading } = useGooglePopupLogin({
-    onSuccess: () => onOpenChange(false),
+    onSuccess: async () => {
+      const { data: { user: u } } = await supabase.auth.getUser();
+      if (u) await checkNameAndClose(u.id);
+      else onOpenChange(false);
+    },
   });
-  // 登录成功自动关登录框（带 prevUserRef guard，只在 user 从无到有时才关）。
+  // 登录成功自动关登录框（带 prevUserRef guard，只在 user 从无到有时才跑）。
   // 以后有 APP 时，APP 里谷歌登录走深链回跳，hook 的 onSuccess 靠
   // googleLoading 触发，APP 分支没置 googleLoading 就不会关框——这条
   // effect 兜底。浏览器里无害（登录成功本来就要关框）。已登录时打开的
@@ -43,7 +66,7 @@ const AuthGateModal = ({ open, onOpenChange }: Props) => {
   const { user } = useAuth();
   const prevUserRef = useRef(user);
   useEffect(() => {
-    if (open && user && !prevUserRef.current) onOpenChange(false);
+    if (open && user && !prevUserRef.current) checkNameAndClose(user.id);
     prevUserRef.current = user;
   }, [open, user, onOpenChange]);
 
@@ -76,7 +99,7 @@ const AuthGateModal = ({ open, onOpenChange }: Props) => {
         return;
       }
       toast({ title: "登录成功 ✨" });
-      onOpenChange(false);
+      await checkNameAndClose(data.user.id);
     } catch (err: any) {
       fail(translateAuthError(err?.message));
     } finally {
@@ -86,15 +109,27 @@ const AuthGateModal = ({ open, onOpenChange }: Props) => {
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
+    const trimmedName = nickname.trim();
+    if (!trimmedName) return fail("请填写昵称");
+    if (trimmedName.length > 6) return fail("昵称最多 6 个字");
     if (!validEmail()) return;
     if (password.length < 6) return fail("密码至少 6 位");
     if (password !== confirmPassword) return fail("两次输入的密码不一致");
     setLoading(true);
     try {
+      try {
+        const { data: taken, error: rpcError } = await supabase.rpc("nickname_taken", { p_name: trimmedName });
+        if (!rpcError && taken === true) {
+          fail("该昵称已被使用，请换一个");
+          return;
+        }
+      } catch {
+        // 查重失败放行继续，不挡注册
+      }
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
-        options: { emailRedirectTo: `${window.location.origin}/` },
+        options: { emailRedirectTo: `${window.location.origin}/`, data: { display_name: trimmedName } },
       });
       if (error) {
         fail(translateAuthError(error.message));
@@ -109,11 +144,40 @@ const AuthGateModal = ({ open, onOpenChange }: Props) => {
         }
       }
       toast({ title: "注册成功 ✨ 已自动登录" });
-      onOpenChange(false);
+      const { data: { user: u } } = await supabase.auth.getUser();
+      if (u) await checkNameAndClose(u.id);
+      else onOpenChange(false);
     } catch (err: any) {
       fail(translateAuthError(err?.message));
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleSaveNickname = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const trimmed = nickname.trim();
+    if (!trimmed) return fail("请填写昵称");
+    if (trimmed.length > 6) return fail("昵称最多 6 个字");
+    if (!user) return;
+    setSavingName(true);
+    try {
+      const { data: taken } = await supabase.from("profiles").select("user_id").eq("display_name", trimmed).neq("user_id", user.id).maybeSingle();
+      if (taken) {
+        fail("该昵称已被使用，请换一个");
+        return;
+      }
+      const { error } = await supabase.from("profiles").upsert({ user_id: user.id, display_name: trimmed }, { onConflict: "user_id" });
+      if (error) {
+        fail("保存失败，请稍后再试");
+        return;
+      }
+      toast({ title: "昵称设置成功" });
+      onOpenChange(false);
+    } catch {
+      fail("保存失败，请稍后再试");
+    } finally {
+      setSavingName(false);
     }
   };
 
@@ -161,6 +225,7 @@ const AuthGateModal = ({ open, onOpenChange }: Props) => {
     setEmail("");
     setPassword("");
     setConfirmPassword("");
+    setNickname("");
     setTab("login");
     setNeedsVerify(false);
     setSentTo("");
@@ -171,12 +236,26 @@ const AuthGateModal = ({ open, onOpenChange }: Props) => {
     <Dialog
       open={open}
       onOpenChange={(v) => {
+        if (!v && view === "nickname") return;
         onOpenChange(v);
         if (!v) reset();
       }}
     >
       <DialogContent className="glass border-primary/20 sm:max-w-md">
-        {view === "sent-reset" ? (
+        {view === "nickname" ? (
+          <>
+            <DialogHeader>
+              <DialogTitle className="gradient-text">设置昵称</DialogTitle>
+              <DialogDescription>请设置一个昵称，最多 6 个字，昵称不能与他人重复。</DialogDescription>
+            </DialogHeader>
+            <form onSubmit={handleSaveNickname} className="space-y-3 mt-4">
+              <Input value={nickname} onChange={(e) => setNickname(e.target.value)} maxLength={6} placeholder="昵称（最多 6 个字）" required />
+              <Button type="submit" disabled={savingName} className="w-full bg-primary/20 text-primary border border-primary/30 hover:bg-primary/30">
+                {savingName && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}保存昵称
+              </Button>
+            </form>
+          </>
+        ) : view === "sent-reset" ? (
           <div className="flex flex-col items-center text-center py-4 gap-4">
             <div className="w-14 h-14 rounded-full bg-primary/15 flex items-center justify-center">
               <MailCheck className="w-7 h-7 text-primary" />
@@ -273,6 +352,7 @@ const AuthGateModal = ({ open, onOpenChange }: Props) => {
 
               <TabsContent value="signup">
                 <form onSubmit={handleSignup} className="space-y-3 mt-4">
+                  <Input value={nickname} onChange={(e) => setNickname(e.target.value)} maxLength={6} placeholder="昵称（最多 6 个字）" required />
                   <EmailInput value={email} onChange={setEmail} placeholder="邮箱 (支持 QQ/163/Gmail 等)" required />
                   <PasswordInput
                     autoComplete="new-password"

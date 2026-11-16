@@ -173,6 +173,14 @@ const Profile = () => {
       toast({ title: "简介最多 60 个字", variant: "destructive" });
       return;
     }
+    const trimmedName = displayName.trim();
+    if (trimmedName) {
+      const { data: taken } = await supabase.from("profiles").select("user_id").eq("display_name", trimmedName).neq("user_id", user.id).maybeSingle();
+      if (taken) {
+        toast({ title: "该昵称已被使用，请换一个", variant: "destructive" });
+        return;
+      }
+    }
     setSaving(true);
     try {
       const { error } = await supabase
