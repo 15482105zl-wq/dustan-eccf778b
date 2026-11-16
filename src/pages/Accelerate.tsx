@@ -264,7 +264,7 @@ const Accelerate = () => {
               </div>
             </div>
           )}
-          {/* 星辰·云（2026-10-12 新增，首推） */}
+          {/* 星辰·云（2026-10-12 新增） */}
           <motion.div
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
@@ -293,7 +293,7 @@ const Accelerate = () => {
               </div>
             </div>
             <p className="text-[13px] leading-relaxed flex-1 text-muted-foreground">
-              专线是看家本领——IEPL 高速专线，月付 8 元起，不限设备，流媒体一键解锁，适合追求性价比的重度用户。
+              IEPL 高速专线，月付 8 元起，不限设备，流媒体一键解锁，适合追求性价比的重度用户。
             </p>
 
             <a
@@ -408,10 +408,10 @@ const Accelerate = () => {
                 </div>
                 <div className="flex-1">
                   <p className="text-sm font-semibold mb-1" style={{ color: "#f2f3fa" }}>
-                    选一家买套餐
+                    选择服务
                   </p>
                   <p className="text-xs text-muted-foreground leading-relaxed">
-                    星辰、Nice任选一家，点卡片上的立即开始，注册账号，按用量选个套餐付款，开通后就能用。
+                    站内分享的加速服务有星辰云与 Nice 云，打开卡片了解详情，注册账号后按需选择套餐，即可开始使用。
                   </p>
                 </div>
               </div>
@@ -425,7 +425,7 @@ const Accelerate = () => {
                     复制订阅链接
                   </p>
                   <p className="text-xs text-muted-foreground leading-relaxed">
-                    付费套餐的订阅链接在机场官网首页里复制。
+                    订阅链接在服务商首页复制即可。
                   </p>
                 </div>
               </div>
