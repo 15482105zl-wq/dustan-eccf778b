@@ -475,7 +475,7 @@ const Accelerate = () => {
                     导入订阅并更新
                   </p>
                   <p className="text-xs text-muted-foreground leading-relaxed">
-                    打开 FLClash，点下方“配置” → 点“+”添加配置 → 选“URL” → 粘贴订阅链接 → 点提交，然后点“更新”刷新订阅
+                    打开 FLClash，点下方“配置” → 点“+”添加配置 → 选“链接”（老版本写的是“URL”） → 粘贴订阅链接 → 点提交，然后点“更新”刷新订阅
                   </p>
                 </div>
               </div>

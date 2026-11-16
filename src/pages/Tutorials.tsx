@@ -21,7 +21,7 @@ const sections = [
           <li>选择套餐</li>
           <li>完成付款</li>
           <li>复制订阅链接：订阅链接在服务商首页复制</li>
-          <li>打开 FLClash，进入"配置"→点击"+"→"从 URL 导入"，粘贴订阅链接并提交</li>
+          <li>打开 FLClash，进入"配置"→点击"+"→"从链接导入"（老版本写的是"从 URL 导入"），粘贴订阅链接并提交</li>
           <li>进入"代理"页面，点击"测速"，测速完成后点击右上角的三个点，点击"排序"，点击"延迟"，选择一个延迟低的节点即可，可按喜欢的国家或延迟自己选</li>
           <li>返回"仪表盘"，点击"开始"即可使用</li>
         </ol>
@@ -89,7 +89,7 @@ const sections = [
       <ul className="space-y-3">
         <li>
           <div className="font-semibold text-foreground">订阅链接如何导入？</div>
-          <div className="text-muted-foreground text-sm mt-0.5">→ FLClash → 配置 → + → 从 URL 导入</div>
+          <div className="text-muted-foreground text-sm mt-0.5">→ FLClash → 配置 → + → 从链接导入（老版本写的是"从 URL 导入"）</div>
         </li>
         <li>
           <div className="font-semibold text-foreground">导入后无法连接？</div>
