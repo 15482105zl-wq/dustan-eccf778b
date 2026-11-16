@@ -165,8 +165,8 @@ const Profile = () => {
 
   const handleSave = async () => {
     if (!user) return;
-    if (displayName.trim().length > 6) {
-      toast({ title: "昵称最多 6 个字", variant: "destructive" });
+    if (displayName.trim().length > 60) {
+      toast({ title: "昵称最多 60 个字", variant: "destructive" });
       return;
     }
     if (bio.trim().length > 60) {
@@ -326,11 +326,11 @@ const Profile = () => {
               <Input
                 value={displayName}
                 onChange={(e) => setDisplayName(e.target.value)}
-                maxLength={6}
+                maxLength={60}
                 className="bg-secondary/50 border-border/50"
                 placeholder="你的昵称"
               />
-              <p className="text-[10px] text-muted-foreground mt-1 text-right">{displayName.length}/6</p>
+              <p className="text-[10px] text-muted-foreground mt-1 text-right">{displayName.length}/60</p>
             </div>
             <div>
               <label className="text-xs text-muted-foreground mb-1 block">邮箱</label>

@@ -111,7 +111,7 @@ const AuthGateModal = ({ open, onOpenChange }: Props) => {
     e.preventDefault();
     const trimmedName = nickname.trim();
     if (!trimmedName) return fail("请填写昵称");
-    if (trimmedName.length > 6) return fail("昵称最多 6 个字");
+    if (trimmedName.length > 60) return fail("昵称最多 60 个字");
     if (!validEmail()) return;
     if (password.length < 6) return fail("密码至少 6 位");
     if (password !== confirmPassword) return fail("两次输入的密码不一致");
@@ -158,7 +158,7 @@ const AuthGateModal = ({ open, onOpenChange }: Props) => {
     e.preventDefault();
     const trimmed = nickname.trim();
     if (!trimmed) return fail("请填写昵称");
-    if (trimmed.length > 6) return fail("昵称最多 6 个字");
+    if (trimmed.length > 60) return fail("昵称最多 60 个字");
     if (!user) return;
     setSavingName(true);
     try {
@@ -246,10 +246,10 @@ const AuthGateModal = ({ open, onOpenChange }: Props) => {
           <>
             <DialogHeader>
               <DialogTitle className="gradient-text">设置昵称</DialogTitle>
-              <DialogDescription>请设置一个昵称，最多 6 个字，昵称不能与他人重复。</DialogDescription>
+              <DialogDescription>请设置一个昵称，最多 60 个字，昵称不能与他人重复。</DialogDescription>
             </DialogHeader>
             <form onSubmit={handleSaveNickname} className="space-y-3 mt-4">
-              <Input value={nickname} onChange={(e) => setNickname(e.target.value)} maxLength={6} placeholder="昵称（最多 6 个字）" required />
+              <Input value={nickname} onChange={(e) => setNickname(e.target.value)} maxLength={60} placeholder="昵称（最多 60 个字）" required />
               <Button type="submit" disabled={savingName} className="w-full bg-primary/20 text-primary border border-primary/30 hover:bg-primary/30">
                 {savingName && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}保存昵称
               </Button>
@@ -352,7 +352,7 @@ const AuthGateModal = ({ open, onOpenChange }: Props) => {
 
               <TabsContent value="signup">
                 <form onSubmit={handleSignup} className="space-y-3 mt-4">
-                  <Input value={nickname} onChange={(e) => setNickname(e.target.value)} maxLength={6} placeholder="昵称（最多 6 个字）" required />
+                  <Input value={nickname} onChange={(e) => setNickname(e.target.value)} maxLength={60} placeholder="昵称（最多 60 个字）" required />
                   <EmailInput value={email} onChange={setEmail} placeholder="邮箱 (支持 QQ/163/Gmail 等)" required />
                   <PasswordInput
                     autoComplete="new-password"
