@@ -343,7 +343,7 @@ const Accelerate = () => {
               立即开始
             </a>
           </motion.div>
-          {/* 2026-10-14 隐藏悦通：只推星辰·云和Nice·云（恢复时取消本注释块即可）
+          {/* 2026-10-14 隐藏悦通（恢复时取消本注释块即可）
           <motion.div
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
