@@ -6,7 +6,7 @@ import SEO from "@/components/SEO";
 import UserNav from "@/components/UserNav";
 import SiteFooter from "@/components/SiteFooter";
 
-const FLCLASH_APK_URL = "https://wwwa.qyshare.com:2083/s/nujcn8";
+const FLCLASH_APK_URL = "https://wwwa.qyshare.com:2083/s/yzz0iu";
 const FLCLASH_FOLDER_URL = "https://wwwa.qyshare.com/s/3vfjoi";
 
 const sections = [
@@ -15,7 +15,7 @@ const sections = [
     title: "网络加速",
     content: (
       <>
-        <p>点击"网络加速"卡片进入加速页，选择服务商后：</p>
+        <p>点击"网络加速"卡片进入加速页。免费订阅不用走下面这套，直接在加速页下方免费订阅区领取，领到后按下面第 5 到 7 步导入、选节点、启动；下面是付费套餐的步骤：</p>
         <ol>
           <li>注册账号</li>
           <li>选择套餐</li>
@@ -32,7 +32,7 @@ const sections = [
           className="inline-block mt-3 px-5 py-2.5 rounded-xl text-sm font-semibold text-white transition-transform hover:scale-105"
           style={{ background: "linear-gradient(135deg, #38bdf8, #6366f1)" }}
         >
-          下载 FLClash 0.9.3 安卓版
+          下载 FLClash 0.9.4 安卓版
         </a>
         <p className="text-sm text-muted-foreground mt-2">
           桌面版也有：
@@ -45,9 +45,10 @@ const sections = [
           >
             点这里下载
           </a>
-          （电脑 41.27MB、Mac 56.41MB、Linux 38.61MB）
+          （电脑 41.13MB、Mac 53.05MB、Linux 66.06MB）
         </p>
         <p className="text-sm text-muted-foreground mt-2">如果下载速度不稳，请使用备用下载：打开分享链接，分享页里面就有备用下载，不用另外找链接。</p>
+        <p className="text-sm text-muted-foreground mt-2">注意：分享页顶部的横幅是第三方广告，别点，真正的下载按钮在文件卡片里。</p>
       </>
     ),
   },

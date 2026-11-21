@@ -100,7 +100,7 @@ const sections = [
         </li>
         <li>
           <div className="font-semibold text-foreground">提示软件包冲突？</div>
-          <div className="text-muted-foreground text-sm mt-0.5">多为签名不一致所致，请先卸载或停用同名应用包，再重新安装。</div>
+          <div className="text-muted-foreground text-sm mt-0.5">多为签名不一致所致。请先在应用管理中确认同名应用是不是自己装的旧包：是旧包可以先卸载再重装；如果是系统自带组件，请不要直接卸载或停用，先记下手机品牌、型号与安卓版本，带着报错原文到互助专区发帖求助。</div>
         </li>
         <li>
           <div className="font-semibold text-foreground">登录时要求验证本人号码？</div>

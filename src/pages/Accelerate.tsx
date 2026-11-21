@@ -14,7 +14,7 @@ import FreeSubSection from "@/components/FreeSubSection";
 const YUETONG_URL = "https://app.xn--9kq451mn9g.com/#/register?code=OkGae8Qp";
 const NICE_URL = "https://dustan.mmmoyou.com/#/register?code=0lc8ncSH";
 const XINGCHEN_URL = "https://xc1.luniu8.com/?code=qm8A2dss";
-const FLCLASH_APK_URL = "https://wwwa.qyshare.com:2083/s/nujcn8";
+const FLCLASH_APK_URL = "https://wwwa.qyshare.com:2083/s/yzz0iu";
 const FLCLASH_FOLDER_URL = "https://wwwa.qyshare.com/s/3vfjoi";
 
 const NOTICE_SLOT = "accelerate_marquee";
@@ -441,6 +441,9 @@ const Accelerate = () => {
                   <p className="text-xs text-muted-foreground mb-2">
                     如果下载速度不稳，请使用备用下载：打开分享链接，分享页里面就有备用下载，不用另外找链接。
                   </p>
+                  <p className="text-xs text-muted-foreground mb-2">
+                    注意：分享页顶部的横幅是第三方广告，别点，真正的下载按钮在文件卡片里。
+                  </p>
                   <a
                     href={FLCLASH_APK_URL}
                     target="_blank"
@@ -448,7 +451,7 @@ const Accelerate = () => {
                     className="inline-block rounded-full px-5 py-2.5 text-sm font-bold"
                     style={{ background: "linear-gradient(135deg,#7c3aed,#a855f7)", color: "#fff" }}
                   >
-                    下载 FLClash 0.9.3 安卓版
+                    下载 FLClash 0.9.4 安卓版
                   </a>
                   <p className="text-xs text-muted-foreground mt-2 leading-relaxed">
                     桌面版也有：
@@ -461,7 +464,7 @@ const Accelerate = () => {
                     >
                       点这里下载
                     </a>
-                    （电脑 41.27MB、Mac 56.41MB、Linux 38.61MB）
+                    （电脑 41.13MB、Mac 53.05MB、Linux 66.06MB）
                   </p>
                 </div>
               </div>
