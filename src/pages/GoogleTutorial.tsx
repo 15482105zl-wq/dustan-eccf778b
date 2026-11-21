@@ -100,7 +100,7 @@ const sections = [
         </li>
         <li>
           <div className="font-semibold text-foreground">提示软件包冲突？</div>
-          <div className="text-muted-foreground text-sm mt-0.5">多为签名不一致所致。请先在应用管理中确认同名应用是不是自己装的旧包：是旧包可以先卸载再重装；如果是系统自带组件，请不要直接卸载或停用，先记下手机品牌、型号与安卓版本，带着报错原文到互助专区发帖求助。</div>
+          <div className="text-muted-foreground text-sm mt-0.5">多为签名不一致所致。Play 服务、服务框架是系统服务，卸载不了，也不要停用，停用了商店、Gmail、地图、通知都会坏。正确做法是卸载更新：打开设置 → 应用 → 找到 Google Play 服务 → 点右上角三个点 → 选“卸载更新”，退回出厂版本后再安装新包。</div>
         </li>
         <li>
           <div className="font-semibold text-foreground">登录时要求验证本人号码？</div>
