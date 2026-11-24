@@ -12,7 +12,6 @@ import SiteFooter from "@/components/SiteFooter";
 import FreeSubSection from "@/components/FreeSubSection";
 
 const YUETONG_URL = "https://app.xn--9kq451mn9g.com/#/register?code=OkGae8Qp";
-const NICE_URL = "https://dustan.mmmoyou.com/#/register?code=0lc8ncSH";
 const XINGCHEN_URL = "https://xc1.luniu8.com/?code=qm8A2dss";
 const FLCLASH_APK_URL = "https://wwwa.qyshare.com:2083/s/yzz0iu";
 const FLCLASH_FOLDER_URL = "https://wwwa.qyshare.com/s/3vfjoi";
@@ -23,40 +22,6 @@ const NOTICE_ICON = "📢";
 // 默认消息已清空（boss 2026-11-10 令：滚动条暂时不显示）；
 // 数据库 site_notices 有文案时仍会显示，管理员在页面上编辑公告也可重新打开。
 const DEFAULT_NOTICE = "";
-
-// 3D 玻璃质感发光 - Nice·云 圆形图标
-const NiceCloudIcon = () => (
-  <div
-    className="w-14 h-14 rounded-full relative flex items-center justify-center flex-shrink-0 overflow-hidden"
-    style={{
-      background: "radial-gradient(100% 100% at 30% 25%, #2bd2ff 0%, #0077ff 55%, #052a6b 100%)",
-      boxShadow: "0 0 20px rgba(0, 140, 255, 0.55), inset 0 1.5px 2px rgba(255, 255, 255, 0.75), inset 0 -3px 6px rgba(0, 0, 0, 0.45)",
-      border: "1px solid rgba(255, 255, 255, 0.4)",
-    }}
-  >
-    <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 56 56">
-      <defs>
-        <linearGradient id="cloudShineRound" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#ffffff" stopOpacity="0.95" />
-          <stop offset="40%" stopColor="#cdeeff" stopOpacity="0.75" />
-          <stop offset="100%" stopColor="#85d1ff" stopOpacity="0.4" />
-        </linearGradient>
-      </defs>
-      <circle cx="28" cy="28" r="20" fill="none" stroke="rgba(255,255,255,0.22)" strokeWidth="0.8" strokeDasharray="3 3" />
-      <ellipse cx="28" cy="28" rx="22" ry="11" fill="none" stroke="rgba(255,255,255,0.3)" strokeWidth="0.8" transform="rotate(-20 28 28)" />
-      <circle cx="10" cy="24" r="1.3" fill="#ffffff" filter="drop-shadow(0 0 2px #fff)" />
-      <circle cx="41" cy="18" r="1.5" fill="#ffffff" filter="drop-shadow(0 0 2px #fff)" />
-      <circle cx="44" cy="35" r="1.2" fill="#ffffff" filter="drop-shadow(0 0 2px #fff)" />
-      <path
-        d="M20 37h17a7.5 7.5 0 0 0 2.2-14.7 10 10 0 0 0-18.7-2.8A7.5 7.5 0 0 0 20 37z"
-        fill="url(#cloudShineRound)"
-        filter="drop-shadow(0 4px 8px rgba(0, 30, 90, 0.45))"
-      />
-      <ellipse cx="29" cy="25" rx="5.5" ry="4.5" fill="#ffffff" opacity="0.45" />
-      <ellipse cx="23" cy="31" rx="4" ry="3" fill="#ffffff" opacity="0.35" />
-    </svg>
-  </div>
-);
 
 // 悦通官方图标（3D 立体图，图床直链，保持原尺寸与辉光阴影）
 const YuetongIcon = () => (
@@ -180,7 +145,7 @@ const Accelerate = () => {
 
   return (
     <div className="min-h-screen relative">
-      <SEO title="网络加速" description="星辰云、Nice云网络加速，IEPL专线，稳定快速" path="/accelerate" noindex />
+      <SEO title="网络加速" description="星辰云网络加速，IEPL专线，稳定快速" path="/accelerate" noindex />
       <ParticleBackground />
       <main className="relative z-10 flex flex-col items-center px-4 pt-5 pb-10 sm:py-10">
         <div className="w-full max-w-4xl flex items-center justify-between mb-6">
@@ -304,45 +269,6 @@ const Accelerate = () => {
               立即开始
             </a>
           </motion.div>
-          <motion.div
-            initial={{ opacity: 0, y: 18 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.45, delay: 0.04 }}
-            className="rounded-[38px] p-6 flex flex-col relative bg-transparent border border-glass-border/40"
-          >
-            <div className="flex items-center gap-3.5 mb-3 mt-1">
-              <NiceCloudIcon />
-              <div className="flex-1">
-                <div className="flex items-center gap-2">
-                  <h2 className="font-heading text-lg font-semibold" style={{ color: "#f2f3fa" }}>
-                    Nice·云
-                  </h2>
-                  <button
-                    type="button"
-                    onClick={() => setShowTutorial(true)}
-                    className="text-sm font-semibold hover:opacity-80 transition-opacity"
-                    style={{ color: "#a855f7" }}
-                  >
-                    教程
-                  </button>
-                </div>
-                <p className="text-[11px] text-muted-foreground">
-                  防失联 · 全球直连 · 峰值10Gbps
-                </p>
-              </div>
-            </div>
-            <p className="text-[13px] leading-relaxed flex-1 text-muted-foreground">
-              内置备用节点，主线路波动无感快速切换。SS/Hy2/Vmess协议，峰值10Gbps，流媒体一键解锁，适合追求速度和不断线的用户。
-            </p>
-
-            <a
-              href={NICE_URL} target="_blank" rel="noopener noreferrer"
-              className="mt-4 w-full rounded-full py-3 text-center text-sm font-bold border border-white/10 bg-transparent transition-transform hover:scale-[1.02]"
-              style={{ color: "#a855f7" }}
-            >
-              立即开始
-            </a>
-          </motion.div>
           {/* 2026-10-14 隐藏悦通（恢复时取消本注释块即可）
           <motion.div
             initial={{ opacity: 0, y: 18 }}
@@ -411,7 +337,7 @@ const Accelerate = () => {
                     选择服务
                   </p>
                   <p className="text-xs text-muted-foreground leading-relaxed">
-                    站内分享的加速服务有星辰云与 Nice 云，打开卡片了解详情，注册账号后按需选择套餐，即可开始使用。
+                    站内分享的加速服务是星辰云，打开卡片了解详情，注册账号后按需选择套餐，即可开始使用。
                   </p>
                 </div>
               </div>

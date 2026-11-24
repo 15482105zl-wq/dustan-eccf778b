@@ -29,7 +29,7 @@ const ALREADY_NOTE = "本月已领取过 这是您的当月链接";
 // 通用失败提示（与函数 500 文案一致，正式措辞）
 const GENERIC_FAIL = "领取失败，请稍后再试，感谢您的理解。";
 
-// 代理图标：同上面星辰/Nice云的 3D 玻璃质感圆图标，尺寸小一号 (w-12 vs w-14)
+// 代理图标：同上面星辰云的 3D 玻璃质感圆图标，尺寸小一号 (w-12 vs w-14)
 const LiuyunIcon = () => (
   <div
     className="w-10 h-10 rounded-full relative flex items-center justify-center flex-shrink-0 overflow-hidden"
