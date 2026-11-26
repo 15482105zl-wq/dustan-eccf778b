@@ -11,6 +11,7 @@ import { useToast } from "@/hooks/use-toast";
 import SiteFooter from "@/components/SiteFooter";
 import FreeSubSection from "@/components/FreeSubSection";
 import LingyunIcon from "@/components/LingyunIcon";
+import XingchenIcon from "@/components/XingchenIcon";
 
 const YUETONG_URL = "https://app.xn--9kq451mn9g.com/#/register?code=OkGae8Qp";
 const XINGCHEN_URL = "https://xc1.luniu8.com/?code=qm8A2dss";
@@ -53,38 +54,6 @@ const YuetongIcon = () => (
         <circle cx="33.5" cy="29" r="8.5" fill="none" stroke="url(#yuetongRingShine)" strokeWidth="5" />
       </g>
       <path d="M15.5 24a8.5 8.5 0 0 1 6-7.2" fill="none" stroke="#ffffff" strokeWidth="1.6" strokeLinecap="round" opacity="0.6" />
-    </svg>
-  </div>
-);
-
-// 星辰·云图标（黑夜星星：深夜底 + 发光大星，boss 2026-10-29 批预览版）
-const XingchenIcon = () => (
-  <div
-    className="w-14 h-14 rounded-full relative flex items-center justify-center flex-shrink-0 overflow-hidden"
-    style={{
-      background: "radial-gradient(100% 100% at 30% 25%, #1e293b 0%, #0f172a 55%, #020617 100%)",
-      boxShadow: "0 0 20px rgba(250, 204, 21, 0.45), inset 0 1.5px 2px rgba(255, 255, 255, 0.75), inset 0 -3px 6px rgba(0, 0, 0, 0.45)",
-      border: "1px solid rgba(255, 255, 255, 0.4)",
-    }}
-  >
-    <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 56 56">
-      <defs>
-        <linearGradient id="xingchenNightStar" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#ffffff" stopOpacity="0.98" />
-          <stop offset="50%" stopColor="#fef3c7" stopOpacity="0.95" />
-          <stop offset="100%" stopColor="#facc15" stopOpacity="0.9" />
-        </linearGradient>
-      </defs>
-      <circle cx="28" cy="28" r="20" fill="none" stroke="rgba(255,255,255,0.22)" strokeWidth="0.8" strokeDasharray="3 3" />
-      <polygon points="15,14 16.2,16.8 19,18 16.2,19.2 15,22 13.8,19.2 11,18 13.8,16.8" fill="#ffffff" opacity="0.9" />
-      <polygon points="42,12 43.4,15.6 47,17 43.4,18.4 42,22 40.6,18.4 37,17 40.6,15.6" fill="#ffffff" opacity="0.85" />
-      <polygon points="40,36 41,38.5 43.5,39.5 41,40.5 40,43 39,40.5 36.5,39.5 39,38.5" fill="#ffffff" opacity="0.8" />
-      <circle cx="16" cy="38" r="1" fill="#ffffff" opacity="0.8" />
-      <circle cx="22" cy="14" r="1" fill="#ffffff" opacity="0.7" />
-      <g filter="drop-shadow(0 0 4px rgba(250, 204, 21, 0.9))">
-        <polygon points="28,12 31.2,24.8 44,28 31.2,31.2 28,44 24.8,31.2 12,28 24.8,24.8" fill="url(#xingchenNightStar)" />
-        <polygon points="28,18 29.8,26.2 38,28 29.8,29.8 28,38 26.2,29.8 18,28 26.2,26.2" fill="#fef3c7" opacity="0.9" />
-      </g>
     </svg>
   </div>
 );
@@ -280,7 +249,7 @@ const Accelerate = () => {
             className="rounded-[38px] p-6 flex flex-col relative bg-transparent border border-glass-border/40"
           >
             <div className="flex items-center gap-3.5 mb-3 mt-1">
-              <XingchenIcon />
+              <XingchenIcon size={56} className="flex-shrink-0" />
               <div className="flex-1">
                 <div className="flex items-center gap-2">
                   <h2 className="font-heading text-lg font-semibold" style={{ color: "#f2f3fa" }}>
