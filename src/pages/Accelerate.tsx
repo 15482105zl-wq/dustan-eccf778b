@@ -10,9 +10,11 @@ import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 import SiteFooter from "@/components/SiteFooter";
 import FreeSubSection from "@/components/FreeSubSection";
+import LingyunIcon from "@/components/LingyunIcon";
 
 const YUETONG_URL = "https://app.xn--9kq451mn9g.com/#/register?code=OkGae8Qp";
 const XINGCHEN_URL = "https://xc1.luniu8.com/?code=qm8A2dss";
+const LINGYUN_URL = "https://dustan.zwaaa.app/#/register?code=R4Xx2MlV";
 const FLCLASH_APK_URL = "https://wwwa.qyshare.com:2083/s/yzz0iu";
 const FLCLASH_FOLDER_URL = "https://wwwa.qyshare.com/s/3vfjoi";
 
@@ -96,6 +98,7 @@ const Accelerate = () => {
   const [noticeDraft, setNoticeDraft] = useState("");
   const [savingNotice, setSavingNotice] = useState(false);
   const [showTutorial, setShowTutorial] = useState(false);
+  const [showLingyunTutorial, setShowLingyunTutorial] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -229,6 +232,46 @@ const Accelerate = () => {
               </div>
             </div>
           )}
+          {/* 凌·云（2026-11-27 新增，站内分享） */}
+          <motion.div
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.45, delay: 0 }}
+            className="rounded-[38px] p-6 flex flex-col relative bg-transparent border border-glass-border/40"
+          >
+            <div className="flex items-center gap-3.5 mb-3 mt-1">
+              <LingyunIcon size={56} className="flex-shrink-0" />
+              <div className="flex-1">
+                <div className="flex items-center gap-2">
+                  <h2 className="font-heading text-lg font-semibold" style={{ color: "#f2f3fa" }}>
+                    凌·云
+                  </h2>
+                  <button
+                    type="button"
+                    onClick={() => setShowLingyunTutorial(true)}
+                    className="text-sm font-semibold hover:opacity-80 transition-opacity"
+                    style={{ color: "#a855f7" }}
+                  >
+                    教程
+                  </button>
+                </div>
+                <p className="text-[11px] text-muted-foreground">
+                  月付 3 元起 · 三网低延迟 · 峰值 5000Mbps
+                </p>
+              </div>
+            </div>
+            <p className="text-[13px] leading-relaxed flex-1 text-muted-foreground">
+              周期套餐每月发放、按月重置；一次性套餐一次到账、用完为止，没有固定到期日。多台设备同时在线，适合想先试试的用户。
+            </p>
+
+            <a
+              href={LINGYUN_URL} target="_blank" rel="noopener noreferrer"
+              className="mt-4 w-full rounded-full py-3 text-center text-sm font-bold border border-white/10 bg-transparent transition-transform hover:scale-[1.02]"
+              style={{ color: "#a855f7" }}
+            >
+              立即开始
+            </a>
+          </motion.div>
           {/* 星辰·云（2026-10-12 新增） */}
           <motion.div
             initial={{ opacity: 0, y: 18 }}
@@ -337,7 +380,7 @@ const Accelerate = () => {
                     选择服务
                   </p>
                   <p className="text-xs text-muted-foreground leading-relaxed">
-                    站内分享的加速服务是星辰云，打开卡片了解详情，注册账号后按需选择套餐，即可开始使用。
+                    站内分享的加速服务有凌云与星辰云，打开卡片了解详情，注册账号后按需选择套餐，即可开始使用。
                   </p>
                 </div>
               </div>
@@ -425,6 +468,131 @@ const Accelerate = () => {
 
               <p className="mt-5 text-xs text-muted-foreground leading-relaxed">
                 连不上先回“配置”点更新同步最新节点，再去“代理”测速，测速完成后点击右上角的三个点，点击“排序”，点击“延迟”，选择一个延迟低的节点即可。每月 1 号到期后，更新订阅无法获取节点，请回到本站重新领取新的订阅链接，重新导入后即可使用。实在不行去互助专区问。
+              </p>
+            </div>
+          </div>
+        )}
+
+        {showLingyunTutorial && (
+          <div
+            className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/70 backdrop-blur-sm p-4"
+            onClick={() => setShowLingyunTutorial(false)}
+          >
+            <div
+              className="w-full max-w-md rounded-[28px] border border-white/10 p-6 max-h-[85vh] overflow-y-auto"
+              style={{ background: "#14141c" }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex items-center justify-between mb-5">
+                <h3 className="font-heading text-base font-semibold" style={{ color: "#f2f3fa" }}>
+                  使用教程
+                </h3>
+                <button
+                  onClick={() => setShowLingyunTutorial(false)}
+                  className="text-muted-foreground text-2xl leading-none px-2"
+                  aria-label="关闭"
+                >
+                  ×
+                </button>
+              </div>
+
+              <div className="flex gap-3 mb-5">
+                <div className="w-6 h-6 rounded-full shrink-0 flex items-center justify-center text-xs font-bold" style={{ background: "#a855f7", color: "#fff" }}>
+                  1
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm font-semibold mb-1" style={{ color: "#f2f3fa" }}>
+                    选套餐
+                  </p>
+                  <p className="text-xs text-muted-foreground leading-relaxed">
+                    点卡片上的立即开始，注册账号，按用量选个套餐付款，开通后就能用。
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex gap-3 mb-5">
+                <div className="w-6 h-6 rounded-full shrink-0 flex items-center justify-center text-xs font-bold" style={{ background: "#a855f7", color: "#fff" }}>
+                  2
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm font-semibold mb-1" style={{ color: "#f2f3fa" }}>
+                    复制订阅链接
+                  </p>
+                  <p className="text-xs text-muted-foreground leading-relaxed">
+                    订阅链接在凌云官网首页里复制。
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex gap-3 mb-5">
+                <div className="w-6 h-6 rounded-full shrink-0 flex items-center justify-center text-xs font-bold" style={{ background: "#a855f7", color: "#fff" }}>
+                  3
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm font-semibold mb-1" style={{ color: "#f2f3fa" }}>
+                    下载客户端
+                  </p>
+                  <p className="text-xs text-muted-foreground mb-2">
+                    如果下载速度不稳，请使用备用下载：打开分享链接，分享页里面就有备用下载，不用另外找链接。
+                  </p>
+                  <p className="text-xs text-muted-foreground mb-2">
+                    注意：分享页顶部的横幅是第三方广告，别点，真正的下载按钮在文件卡片里。
+                  </p>
+                  <a
+                    href={FLCLASH_APK_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-block rounded-full px-5 py-2.5 text-sm font-bold"
+                    style={{ background: "linear-gradient(135deg,#7c3aed,#a855f7)", color: "#fff" }}
+                  >
+                    下载 FLClash 0.9.4 安卓版
+                  </a>
+                  <p className="text-xs text-muted-foreground mt-2 leading-relaxed">
+                    桌面版也有：
+                    <a
+                      href={FLCLASH_FOLDER_URL}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="underline underline-offset-2"
+                      style={{ color: "#c4b5fd" }}
+                    >
+                      点这里下载
+                    </a>
+                    （电脑 41.13MB、Mac 53.05MB、Linux 66.06MB）
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex gap-3 mb-5">
+                <div className="w-6 h-6 rounded-full shrink-0 flex items-center justify-center text-xs font-bold" style={{ background: "#a855f7", color: "#fff" }}>
+                  4
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm font-semibold mb-1" style={{ color: "#f2f3fa" }}>
+                    导入订阅并更新
+                  </p>
+                  <p className="text-xs text-muted-foreground leading-relaxed">
+                    打开 FLClash，点下方“配置” → 点“+”添加配置 → 选“链接”（老版本写的是URL） → 粘贴订阅链接 → 点提交，然后点“更新”刷新订阅
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex gap-3">
+                <div className="w-6 h-6 rounded-full shrink-0 flex items-center justify-center text-xs font-bold" style={{ background: "#a855f7", color: "#fff" }}>
+                  5
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm font-semibold mb-1" style={{ color: "#f2f3fa" }}>
+                    选节点并启动
+                  </p>
+                  <p className="text-xs text-muted-foreground leading-relaxed">
+                    点下方“代理”，点测速，测完点右上角的三个点，点排序，点延迟，延迟低的排在前面，自动选最快的就行，想自己挑就切手动选一个延迟低的，回到“仪表盘”点启动，显示已连接就能用了。
+                  </p>
+                </div>
+              </div>
+
+              <p className="mt-5 text-xs text-muted-foreground leading-relaxed">
+                连不上先回“配置”点更新同步最新节点，再去“代理”点测速，测完点右上角的三个点，点排序，点延迟，选一个延迟低的就行。实在不行去互助专区问。
               </p>
             </div>
           </div>
